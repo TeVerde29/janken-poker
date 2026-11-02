@@ -14,6 +14,7 @@ import { HostEngine } from './rules.js';
 import { net, normalizeCode, CODE_LENGTH } from './net.js';
 import * as ui from './ui.js';
 import * as fx from './animations.js';
+import * as audio from './audio.js';
 
 const { $ } = ui;
 const NICK_KEY = 'jankencards.nickname';
@@ -196,7 +197,7 @@ async function onDeal(msg) {
   }
 
   ui.renderHand(true);
-  await fx.wait(600);
+  await fx.wait(550);
   enableTurn();
 }
 
@@ -216,6 +217,7 @@ function onRivalPlayed(msg) {
   state.rivalPlay = 'hidden';
   ui.setFaceDown('rival');
   ui.renderRivalHand(remainingRivalCards());
+  audio.sfxCardSlide();
   if (state.canPlay) ui.setStatus('El rival ya eligió. ¡Tu turno!', 'turn');
 }
 
@@ -229,14 +231,22 @@ async function onAttemptResult(msg) {
   ui.setFaces(mine, theirs);
   state.rivalPlay = null;
   state.roundHistory.push({ mine, theirs, outcome });
+  state.lastDuelSummary = { mine, theirs, outcome };
   ui.renderRivalHand(remainingRivalCards());
   ui.setStatus('¡Revelando!', 'info');
+
+  audio.sfxCardFlip();
+  setTimeout(() => audio.sfxClash(), 260);
 
   await fx.revealAttempt(
     { me: ui.slotParts('me'), rival: ui.slotParts('rival') },
     outcome,
     ui.setArenaResult,
   );
+
+  if (outcome === 'win') audio.sfxVictory();
+  else if (outcome === 'tie') audio.sfxTie();
+
   ui.renderHistory(state.roundHistory);
 
   if (!msg.roundOver) {
@@ -263,6 +273,8 @@ async function onRoundResult(msg) {
   state.scores = scores;
   ui.renderScoreboard();
   fx.bumpScore($(iWon ? 'score-me' : 'score-rival'));
+  if (iWon) audio.sfxVictory();
+
   if (msg.isTiebreak) ui.setStatus(iWon ? '¡Ganas el desempate!' : 'El rival gana el desempate', 'info');
   else ui.setStatus(iWon ? '¡Ganas la ronda! +1 punto' : 'El rival gana la ronda', 'info');
   await fx.wait(1400);
@@ -275,14 +287,23 @@ async function onGameOver(msg) {
   state.rematch = { requested: false, offered: false, ready: false };
   const won = msg.winner === state.role;
   ui.setTiebreakBanner(false);
-  ui.renderGameOver({ won, tiebreaks: msg.tiebreaks || 0 });
+
+  ui.renderGameOver({
+    won,
+    tiebreaks: msg.tiebreaks || 0,
+    lastDuel: state.lastDuelSummary,
+  });
+
   ui.setRematchUI({
-    label: 'Revancha',
+    label: 'Solicitar revancha',
     disabled: false,
     note: state.role === 'host' ? 'Misma configuración de mazo.' : 'La revancha la inicia el anfitrión.',
   });
   ui.showScreen('gameover');
-  if (won) fx.launchConfetti();
+  if (won) {
+    audio.sfxVictory();
+    fx.launchConfetti();
+  }
 }
 
 function onRematchRequest() {
@@ -304,6 +325,7 @@ function selectCard(index) {
   if (!card || card.played) return;
   selectedIndex = selectedIndex === index ? null : index;
   ui.updateHand(selectedIndex);
+  audio.sfxCardSelect();
   fx.vibrate(10);
 }
 
@@ -319,7 +341,8 @@ function confirmPlay() {
   ui.updateHand(null);
   ui.setFaceDown('me');
   ui.setStatus(state.rivalPlay ? 'Revelando…' : 'Esperando jugada del rival…', 'wait');
-  fx.vibrate(20);
+  audio.sfxCardSlide();
+  fx.vibrate(18);
 
   const play = { type: 'play', card: card.type, attempt: state.currentAttempt, round: state.currentRound };
   if (state.role === 'host') engine?.play('host', play.card, play.attempt, play.round);
@@ -328,6 +351,7 @@ function confirmPlay() {
 
 function requestRematch() {
   fx.vibrate(15);
+  audio.sfxCardSelect();
   if (state.role === 'host') {
     if (!net.connected) return;
     state.rematch.requested = true;
@@ -364,6 +388,7 @@ function initLogin() {
     $('login-error').textContent = '';
     state.nickname = name;
     try { localStorage.setItem(NICK_KEY, name); } catch { /* sin persistencia */ }
+    audio.sfxCardSelect();
     fx.vibrate(10);
     goMenu();
   });
@@ -387,6 +412,7 @@ function showJoinError(text) {
 
 function initMenu() {
   $('btn-create').addEventListener('click', () => {
+    audio.sfxCardSelect();
     fx.vibrate(10);
     ui.showScreen('config');
   });
@@ -395,11 +421,13 @@ function initMenu() {
     const form = $('join-form');
     form.hidden = !form.hidden;
     $('btn-join').setAttribute('aria-expanded', String(!form.hidden));
+    audio.sfxCardSelect();
     if (!form.hidden) $('code-input').focus();
   });
 
   $('btn-rename').addEventListener('click', () => {
     $('nickname-input').value = state.nickname;
+    audio.sfxCardSelect();
     ui.showScreen('login');
   });
 
@@ -421,6 +449,7 @@ function initMenu() {
     ui.setButtonBusy(btn, true, 'Conectando…');
     codeInput.disabled = true;
     showJoinError('');
+    audio.sfxCardSelect();
     fx.vibrate(10);
     try {
       resetSession();
@@ -453,15 +482,15 @@ function initConfig() {
     label.className = 'mode-card';
     if (opt.recommended) label.classList.add('is-recommended');
 
-    const stackHtml = Array.from({ length: opt.layers }, (_, idx) =>
-      `<span class="mode-stack-layer" style="--l:${idx}"></span>`
-    ).join('');
-
     label.innerHTML = `
       <input type="radio" name="deck" value="${opt.size}" ${opt.recommended ? 'checked' : ''}>
       <div class="mode-card-content">
         <div class="mode-visual" aria-hidden="true">
-          <div class="mode-stack">${stackHtml}</div>
+          <div class="archetype-icons">
+            <img src="assets/icons/piedra.svg" alt="" title="Piedras: ${opt.perType}">
+            <img src="assets/icons/papel.svg" alt="" title="Papeles: ${opt.perType}">
+            <img src="assets/icons/tijera.svg" alt="" title="Tijeras: ${opt.perType}">
+          </div>
         </div>
         <div class="mode-info">
           <div class="mode-header">
@@ -472,10 +501,15 @@ function initConfig() {
         </div>
         <div class="mode-check" aria-hidden="true">✓</div>
       </div>`;
+
+    label.addEventListener('click', () => audio.sfxCardSelect());
     list.append(label);
   });
 
-  $('btn-config-back').addEventListener('click', () => ui.showScreen('menu'));
+  $('btn-config-back').addEventListener('click', () => {
+    audio.sfxCardSelect();
+    ui.showScreen('menu');
+  });
 
   $('config-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -483,6 +517,7 @@ function initConfig() {
     const opt = DECK_OPTIONS.find((o) => o.size === size) || DECK_OPTIONS[1];
     const btn = $('btn-config-create');
     ui.setButtonBusy(btn, true, 'Creando sala…');
+    audio.sfxCardSlide();
     fx.vibrate(10);
     try {
       resetSession();
@@ -492,9 +527,9 @@ function initConfig() {
       const code = await net.host();
       state.roomCode = code;
       engine = new HostEngine(opt.size, engineEmit);
-      $('room-code').textContent = code;
       $('waiting-info').textContent = `${opt.title} · Mazo de ${opt.size} cartas (${opt.rounds} rondas)`;
-      $('btn-copy-label').textContent = 'Copiar código';
+      $('btn-copy-label').textContent = 'Copiar';
+      ui.renderWaitingFaceoff();
       ui.showScreen('waiting');
     } catch (err) {
       net.destroy();
@@ -531,16 +566,20 @@ function initWaiting() {
   $('btn-copy').addEventListener('click', async () => {
     const ok = await copyText(state.roomCode || '');
     const label = $('btn-copy-label');
-    label.textContent = ok ? '¡Copiado!' : 'Cópialo a mano';
+    label.textContent = ok ? '¡Copiado!' : 'Error';
     $('btn-copy').classList.toggle('is-copied', ok);
+    audio.sfxCardSelect();
     fx.vibrate(15);
     clearTimeout(initWaiting.timer);
     initWaiting.timer = setTimeout(() => {
-      label.textContent = 'Copiar código';
+      label.textContent = 'Copiar';
       $('btn-copy').classList.remove('is-copied');
     }, 1800);
   });
-  $('btn-cancel-room').addEventListener('click', leaveSession);
+  $('btn-cancel-room').addEventListener('click', () => {
+    audio.sfxCardSelect();
+    leaveSession();
+  });
 }
 
 function initGame() {
@@ -556,15 +595,31 @@ function initGame() {
     confirmPlay();
   });
   $('btn-play').addEventListener('click', confirmPlay);
+
+  const soundBtn = $('btn-audio-toggle');
+  soundBtn.addEventListener('click', () => {
+    const active = audio.toggleAudio();
+    soundBtn.classList.toggle('is-muted', !active);
+    soundBtn.setAttribute('title', active ? 'Silenciar sonido' : 'Activar sonido');
+    if (active) audio.sfxCardSelect();
+  });
+
   $('btn-leave-game').addEventListener('click', () => {
+    audio.sfxCardSelect();
     if (window.confirm('¿Seguro que quieres abandonar la partida?')) leaveSession();
   });
 }
 
 function initGameOver() {
   $('btn-rematch').addEventListener('click', requestRematch);
-  $('btn-gameover-menu').addEventListener('click', leaveSession);
-  $('btn-disconnect-menu').addEventListener('click', leaveSession);
+  $('btn-gameover-menu').addEventListener('click', () => {
+    audio.sfxCardSelect();
+    leaveSession();
+  });
+  $('btn-disconnect-menu').addEventListener('click', () => {
+    audio.sfxCardSelect();
+    leaveSession();
+  });
 }
 
 /* ===================================================== Arranque */

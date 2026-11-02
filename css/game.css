@@ -1,8 +1,6 @@
-/* game.css — tablero de juego, cartas, arena, marcador e historial */
+/* game.css — tablero de duelo, arena, marcador e interacción de cartas */
 
 .screen--game {
-  /* Proporciones de cartas: 3 cartas caben perfectamente en pantallas móviles de 320px
-     y escalan con gracia hasta 760px en escritorio. Arte original en 5:7 (300x420). */
   --card-w: clamp(74px, min(27vw, 17dvh), 154px);
   --arena-w: clamp(78px, min(31vw, 18dvh), 164px);
   --meet: clamp(8px, 2.5vw, 16px);
@@ -17,16 +15,16 @@
   padding-bottom: max(16px, env(safe-area-inset-bottom));
 }
 
-/* ------------------------------------------------ 1. Marcador Deportivo HUD */
+/* ------------------------------------------------ 1. Marcador HUD Deportivo */
 
 .scoreboard {
   position: relative;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto 1fr auto;
   align-items: center;
   gap: 12px;
-  padding: 10px 48px 10px 16px;
+  padding: 10px 14px 10px 18px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   background: var(--bg-surface);
@@ -60,17 +58,18 @@
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(0.85rem, 3.4vw, 1.05rem);
-  color: var(--text-primary);
+  color: var(--text-ivory);
 }
 
 .player--me .player-name {
-  color: var(--gold-matte);
+  color: var(--brass-light);
 }
 
 .score-center {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 4px;
 }
 
 .score {
@@ -92,12 +91,12 @@
 }
 
 #score-me {
-  color: var(--gold-matte);
+  color: var(--brass);
 }
 
 .score-sep {
   color: var(--text-muted);
-  font-weight: 400;
+  font-weight: 300;
   font-size: 0.85em;
 }
 
@@ -111,11 +110,14 @@
   white-space: nowrap;
 }
 
-#btn-leave-game {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
+.board-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.board-controls .btn-icon-only.is-muted svg {
+  opacity: 0.35;
 }
 
 /* ------------------------------------------------ 2. Banner de Desempate */
@@ -124,17 +126,17 @@
   width: 100%;
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  background: linear-gradient(90deg, rgba(212, 175, 55, 0.05), rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.05));
+  border: 1px solid var(--border-brass);
+  background: linear-gradient(90deg, transparent, var(--brass-surface), transparent);
   text-align: center;
 }
 
 .tiebreak-banner-text {
   font-family: var(--font-display);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.16em;
-  color: var(--gold-matte);
+  color: var(--brass-light);
 }
 
 /* ------------------------------------------------ 3. Mano del Rival */
@@ -151,7 +153,7 @@
   aspect-ratio: 5 / 7;
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
   transition: opacity 280ms ease, transform 280ms ease;
 }
 
@@ -166,7 +168,7 @@
   height: 100%;
 }
 
-/* ------------------------------------------------ 4. Arena de Duelo Orgánica */
+/* ------------------------------------------------ 4. Tapete de Duelo / Arena */
 
 .arena-wrap {
   width: 100%;
@@ -177,8 +179,8 @@
   padding: 12px 10px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  background-color: var(--bg-surface);
-  background-image: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.04), transparent 70%);
+  background-color: var(--bg-table-felt);
+  background-image: radial-gradient(ellipse at 50% 50%, rgba(185, 154, 99, 0.05), transparent 72%);
 }
 
 .arena-meta {
@@ -200,7 +202,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(14px, 5vw, 40px);
+  gap: clamp(14px, 5vw, 42px);
   width: 100%;
   padding: 4px 0;
 }
@@ -219,7 +221,7 @@
   height: 28px;
   border-radius: 50%;
   border: 1px solid var(--border-subtle);
-  background: var(--bg);
+  background: var(--bg-obsidian);
   font-family: var(--font-display);
   font-size: 0.65rem;
   font-weight: 700;
@@ -259,14 +261,14 @@
   height: 100%;
   display: grid;
   place-items: center;
-  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border: 1px dashed rgba(233, 227, 214, 0.12);
   border-radius: calc(var(--arena-w) * 0.075);
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(233, 227, 214, 0.015);
 }
 
 .slot-empty-icon {
   font-size: calc(var(--arena-w) * 0.28);
-  opacity: 0.25;
+  opacity: 0.2;
   filter: grayscale(1);
 }
 
@@ -322,9 +324,9 @@
   left: 50%;
   top: 50%;
   z-index: 5;
-  padding: 0.35em 1em;
+  padding: 0.35em 1.05em;
   border-radius: var(--radius-full);
-  background: var(--bg);
+  background: var(--bg-obsidian);
   border: 1px solid currentColor;
   box-shadow: var(--shadow-modal);
   font-family: var(--font-display);
@@ -337,18 +339,18 @@
 }
 
 .arena-result--win {
-  color: var(--win);
-  border-color: var(--win);
+  color: var(--win-emerald);
+  border-color: var(--win-emerald);
 }
 
 .arena-result--lose {
-  color: var(--lose);
-  border-color: var(--lose);
+  color: var(--lose-ruby);
+  border-color: var(--lose-ruby);
 }
 
 .arena-result--tie {
-  color: var(--tie);
-  border-color: var(--tie);
+  color: var(--tie-slate);
+  border-color: var(--tie-slate);
 }
 
 /* ------------------------------------------------ 5. Historial de Intentos */
@@ -365,10 +367,10 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 7px;
+  padding: 3px 8px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-full);
-  background: var(--bg-elevated);
+  background: var(--bg-surface-elevated);
 }
 
 .mini-card {
@@ -386,11 +388,11 @@
 }
 
 .history-item--win { border-color: rgba(56, 161, 105, 0.4); }
-.history-item--win .history-badge { color: var(--win); }
+.history-item--win .history-badge { color: var(--win-emerald); }
 .history-item--lose { border-color: rgba(229, 62, 62, 0.4); }
-.history-item--lose .history-badge { color: var(--lose); }
-.history-item--tie { border-color: rgba(66, 153, 225, 0.4); }
-.history-item--tie .history-badge { color: var(--tie); }
+.history-item--lose .history-badge { color: var(--lose-ruby); }
+.history-item--tie { border-color: rgba(74, 144, 226, 0.4); }
+.history-item--tie .history-badge { color: var(--tie-slate); }
 
 /* ------------------------------------------------ 6. Estado del Turno */
 
@@ -414,8 +416,8 @@
   height: 8px;
   margin-right: 8px;
   border-radius: 50%;
-  background: var(--gold-matte);
-  box-shadow: 0 0 10px var(--gold-matte);
+  background: var(--brass);
+  box-shadow: 0 0 10px var(--brass);
   vertical-align: middle;
 }
 
@@ -433,7 +435,7 @@
   display: flex;
   justify-content: center;
   gap: clamp(8px, 2.5vw, 18px);
-  padding-top: 14px; /* espacio para la elevación de selección */
+  padding-top: 14px;
   min-height: calc(var(--card-w) * 1.4 + 14px);
 }
 
@@ -459,15 +461,15 @@
   pointer-events: none;
 }
 
-.card--piedra { background: linear-gradient(180deg, #4A4A4A, #282828); }
-.card--papel  { background: linear-gradient(180deg, #F5EFE0, #E0D7C1); }
-.card--tijera { background: linear-gradient(180deg, #8B2E3C, #561C26); }
+.card--piedra { background: linear-gradient(180deg, #444946, #222624); }
+.card--papel  { background: linear-gradient(180deg, #F5EFE0, #DDD4C0); }
+.card--tijera { background: linear-gradient(180deg, #7C2A36, #4A161E); }
 
 @media (hover: hover) {
   .hand:not(.is-locked) .card:not(.card-select):not(.is-played):hover {
     transform: translateY(-5px);
     filter: brightness(1.08);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
   }
 }
 
@@ -482,7 +484,7 @@
 
 .card.is-played {
   transform: scale(0.85);
-  opacity: 0.45;
+  opacity: 0.42;
   filter: saturate(0.3);
   cursor: default;
 }
@@ -497,15 +499,15 @@
 }
 
 .btn--play.btn--ready {
-  background-color: var(--gold-matte);
-  color: var(--gold-ink);
-  box-shadow: 0 6px 20px var(--gold-glow);
+  background-color: var(--brass);
+  color: var(--brass-ink);
+  box-shadow: 0 6px 20px var(--brass-glow);
   transform: translateY(-1px);
 }
 
 .btn--play.btn--ready:hover {
-  background-color: var(--gold-hover);
-  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.38);
+  background-color: var(--brass-light);
+  box-shadow: 0 8px 24px rgba(185, 154, 99, 0.4);
 }
 
 /* ------------------------------------------------ 9. Responsive */
@@ -517,7 +519,7 @@
   }
 
   .scoreboard {
-    padding: 12px 56px 12px 24px;
+    padding: 12px 20px 12px 24px;
   }
 
   .mini-back { width: 32px; }
@@ -526,7 +528,7 @@
 
 @media (max-width: 360px) {
   .scoreboard {
-    padding-right: 44px;
+    padding-right: 10px;
     padding-left: 10px;
   }
 

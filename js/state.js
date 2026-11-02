@@ -16,15 +16,17 @@ export const DECK_OPTIONS = [
     rounds: 3,
     title: 'Duelo Rápido',
     tag: '3 rondas',
-    desc: 'Partida ágil e intensa de 3 rondas.',
+    perType: 6,
+    desc: 'Partida ágil e intensa (6 piedras, 6 papeles, 6 tijeras).',
     layers: 1,
   },
   {
     size: 30,
     rounds: 5,
-    title: 'Estándar',
+    title: 'Partida Estándar',
     tag: '5 rondas',
-    desc: 'La experiencia equilibrada y competitiva.',
+    perType: 10,
+    desc: 'La experiencia equilibrada y competitiva recomendada.',
     layers: 2,
     recommended: true,
   },
@@ -33,7 +35,8 @@ export const DECK_OPTIONS = [
     rounds: 9,
     title: 'Gran Torneo',
     tag: '9 rondas',
-    desc: 'Máxima prueba de estrategia y conteo de cartas.',
+    perType: 18,
+    desc: 'Prueba máxima de memoria de cartas, farol y estrategia.',
     layers: 3,
   },
 ];
@@ -60,6 +63,7 @@ export const state = {
   rivalHandCount: 3,        // solo conteo, no las cartas
   currentAttempt: 1,
   roundHistory: [],         // intentos de la ronda actual: { mine, theirs, outcome }
+  lastDuelSummary: [],      // cartas jugadas en el último duelo para la pantalla de victoria/derrota
   scores: { me: 0, rival: 0 },
   isTiebreak: false,
   tiebreakNumber: 0,
@@ -85,6 +89,7 @@ export function resetMatchState() {
   state.rivalHandCount = 3;
   state.currentAttempt = 1;
   state.roundHistory = [];
+  state.lastDuelSummary = [];
   state.scores = { me: 0, rival: 0 };
   state.isTiebreak = false;
   state.tiebreakNumber = 0;

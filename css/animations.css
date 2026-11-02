@@ -21,21 +21,21 @@
 .card-deal:nth-child(3) { animation-delay: 160ms; }
 
 /* 2. Entrada de las cartas del logotipo en pantalla de bienvenida */
-@keyframes logoCardLeft {
+@keyframes heroCardLeft {
   0% {
     opacity: 0;
-    transform: rotate(0deg) translate(0, 20px) scale(0.85);
+    transform: rotate(0deg) translate(0, 24px) scale(0.85);
   }
   100% {
     opacity: 1;
-    transform: rotate(-14deg) translate(16px, 6px) scale(1);
+    transform: rotate(-14deg) translate(16px, 8px) scale(1);
   }
 }
 
-@keyframes logoCardCenter {
+@keyframes heroCardCenter {
   0% {
     opacity: 0;
-    transform: translateY(24px) scale(0.9);
+    transform: translateY(28px) scale(0.9);
   }
   100% {
     opacity: 1;
@@ -43,42 +43,42 @@
   }
 }
 
-@keyframes logoCardRight {
+@keyframes heroCardRight {
   0% {
     opacity: 0;
-    transform: rotate(0deg) translate(0, 20px) scale(0.85);
+    transform: rotate(0deg) translate(0, 24px) scale(0.85);
   }
   100% {
     opacity: 1;
-    transform: rotate(14deg) translate(-16px, 6px) scale(1);
+    transform: rotate(14deg) translate(-16px, 8px) scale(1);
   }
 }
 
-.logo-card--left {
-  animation: logoCardLeft 550ms var(--ease-apple) 100ms both;
+.hero-card--left {
+  animation: heroCardLeft 550ms var(--ease-apple) 100ms both;
 }
 
-.logo-card--center {
-  animation: logoCardCenter 550ms var(--ease-apple) 40ms both;
+.hero-card--center {
+  animation: heroCardCenter 550ms var(--ease-apple) 40ms both;
 }
 
-.logo-card--right {
-  animation: logoCardRight 550ms var(--ease-apple) 140ms both;
+.hero-card--right {
+  animation: heroCardRight 550ms var(--ease-apple) 140ms both;
 }
 
-/* 3. Carta seleccionada: elevación suave con aura dorada mate tenue */
+/* 3. Carta seleccionada: elevación suave con aura de latón tenue */
 @keyframes selectGlowPulse {
   0%, 100% {
-    box-shadow: 0 0 0 2px var(--gold-matte), 0 10px 24px var(--gold-glow);
+    box-shadow: 0 0 0 2px var(--brass), 0 10px 24px var(--brass-glow);
   }
   50% {
-    box-shadow: 0 0 0 2px var(--gold-hover), 0 14px 32px rgba(212, 175, 55, 0.38);
+    box-shadow: 0 0 0 2px var(--brass-light), 0 14px 32px rgba(185, 154, 99, 0.4);
   }
 }
 
 .card-select {
   transform: translateY(-9px);
-  border-color: var(--gold-matte);
+  border-color: var(--brass);
   animation: selectGlowPulse 1.8s ease-in-out infinite;
   transition: transform 180ms var(--ease-apple),
               border-color 180ms var(--ease-apple),
@@ -118,11 +118,11 @@
 @keyframes cardWinGlow {
   0%, 100% {
     transform: translateY(0);
-    box-shadow: 0 0 0 2px var(--gold-matte), 0 8px 24px var(--gold-glow);
+    box-shadow: 0 0 0 2px var(--win-emerald), 0 8px 24px rgba(56, 161, 105, 0.35);
   }
   50% {
     transform: translateY(-4px);
-    box-shadow: 0 0 0 2px var(--gold-hover), 0 14px 36px rgba(212, 175, 55, 0.45);
+    box-shadow: 0 0 0 2px var(--win-emerald), 0 14px 36px rgba(56, 161, 105, 0.5);
   }
 }
 
@@ -160,7 +160,7 @@
   }
   45% {
     transform: scale(1.28);
-    color: var(--gold-hover);
+    color: var(--brass-light);
   }
   100% {
     transform: scale(1);
@@ -279,7 +279,7 @@
   animation: nulaOverlayFade 1.4s var(--ease-apple) forwards;
 }
 
-/* 16. Caída de confeti refinado (geométrico, elegante) */
+/* 16. Caída de confeti refinado (geométrico, elegante: latón, marfil, esmeralda, pizarra) */
 @keyframes confettiFall {
   0% {
     opacity: 1;
@@ -304,11 +304,11 @@
   animation: confettiFall 2.8s linear 1 forwards;
 }
 
-.confetti:nth-child(5n+1) { background-color: var(--gold-matte); }
-.confetti:nth-child(5n+2) { background-color: #5B8DB8; }
-.confetti:nth-child(5n+3) { background-color: #E8A0B0; }
-.confetti:nth-child(5n+4) { background-color: #CBD5E1; }
-.confetti:nth-child(5n+5) { background-color: #F8FAFC; }
+.confetti:nth-child(5n+1) { background-color: var(--brass); }
+.confetti:nth-child(5n+2) { background-color: var(--text-ivory); }
+.confetti:nth-child(5n+3) { background-color: var(--win-emerald); }
+.confetti:nth-child(5n+4) { background-color: var(--tie-slate); }
+.confetti:nth-child(5n+5) { background-color: #CBB07E; }
 
 /* 17. Toast */
 @keyframes toastIn {
@@ -323,9 +323,9 @@
 /* Accesibilidad: movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
   .card-deal,
-  .logo-card--left,
-  .logo-card--center,
-  .logo-card--right,
+  .hero-card--left,
+  .hero-card--center,
+  .hero-card--right,
   .card-flip,
   .card-clash,
   .card-select,

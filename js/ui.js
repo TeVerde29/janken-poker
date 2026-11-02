@@ -1,6 +1,6 @@
 /**
  * ui.js — Renderizado de pantallas, cartas, marcador, arena e historial.
- * No contiene lógica de juego: solo pinta lo que hay en `state`.
+ * No contiene lógica de red ni reglas: solo pinta lo que hay en `state`.
  */
 import { state, MAX_ATTEMPTS } from './state.js';
 import { restartClass } from './animations.js';
@@ -18,7 +18,7 @@ export function preloadCards() {
   });
 }
 
-function cardImg(type) {
+export function cardImg(type) {
   const img = document.createElement('img');
   img.src = `${ICONS}${type}.svg`;
   img.alt = type === 'jc' ? 'Carta boca abajo' : CARD_LABEL[type];
@@ -64,6 +64,14 @@ export function setButtonBusy(btn, busy, busyText) {
     btn.disabled = false;
     btn.removeAttribute('aria-busy');
   }
+}
+
+/* ------------------------------------------------- Antesala de Espera (Face-off) */
+
+export function renderWaitingFaceoff() {
+  $('waiting-host-name').textContent = state.nickname || 'Tú';
+  $('waiting-host-initial').textContent = (state.nickname || 'T').charAt(0).toUpperCase();
+  $('room-code').textContent = state.roomCode || '------';
 }
 
 /* ----------------------------------------------------------------- Marcador */
@@ -138,7 +146,7 @@ export function updateHand(selectedIndex) {
     btnPlay.disabled = true;
     btnPlay.classList.remove('btn--ready');
   } else {
-    btnPlay.textContent = 'Elige una carta';
+    btnPlay.textContent = 'Selecciona una carta';
     btnPlay.disabled = true;
     btnPlay.classList.remove('btn--ready');
   }
@@ -275,7 +283,7 @@ export function setStatus(text, kind = 'info') {
 
 /* ----------------------------------------------------------- Fin de partida */
 
-export function renderGameOver({ won, tiebreaks }) {
+export function renderGameOver({ won, tiebreaks, lastDuel }) {
   const title = $('result-title');
   title.textContent = won ? '¡Victoria!' : 'Derrota';
   title.className = 'result-title ' + (won ? 'result-title--win' : 'result-title--lose');
@@ -295,6 +303,30 @@ export function renderGameOver({ won, tiebreaks }) {
       : ' Resuelto en la ronda de desempate.';
   }
   $('result-sub').textContent = sub;
+
+  // Tira de cartas del último enfrentamiento si están disponibles
+  const strip = $('last-duel-strip');
+  const stripCards = $('last-duel-cards');
+  if (lastDuel && lastDuel.mine && lastDuel.theirs) {
+    strip.hidden = false;
+    stripCards.replaceChildren();
+
+    const myCard = document.createElement('div');
+    myCard.className = `mini-card card--${lastDuel.mine}`;
+    myCard.append(cardImg(lastDuel.mine));
+
+    const vs = document.createElement('span');
+    vs.className = 'history-badge';
+    vs.textContent = 'VS';
+
+    const rivalCard = document.createElement('div');
+    rivalCard.className = `mini-card card--${lastDuel.theirs}`;
+    rivalCard.append(cardImg(lastDuel.theirs));
+
+    stripCards.append(myCard, vs, rivalCard);
+  } else {
+    strip.hidden = true;
+  }
 }
 
 export function setRematchUI({ label, disabled, note }) {
