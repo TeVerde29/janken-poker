@@ -1,6 +1,8 @@
 {
+  "id": "./",
   "name": "JANKEN — The Card Duel",
   "short_name": "JANKEN",
+  "lang": "es",
   "description": "Juego 1v1 online para navegador: piedra, papel o tijera con cartas y estrategia de mesa.",
   "start_url": "./",
   "scope": "./",

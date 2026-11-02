@@ -328,6 +328,21 @@
     </div>
   </div>
 
+  <!-- Modal con guía de instalación paso a paso -->
+  <div id="overlay-install-guide" class="modal" role="dialog" aria-modal="true" aria-labelledby="install-guide-title" hidden>
+    <div class="modal-box modal-box--install">
+      <div class="install-guide-header">
+        <img src="assets/icons/icon-192.png" alt="" width="52" height="52" class="install-guide-icon">
+        <div class="install-guide-headings">
+          <h2 id="install-guide-title" class="section-title">Instalar JANKEN</h2>
+          <p class="section-desc">Crea un acceso directo en tu dispositivo para jugar a pantalla completa y sin barras de navegador.</p>
+        </div>
+      </div>
+      <div id="install-guide-body" class="install-guide-body"></div>
+      <button id="btn-close-install-guide" type="button" class="btn btn--primary btn--block">Entendido</button>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="alert" hidden></div>
   <div id="confetti-layer" aria-hidden="true"></div>
 
