@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="300" height="420" role="img" aria-labelledby="title-papel">
+  <title id="title-papel">Carta de Papel</title>
+  <defs>
+    <linearGradient id="bg-papel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDFBF7" />
+      <stop offset="100%" stop-color="#E6DFD3" />
+    </linearGradient>
+    <g id="icon-papel-corner">
+      <path d="M-10,-14 H10 C13,-14 13,-9 10,-9 H-8 V10 C-8,13 8,13 8,10 V-9 H10 V11 C10,15 -10,15 -10,11 Z" fill="#5B8DB8" />
+      <rect x="-8" y="-11" width="16" height="22" rx="2" fill="#5B8DB8" />
+      <line x1="-4" y1="-5" x2="4" y2="-5" stroke="#FDFBF7" stroke-width="2" stroke-linecap="round" />
+      <line x1="-4" y1="0" x2="4" y2="0" stroke="#FDFBF7" stroke-width="2" stroke-linecap="round" />
+      <line x1="-4" y1="5" x2="2" y2="5" stroke="#FDFBF7" stroke-width="2" stroke-linecap="round" />
+    </g>
+  </defs>
+  <rect x="0" y="0" width="300" height="420" rx="20" ry="20" fill="url(#bg-papel)" />
+  <rect x="14" y="14" width="272" height="392" rx="12" ry="12" fill="none" stroke="#5B8DB8" stroke-width="4" />
+  <use href="#icon-papel-corner" transform="translate(42, 42)" />
+  <use href="#icon-papel-corner" transform="translate(258, 378) rotate(180)" />
+  <g transform="translate(150, 185)">
+    <path d="M-64,-68 H68 C80,-68 84,-52 72,-46 V60 C72,76 58,84 44,84 H-64 C-78,84 -84,72 -84,60 C-84,48 -72,46 -64,46 V-46 C-76,-46 -80,-68 -64,-68 Z" fill="#5B8DB8" opacity="0.18" transform="translate(4, 6)" />
+    <path d="M-62,-72 H62 C76,-72 76,-48 62,-48 H-50 V52 C-50,68 -64,76 -72,76 H52 C66,76 72,64 72,52 V-48" fill="#5B8DB8" />
+    <path d="M-62,-72 H62 C78,-72 78,-46 62,-46 H-62 C-78,-46 -78,-72 -62,-72 Z" fill="#5B8DB8" stroke="#FDFBF7" stroke-width="3" />
+    <circle cx="-62" cy="-59" r="13" fill="#467299" stroke="#FDFBF7" stroke-width="3" />
+    <path d="M-62,-59 m-5,0 a5,5 0 1,0 10,0 a3,3 0 1,0 -6,0" fill="none" stroke="#FDFBF7" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M-54,-46 H62 V54 C62,66 54,74 42,74 H-62 C-54,74 -54,64 -54,54 Z" fill="#5B8DB8" stroke="#FDFBF7" stroke-width="3" stroke-linejoin="round" />
+    <path d="M-66,48 H50 C64,48 64,74 50,74 H-66 C-80,74 -80,48 -66,48 Z" fill="#467299" stroke="#FDFBF7" stroke-width="3" />
+    <circle cx="-66" cy="61" r="13" fill="#365B7D" stroke="#FDFBF7" stroke-width="3" />
+    <path d="M-66,61 m-5,0 a5,5 0 1,0 10,0 a3,3 0 1,0 -6,0" fill="none" stroke="#FDFBF7" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="-32" y1="-22" x2="38" y2="-22" stroke="#FDFBF7" stroke-width="5" stroke-linecap="round" />
+    <line x1="-32" y1="-2" x2="38" y2="-2" stroke="#FDFBF7" stroke-width="5" stroke-linecap="round" />
+    <line x1="-32" y1="18" x2="18" y2="18" stroke="#FDFBF7" stroke-width="5" stroke-linecap="round" />
+  </g>
+  <text x="150" y="348" text-anchor="middle" fill="#2E2E2E" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, Roboto, Helvetica, Arial, sans-serif" font-size="30" font-weight="900" letter-spacing="4">PAPEL</text>
+</svg>

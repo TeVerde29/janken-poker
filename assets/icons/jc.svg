@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="300" height="420" role="img" aria-labelledby="title-dorso">
+  <title id="title-dorso">Dorso de la Carta - JC</title>
+  <defs>
+    <linearGradient id="bg-dorso" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1A2438" />
+      <stop offset="100%" stop-color="#0E1626" />
+    </linearGradient>
+    <pattern id="diamond-pattern" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+      <polygon points="15,2 28,15 15,28 2,15" fill="none" stroke="#D4AF37" stroke-width="1.5" opacity="0.15" />
+      <polygon points="15,9 21,15 15,21 9,15" fill="#D4AF37" opacity="0.15" />
+    </pattern>
+    <clipPath id="card-clip">
+      <rect x="0" y="0" width="300" height="420" rx="20" ry="20" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#card-clip)">
+    <rect x="0" y="0" width="300" height="420" fill="url(#bg-dorso)" />
+    <rect x="0" y="0" width="300" height="420" fill="url(#diamond-pattern)" />
+  </g>
+  <rect x="14" y="14" width="272" height="392" rx="12" ry="12" fill="none" stroke="#D4AF37" stroke-width="4" />
+  <g transform="translate(150, 210)">
+    <circle cx="0" cy="0" r="64" fill="#0E1626" stroke="#D4AF37" stroke-width="2" />
+    <circle cx="0" cy="0" r="54" fill="#D4AF37" />
+    <text x="0" y="16" text-anchor="middle" fill="#0E1626" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, Roboto, Helvetica, Arial, sans-serif" font-size="46" font-weight="900" letter-spacing="2">JC</text>
+  </g>
+</svg>

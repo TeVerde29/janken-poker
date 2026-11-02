@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="300" height="420" role="img" aria-labelledby="title-tijera">
+  <title id="title-tijera">Carta de Tijera</title>
+  <defs>
+    <linearGradient id="bg-tijera" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8B2E3C" />
+      <stop offset="100%" stop-color="#5E1F2A" />
+    </linearGradient>
+    <g id="icon-tijera-corner">
+      <path d="M-9,-14 L4,4 L0,6 L-12,-11 Z" fill="#E8A0B0" />
+      <path d="M9,-14 L-4,4 L0,6 L12,-11 Z" fill="#E8A0B0" />
+      <circle cx="-7" cy="9" r="5" fill="none" stroke="#E8A0B0" stroke-width="2.5" />
+      <circle cx="7" cy="9" r="5" fill="none" stroke="#E8A0B0" stroke-width="2.5" />
+    </g>
+  </defs>
+  <rect x="0" y="0" width="300" height="420" rx="20" ry="20" fill="url(#bg-tijera)" />
+  <rect x="14" y="14" width="272" height="392" rx="12" ry="12" fill="none" stroke="#E8A0B0" stroke-width="4" />
+  <use href="#icon-tijera-corner" transform="translate(42, 42)" />
+  <use href="#icon-tijera-corner" transform="translate(258, 378) rotate(180)" />
+  <g transform="translate(150, 185)">
+    <g>
+      <path d="M-68,-82 C-42,-68 12,-4 26,18 L8,30 C-14,4 -64,-52 -68,-82 Z" fill="#F0D0D8" stroke="#5E1F2A" stroke-width="3" stroke-linejoin="round" />
+      <path d="M-68,-82 L18,12 L10,18 Z" fill="#E8A0B0" />
+      <path d="M18,12 L42,38 L30,48 L8,24 Z" fill="#F0D0D8" />
+    </g>
+    <g>
+      <path d="M68,-82 C42,-68 -12,-4 -26,18 L-8,30 C14,4 64,-52 68,-82 Z" fill="#F0D0D8" stroke="#5E1F2A" stroke-width="3" stroke-linejoin="round" />
+      <path d="M68,-82 L-18,12 L-10,18 Z" fill="#E8A0B0" />
+      <path d="M-18,12 L-42,38 L-30,48 L-8,24 Z" fill="#F0D0D8" />
+    </g>
+    <circle cx="-48" cy="56" r="28" fill="none" stroke="#F0D0D8" stroke-width="14" />
+    <circle cx="-48" cy="56" r="21" fill="none" stroke="#5E1F2A" stroke-width="2" />
+    <circle cx="48" cy="56" r="28" fill="none" stroke="#F0D0D8" stroke-width="14" />
+    <circle cx="48" cy="56" r="21" fill="none" stroke="#5E1F2A" stroke-width="2" />
+    <circle cx="0" cy="-2" r="9" fill="#5E1F2A" stroke="#F0D0D8" stroke-width="3" />
+    <line x1="-4" y1="-6" x2="4" y2="2" stroke="#F0D0D8" stroke-width="2" stroke-linecap="round" />
+  </g>
+  <text x="150" y="348" text-anchor="middle" fill="#F0D0D8" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, Roboto, Helvetica, Arial, sans-serif" font-size="30" font-weight="900" letter-spacing="4">TIJERA</text>
+</svg>

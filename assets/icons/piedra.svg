@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="300" height="420" role="img" aria-labelledby="title-piedra">
+  <title id="title-piedra">Carta de Piedra</title>
+  <defs>
+    <linearGradient id="bg-piedra" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4A5568" />
+      <stop offset="100%" stop-color="#2D3748" />
+    </linearGradient>
+    <g id="icon-piedra-corner">
+      <polygon points="0,-14 12,-8 15,5 6,15 -9,14 -15,3 -11,-10" fill="#A0AEC0" />
+      <polyline points="-11,-10 0,-3 12,-8" fill="none" stroke="#2D3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <polyline points="0,-3 2,9 6,15" fill="none" stroke="#2D3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <line x1="2" y1="9" x2="-9" y2="14" stroke="#2D3748" stroke-width="1.5" stroke-linecap="round" />
+    </g>
+  </defs>
+  <rect x="0" y="0" width="300" height="420" rx="20" ry="20" fill="url(#bg-piedra)" />
+  <rect x="14" y="14" width="272" height="392" rx="12" ry="12" fill="none" stroke="#A0AEC0" stroke-width="4" />
+  <use href="#icon-piedra-corner" transform="translate(42, 42)" />
+  <use href="#icon-piedra-corner" transform="translate(258, 378) rotate(180)" />
+  <g transform="translate(150, 185)">
+    <polygon points="0,-82 68,-52 84,15 48,76 -42,80 -82,25 -66,-48" fill="#E2E8F0" stroke="#2D3748" stroke-width="4" stroke-linejoin="round" />
+    <polygon points="0,-82 68,-52 24,-14 -28,-24" fill="#EDF2F7" />
+    <polygon points="-66,-48 0,-82 -28,-24" fill="#CBD5E0" />
+    <polygon points="68,-52 84,15 32,26 24,-14" fill="#CBD5E0" />
+    <polygon points="84,15 48,76 -8,44 32,26" fill="#A0AEC0" />
+    <polygon points="-42,80 48,76 -8,44" fill="#718096" />
+    <polygon points="-82,25 -42,80 -8,44 -38,14" fill="#A0AEC0" />
+    <polygon points="-66,-48 -28,-24 -38,14 -82,25" fill="#CBD5E0" />
+    <polygon points="-28,-24 24,-14 32,26 -8,44 -38,14" fill="#E2E8F0" />
+    <polyline points="0,-82 -28,-24 24,-14 68,-52" fill="none" stroke="#2D3748" stroke-width="3.5" stroke-linejoin="round" />
+    <polyline points="-66,-48 -28,-24 -38,14 -82,25" fill="none" stroke="#2D3748" stroke-width="3.5" stroke-linejoin="round" />
+    <polyline points="24,-14 32,26 84,15" fill="none" stroke="#2D3748" stroke-width="3.5" stroke-linejoin="round" />
+    <polyline points="-38,14 -8,44 32,26" fill="none" stroke="#2D3748" stroke-width="3.5" stroke-linejoin="round" />
+    <line x1="-8" y1="44" x2="-42" y2="80" stroke="#2D3748" stroke-width="3.5" stroke-linecap="round" />
+    <line x1="-8" y1="44" x2="48" y2="76" stroke="#2D3748" stroke-width="3.5" stroke-linecap="round" />
+    <polygon points="0,-82 68,-52 84,15 48,76 -42,80 -82,25 -66,-48" fill="none" stroke="#2D3748" stroke-width="4" stroke-linejoin="round" />
+  </g>
+  <text x="150" y="348" text-anchor="middle" fill="#E2E8F0" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, Roboto, Helvetica, Arial, sans-serif" font-size="30" font-weight="900" letter-spacing="4">PIEDRA</text>
+</svg>
