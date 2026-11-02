@@ -300,11 +300,40 @@
 
 .lobby-footer {
   margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .lobby-tip {
   font-size: 0.78rem;
   color: var(--text-muted);
+}
+
+.panel-meta-footer,
+.lobby-footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.panel-meta-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 150ms var(--ease-apple);
+}
+
+.panel-meta-link:hover {
+  color: var(--brass-light);
+  text-decoration: underline;
+}
+
+.panel-meta-sep {
+  color: var(--border-medium);
 }
 
 /* --------------------------------------------------- 3. Selección de Modo */

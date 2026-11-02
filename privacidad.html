@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Política de Privacidad | JANKEN — The Card Duel</title>
+  <meta name="description" content="Información sobre privacidad y protección de datos de JANKEN: juego multijugador P2P WebRTC sin servidores propios, sin cookies de rastreo y sin recopilación de datos personales.">
+  <link rel="canonical" href="https://teverde29.github.io/janken-poker/privacidad.html">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/jc.svg">
+  <meta name="theme-color" content="#101512">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <style>
+    .privacy-container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 1.25rem 4rem;
+      color: var(--text-primary);
+    }
+    .privacy-header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-medium);
+      padding-bottom: 1.5rem;
+    }
+    .privacy-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      color: var(--brass-light);
+      text-decoration: none;
+      margin-bottom: 1.25rem;
+      transition: color 150ms var(--ease-apple);
+    }
+    .privacy-back:hover {
+      color: var(--text-ivory);
+    }
+    .privacy-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      color: var(--text-ivory);
+      letter-spacing: 0.03em;
+      margin: 0 0 0.5rem;
+    }
+    .privacy-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .privacy-section {
+      margin-bottom: 1.85rem;
+    }
+    .privacy-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-ivory);
+      margin: 0 0 0.65rem;
+    }
+    .privacy-section p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin: 0 0 0.85rem;
+    }
+    .privacy-section ul {
+      margin: 0 0 1rem;
+      padding-left: 1.25rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .privacy-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+    .privacy-footer a {
+      color: var(--brass-light);
+      text-decoration: none;
+    }
+    .privacy-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="privacy-container">
+    <header class="privacy-header">
+      <a href="./" class="privacy-back">← Volver al juego</a>
+      <h1 class="privacy-title">Política de Privacidad y Términos</h1>
+      <p class="privacy-meta">Última actualización: 2 de noviembre de 2026</p>
+    </header>
+
+    <main>
+      <section class="privacy-section">
+        <h2>1. Arquitectura P2P y Datos del Usuario</h2>
+        <p><strong>JANKEN — The Card Duel</strong> es un juego web multijugador estático de código abierto. Todo el intercambio de jugadas entre los dos duelistas ocurre de forma directa de navegador a navegador mediante WebRTC (a través de PeerJS).</p>
+        <p>No poseemos servidores centrales de bases de datos, no almacenamos historiales de partidas en la nube, ni registramos cuentas de usuario.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>2. Almacenamiento Local (localStorage)</h2>
+        <p>El único dato que la aplicación guarda en tu dispositivo es:</p>
+        <ul>
+          <li><strong>Nombre del duelista (nickname):</strong> Se guarda localmente en el navegador para que no tengas que escribirlo cada vez que entres.</li>
+          <li><strong>Preferencias técnicas:</strong> Estado de silencio del sintetizador de sonido Web Audio y estado de visualización del banner de instalación PWA en <code>sessionStorage</code>.</li>
+        </ul>
+        <p>Ninguno de estos datos se envía a servidores de terceros con fines publicitarios o de telemetría.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>3. Conexión de Red y Señalización</h2>
+        <p>Para emparejar a los dos jugadores mediante el código de sala de 6 caracteres, la biblioteca PeerJS contacta temporalmente un servidor de señalización de código abierto únicamente para establecer el apretón de manos inicial (handshake WebRTC). Una vez establecida la conexión P2P entre ambos dispositivos, los mensajes de juego viajan directamente entre ellos.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>4. Cookies y Rastreo</h2>
+        <p>Este sitio no utiliza cookies analíticas, píxeles de seguimiento ni herramientas de publicidad de terceros. Es un proyecto de juego limpio y transparente.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>5. Código Abierto y Contacto</h2>
+        <p>El código fuente completo es público y auditable en GitHub. Para cualquier duda, reporte de seguridad o sugerencia, puedes abrir una incidencia en nuestro repositorio oficial.</p>
+      </section>
+    </main>
+
+    <footer class="privacy-footer">
+      <span>JANKEN — The Card Duel</span>
+      <div>
+        <a href="./">Mesa de juego</a> · 
+        <a href="https://github.com/TeVerde29/janken-poker" target="_blank" rel="noopener">Código en GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

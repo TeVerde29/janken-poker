@@ -1,0 +1,5 @@
+Contact: https://github.com/TeVerde29/janken-poker/issues
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: es, en
+Canonical: https://teverde29.github.io/janken-poker/.well-known/security.txt
+Policy: https://github.com/TeVerde29/janken-poker/blob/main/README.md

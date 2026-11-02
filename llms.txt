@@ -1,0 +1,12 @@
+# JANKEN — The Card Duel
+
+> Juego 1v1 online para navegador que fusiona Piedra, Papel o Tijera con cartas coleccionables, estrategia de mesa y conexión directa P2P (WebRTC).
+
+- Web: https://teverde29.github.io/janken-poker/
+- Código fuente: https://github.com/TeVerde29/janken-poker
+- Privacidad: https://teverde29.github.io/janken-poker/privacidad.html
+
+## Características
+- Multijugador P2P en tiempo real usando PeerJS (WebRTC), sin servidores intermedios ni registro de cuentas.
+- Modos de juego con mazos de 18, 30 y 54 cartas balanceadas exactamente en tercios (piedra, papel, tijera).
+- Desempates tácticos a muerte súbita y soporte completo Progressive Web App (PWA) instalable.

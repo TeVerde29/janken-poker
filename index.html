@@ -3,9 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>JANKEN — The Card Duel</title>
+  <title>JANKEN — The Card Duel | Piedra, Papel o Tijera con Cartas 1v1 Online</title>
   <meta name="description" content="Juego 1v1 online para navegador: piedra, papel o tijera con cartas y estrategia de mesa. Partidas P2P directas sin cuentas ni registro.">
+  <link rel="canonical" href="https://teverde29.github.io/janken-poker/">
   <meta name="theme-color" content="#101512">
+
+  <!-- Open Graph / Redes Sociales -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://teverde29.github.io/janken-poker/">
+  <meta property="og:title" content="JANKEN — The Card Duel | Piedra, Papel o Tijera con Cartas 1v1">
+  <meta property="og:description" content="Duelos 1v1 de cartas online en tiempo real por WebRTC P2P. Sin registros ni cuentas: crea una sala y comparte el código.">
+  <meta property="og:image" content="https://teverde29.github.io/janken-poker/assets/icons/icon-512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="JANKEN — The Card Duel | Duelo 1v1">
+  <meta name="twitter:description" content="Piedra, papel o tijera llevado a la mesa de cartas online P2P.">
+  <meta name="twitter:image" content="https://teverde29.github.io/janken-poker/assets/icons/icon-512.png">
+
+  <!-- Seguridad y Conexiones Externas -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://0.peerjs.com wss://0.peerjs.com https://*.peerjs.com wss://*.peerjs.com; object-src 'none'; base-uri 'self';">
+
   <link rel="icon" type="image/svg+xml" href="assets/icons/jc.svg">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
@@ -13,8 +33,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="JANKEN">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com">
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/screens.css">
@@ -51,6 +74,11 @@
           </div>
           <button type="submit" class="btn btn--primary btn--block btn--lg">Entrar a la mesa</button>
         </form>
+        <footer class="panel-meta-footer">
+          <a href="privacidad.html" class="panel-meta-link">Privacidad y Términos</a>
+          <span class="panel-meta-sep" aria-hidden="true">·</span>
+          <a href="https://github.com/TeVerde29/janken-poker" class="panel-meta-link" target="_blank" rel="noopener">Código en GitHub</a>
+        </footer>
       </div>
     </section>
 
@@ -106,6 +134,11 @@
 
         <footer class="lobby-footer">
           <span class="lobby-tip">Partidas multijugador 1v1 directas mediante WebRTC P2P</span>
+          <div class="lobby-footer-links">
+            <a href="privacidad.html" class="panel-meta-link">Privacidad y Términos</a>
+            <span class="panel-meta-sep" aria-hidden="true">·</span>
+            <a href="https://github.com/TeVerde29/janken-poker" class="panel-meta-link" target="_blank" rel="noopener">Código en GitHub</a>
+          </div>
         </footer>
       </div>
     </section>
@@ -349,7 +382,7 @@
   <!-- Banner para instalar acceso directo PWA -->
   <aside id="pwa-install-banner" class="pwa-banner" role="complementary" aria-label="Instalar juego como aplicación" hidden>
     <div class="pwa-banner-content">
-      <img src="assets/icons/icon-192.png" alt="" width="36" height="36" class="pwa-banner-icon">
+      <img src="assets/icons/jc.svg" alt="" width="36" height="36" class="pwa-banner-icon">
       <div class="pwa-banner-info">
         <span class="pwa-banner-title">JANKEN — The Card Duel</span>
         <span class="pwa-banner-desc">Instala el juego para abrirlo directo en pantalla completa</span>
@@ -363,7 +396,7 @@
     </div>
   </aside>
 
-  <script src="https://unpkg.com/peerjs@1/dist/peerjs.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" integrity="sha384-x0YgkOr/3UOZP2CRDxGW9e0Q+2Qjyr3uJrm4xU32Y7ZCNAo7Cc7bjhrZMi/dwczu" crossorigin="anonymous"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
