@@ -7,6 +7,12 @@
   <meta name="description" content="Juego 1v1 online para navegador: piedra, papel o tijera con cartas y estrategia de mesa. Partidas P2P directas sin cuentas ni registro.">
   <meta name="theme-color" content="#101512">
   <link rel="icon" type="image/svg+xml" href="assets/icons/jc.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="JANKEN">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@500;600;700&display=swap">
@@ -59,10 +65,16 @@
               <h2 id="menu-title" class="user-name"><span id="menu-name"></span></h2>
             </div>
           </div>
-          <button id="btn-rename" type="button" class="btn-pill" aria-label="Cambiar nombre de jugador">
-            <svg class="pill-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Cambiar</span>
-          </button>
+          <div class="lobby-header-actions">
+            <button id="btn-install-app" type="button" class="btn-pill btn-pill--install" aria-label="Instalar acceso directo" hidden>
+              <svg class="pill-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="7 10 12 15 17 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>Instalar</span>
+            </button>
+            <button id="btn-rename" type="button" class="btn-pill" aria-label="Cambiar nombre de jugador">
+              <svg class="pill-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Cambiar</span>
+            </button>
+          </div>
         </header>
 
         <div class="lobby-actions">
@@ -318,6 +330,23 @@
 
   <div id="toast" class="toast" role="alert" hidden></div>
   <div id="confetti-layer" aria-hidden="true"></div>
+
+  <!-- Banner para instalar acceso directo PWA -->
+  <aside id="pwa-install-banner" class="pwa-banner" role="complementary" aria-label="Instalar juego como aplicación" hidden>
+    <div class="pwa-banner-content">
+      <img src="assets/icons/icon-192.png" alt="" width="36" height="36" class="pwa-banner-icon">
+      <div class="pwa-banner-info">
+        <span class="pwa-banner-title">JANKEN — The Card Duel</span>
+        <span class="pwa-banner-desc">Instala el juego para abrirlo directo en pantalla completa</span>
+      </div>
+    </div>
+    <div class="pwa-banner-actions">
+      <button id="btn-pwa-install" type="button" class="btn btn--primary btn--sm">Instalar</button>
+      <button id="btn-pwa-dismiss" type="button" class="btn-icon-only" aria-label="Cerrar aviso de instalación">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </aside>
 
   <script src="https://unpkg.com/peerjs@1/dist/peerjs.min.js"></script>
   <script type="module" src="js/main.js"></script>

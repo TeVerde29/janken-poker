@@ -15,6 +15,7 @@ import { net, normalizeCode, CODE_LENGTH } from './net.js';
 import * as ui from './ui.js';
 import * as fx from './animations.js';
 import * as audio from './audio.js';
+import { initPWA } from './pwa.js';
 
 const { $ } = ui;
 const NICK_KEY = 'jankencards.nickname';
@@ -628,6 +629,7 @@ function initGameOver() {
 
 function boot() {
   ui.preloadCards();
+  initPWA();
   initLogin();
   initMenu();
   initConfig();

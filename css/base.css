@@ -217,6 +217,12 @@ h1, h2, h3, h4 {
   font-size: 1.05rem;
 }
 
+.btn--sm {
+  min-height: 36px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.85rem;
+}
+
 .btn-icon {
   width: 17px;
   height: 17px;
