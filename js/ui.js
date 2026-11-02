@@ -43,7 +43,7 @@ export function showScreen(name) {
   if (focusTarget && window.matchMedia('(hover: hover)').matches) focusTarget.focus({ preventScroll: true });
 }
 
-export function showToast(text, ms = 2600) {
+export function showToast(text, ms = 2800) {
   const t = $('toast');
   t.textContent = text;
   t.hidden = false;
@@ -73,6 +73,7 @@ export function renderScoreboard() {
   $('rival-name').textContent = state.rivalName || 'Rival';
   $('score-me').textContent = state.scores.me;
   $('score-rival').textContent = state.scores.rival;
+
   let label;
   if (state.isTiebreak) {
     label = state.tiebreakNumber > 1 ? `Desempate #${state.tiebreakNumber}` : 'Desempate';
@@ -110,10 +111,11 @@ export function renderHand(animate) {
   updateHand(null);
 }
 
-/** Refresca selección, cartas jugadas y bloqueo de la mano. */
+/** Refresca selección, cartas jugadas, bloqueo y el botón de acción principal. */
 export function updateHand(selectedIndex) {
   const wrap = $('hand');
   wrap.classList.toggle('is-locked', !state.canPlay);
+
   wrap.querySelectorAll('.card').forEach((el) => {
     const i = Number(el.dataset.index);
     const card = state.myHand[i];
@@ -124,10 +126,25 @@ export function updateHand(selectedIndex) {
     el.disabled = card.played;
     el.tabIndex = state.canPlay && !card.played ? 0 : -1;
   });
-  $('btn-play').disabled = !state.canPlay || selectedIndex === null;
+
+  const btnPlay = $('btn-play');
+  if (selectedIndex !== null && state.myHand[selectedIndex]) {
+    const card = state.myHand[selectedIndex];
+    btnPlay.textContent = `Jugar ${CARD_LABEL[card.type]}`;
+    btnPlay.disabled = !state.canPlay;
+    btnPlay.classList.add('btn--ready');
+  } else if (!state.canPlay && state.myPlay) {
+    btnPlay.textContent = 'Esperando al rival…';
+    btnPlay.disabled = true;
+    btnPlay.classList.remove('btn--ready');
+  } else {
+    btnPlay.textContent = 'Elige una carta';
+    btnPlay.disabled = true;
+    btnPlay.classList.remove('btn--ready');
+  }
 }
 
-/** Cartas boca abajo del rival (solo el conteo). */
+/** Cartas boca abajo del rival (solo el conteo visual). */
 export function renderRivalHand(count) {
   state.rivalHandCount = count;
   const wrap = $('rival-hand');
@@ -167,7 +184,7 @@ export function clearArena() {
     const holder = slotHolder(who);
     const ph = document.createElement('div');
     ph.className = 'slot-empty';
-    ph.innerHTML = '<span>?</span>';
+    ph.innerHTML = '<span class="slot-empty-icon" aria-hidden="true">🎴</span>';
     holder.replaceChildren(ph);
   }
   $('arena').classList.remove('is-meeting');
@@ -219,7 +236,7 @@ export function renderAttemptLabel(attempt) {
 /* ---------------------------------------------------------------- Historial */
 
 const OUTCOME_TEXT = { win: 'Ganaste', lose: 'Perdiste', tie: 'Empate' };
-const OUTCOME_ICON = { win: '✓', lose: '✗', tie: '=' };
+const OUTCOME_ICON = { win: '✓', lose: '✕', tie: '=' };
 
 export function renderHistory(history) {
   const list = $('history');
@@ -228,15 +245,19 @@ export function renderHistory(history) {
     const li = document.createElement('li');
     li.className = `history-item history-item--${h.outcome}`;
     li.setAttribute('aria-label', `Intento ${i + 1}: tu ${CARD_LABEL[h.mine]} contra ${CARD_LABEL[h.theirs]}. ${OUTCOME_TEXT[h.outcome]}`);
+
     const mine = document.createElement('span');
     mine.className = 'mini-card';
     mine.append(cardImg(h.mine));
+
     const badge = document.createElement('span');
     badge.className = 'history-badge';
     badge.textContent = OUTCOME_ICON[h.outcome];
+
     const theirs = document.createElement('span');
     theirs.className = 'mini-card';
     theirs.append(cardImg(h.theirs));
+
     li.append(mine, badge, theirs);
     list.append(li);
   });
@@ -256,14 +277,23 @@ export function setStatus(text, kind = 'info') {
 
 export function renderGameOver({ won, tiebreaks }) {
   const title = $('result-title');
-  title.textContent = won ? '¡Ganaste!' : 'Perdiste';
+  title.textContent = won ? '¡Victoria!' : 'Derrota';
   title.className = 'result-title ' + (won ? 'result-title--win' : 'result-title--lose');
+
   $('final-me-name').textContent = state.nickname;
   $('final-rival-name').textContent = state.rivalName || 'Rival';
   $('final-me').textContent = state.scores.me;
   $('final-rival').textContent = state.scores.rival;
-  let sub = won ? `Has vencido a ${state.rivalName || 'tu rival'}.` : `${state.rivalName || 'Tu rival'} se lleva la partida.`;
-  if (tiebreaks > 0) sub += tiebreaks > 1 ? ` Decidido tras ${tiebreaks} rondas de desempate.` : ' Decidido en la ronda de desempate.';
+
+  let sub = won
+    ? `Has superado a ${state.rivalName || 'tu rival'} en el duelo.`
+    : `${state.rivalName || 'Tu rival'} se lleva la victoria esta vez.`;
+
+  if (tiebreaks > 0) {
+    sub += tiebreaks > 1
+      ? ` Resuelto tras ${tiebreaks} intensas rondas de desempate.`
+      : ' Resuelto en la ronda de desempate.';
+  }
   $('result-sub').textContent = sub;
 }
 

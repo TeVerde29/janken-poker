@@ -1,22 +1,23 @@
-/* game.css — tablero, cartas, arena, historial y marcador */
+/* game.css — tablero de juego, cartas, arena, marcador e historial */
 
 .screen--game {
-  /* Tamaños de carta: caben 3 en 320px y se adaptan a la altura disponible.
-     Relación 5:7 para respetar el arte SVG original (300x420). */
-  --card-w: clamp(70px, min(27vw, 18dvh), 160px);
-  --arena-w: clamp(72px, min(30vw, 19dvh), 170px);
-  --meet: clamp(6px, 2vw, 14px);
+  /* Proporciones de cartas: 3 cartas caben perfectamente en pantallas móviles de 320px
+     y escalan con gracia hasta 760px en escritorio. Arte original en 5:7 (300x420). */
+  --card-w: clamp(74px, min(27vw, 17dvh), 154px);
+  --arena-w: clamp(78px, min(31vw, 18dvh), 164px);
+  --meet: clamp(8px, 2.5vw, 16px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(6px, 1.4dvh, 14px);
-  max-width: 760px;
+  gap: clamp(8px, 1.6dvh, 16px);
+  max-width: 720px;
   margin: 0 auto;
-  padding-top: max(10px, env(safe-area-inset-top));
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
 }
 
-/* --------------------------------------------------------------- Marcador */
+/* ------------------------------------------------ 1. Marcador Deportivo HUD */
 
 .scoreboard {
   position: relative;
@@ -24,11 +25,12 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 8px;
-  padding: 8px 48px 8px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(26, 29, 38, 0.85);
+  gap: 12px;
+  padding: 10px 48px 10px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-subtle);
 }
 
 .player {
@@ -43,11 +45,11 @@
 }
 
 .player-tag {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--text-muted);
 }
 
 .player-name {
@@ -57,14 +59,15 @@
   white-space: nowrap;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(0.85rem, 3.6vw, 1.05rem);
+  font-size: clamp(0.85rem, 3.4vw, 1.05rem);
+  color: var(--text-primary);
 }
 
 .player--me .player-name {
-  color: var(--gold);
+  color: var(--gold-matte);
 }
 
-.score-box {
+.score-center {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,11 +75,11 @@
 
 .score {
   display: flex;
-  align-items: center;
-  gap: 0.4rem;
+  align-items: baseline;
+  gap: 0.35rem;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.4rem, 7vw, 2rem);
+  font-size: clamp(1.4rem, 6.5vw, 2.1rem);
   line-height: 1;
 }
 
@@ -84,70 +87,77 @@
   display: inline-block;
   min-width: 1ch;
   text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
 }
 
 #score-me {
-  color: var(--gold);
+  color: var(--gold-matte);
 }
 
 .score-sep {
-  color: var(--text-dim);
-  font-weight: 500;
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.85em;
 }
 
 .round-label {
-  margin-top: 2px;
-  font-size: 0.72rem;
+  margin-top: 3px;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
 #btn-leave-game {
   position: absolute;
   top: 50%;
-  right: 8px;
+  right: 10px;
   transform: translateY(-50%);
 }
 
-/* --------------------------------------------------------------- Banner */
+/* ------------------------------------------------ 2. Banner de Desempate */
 
 .tiebreak-banner {
   width: 100%;
-  padding: 0.55rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  background: linear-gradient(90deg, #8B2E3C, var(--gold), #5B8DB8);
-  color: var(--gold-ink);
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.05), rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.05));
   text-align: center;
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
 }
 
-/* ----------------------------------------------------------- Mano rival */
+.tiebreak-banner-text {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--gold-matte);
+}
+
+/* ------------------------------------------------ 3. Mano del Rival */
 
 .rival-hand {
   display: flex;
   justify-content: center;
-  gap: 6px;
-  min-height: 34px;
+  gap: 8px;
+  min-height: 38px;
 }
 
 .mini-back {
-  width: 24px;
+  width: 26px;
   aspect-ratio: 5 / 7;
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  transition: opacity 300ms ease, transform 300ms ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: opacity 280ms ease, transform 280ms ease;
 }
 
 .mini-back.is-gone {
   opacity: 0.12;
-  transform: translateY(4px) scale(0.9);
+  transform: translateY(6px) scale(0.85);
 }
 
 .mini-back img,
@@ -156,48 +166,82 @@
   height: 100%;
 }
 
-/* ----------------------------------------------------------------- Arena */
+/* ------------------------------------------------ 4. Arena de Duelo Orgánica */
 
 .arena-wrap {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 10px 8px;
-  border: 1px solid var(--line);
+  gap: 8px;
+  padding: 12px 10px;
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  background:
-    radial-gradient(70% 90% at 50% 50%, rgba(212, 175, 55, 0.07), transparent 70%),
-    rgba(26, 29, 38, 0.55);
+  background-color: var(--bg-surface);
+  background-image: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.04), transparent 70%);
+}
+
+.arena-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .attempt-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--text-muted);
 }
 
 .arena {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, var(--arena-w));
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: clamp(16px, 6vw, 48px);
+  gap: clamp(14px, 5vw, 40px);
+  width: 100%;
+  padding: 4px 0;
+}
+
+.arena-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.vs-badge {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
 }
 
 .arena-slot {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transition: transform 260ms var(--ease-out);
+  gap: 6px;
+  transition: transform 260ms var(--ease-apple);
 }
 
-.arena.is-meeting .arena-slot--me { transform: translateX(var(--meet)); }
-.arena.is-meeting .arena-slot--rival { transform: translateX(calc(var(--meet) * -1)); }
+.arena.is-meeting .arena-slot--me {
+  transform: translateX(var(--meet));
+}
+
+.arena.is-meeting .arena-slot--rival {
+  transform: translateX(calc(var(--meet) * -1));
+}
 
 .slot-card {
   width: var(--arena-w);
@@ -205,9 +249,9 @@
 }
 
 .slot-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .slot-empty {
@@ -215,12 +259,15 @@
   height: 100%;
   display: grid;
   place-items: center;
-  border: 2px dashed rgba(240, 240, 240, 0.14);
-  border-radius: calc(var(--arena-w) * 0.067);
-  color: rgba(240, 240, 240, 0.18);
-  font-family: var(--font-display);
-  font-size: calc(var(--arena-w) * 0.3);
-  font-weight: 700;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: calc(var(--arena-w) * 0.075);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.slot-empty-icon {
+  font-size: calc(var(--arena-w) * 0.28);
+  opacity: 0.25;
+  filter: grayscale(1);
 }
 
 .slot-fx,
@@ -231,7 +278,7 @@
 }
 
 .slot-fx {
-  border-radius: calc(var(--arena-w) * 0.067);
+  border-radius: calc(var(--arena-w) * 0.075);
 }
 
 .flip {
@@ -246,8 +293,6 @@
   transform: rotateY(180deg); /* boca abajo hasta la revelación */
 }
 
-/* La clase .card-flip oculta la cara trasera del propio contenedor; aquí
-   el contenedor debe dejar ver sus dos caras hijas. */
 .flip .flip-inner.card-flip {
   backface-visibility: visible;
 }
@@ -256,10 +301,10 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border-radius: calc(var(--arena-w) * 0.067);
+  border-radius: calc(var(--arena-w) * 0.075);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-card);
 }
 
 .face img {
@@ -271,45 +316,59 @@
   transform: rotateY(180deg);
 }
 
+/* Insignia central de resultado */
 .arena-result {
   position: absolute;
   left: 50%;
-  top: 44%;
-  z-index: 3;
-  padding: 0.3em 0.8em;
-  border-radius: 999px;
-  background: rgba(18, 20, 26, 0.92);
-  border: 2px solid currentColor;
+  top: 50%;
+  z-index: 5;
+  padding: 0.35em 1em;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  border: 1px solid currentColor;
+  box-shadow: var(--shadow-modal);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1rem, 5vw, 1.4rem);
-  letter-spacing: 0.1em;
+  font-size: clamp(0.95rem, 4.5vw, 1.35rem);
+  letter-spacing: 0.08em;
   white-space: nowrap;
   transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
-.arena-result--win { color: var(--gold); }
-.arena-result--lose { color: var(--lose); }
-.arena-result--tie { color: var(--tie); }
+.arena-result--win {
+  color: var(--win);
+  border-color: var(--win);
+}
 
-/* ------------------------------------------------------------- Historial */
+.arena-result--lose {
+  color: var(--lose);
+  border-color: var(--lose);
+}
+
+.arena-result--tie {
+  color: var(--tie);
+  border-color: var(--tie);
+}
+
+/* ------------------------------------------------ 5. Historial de Intentos */
 
 .history {
   display: flex;
   gap: 8px;
   padding: 0;
   list-style: none;
+  margin-top: 2px;
 }
 
 .history-item {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 6px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--bg-elev);
+  padding: 3px 7px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
 }
 
 .mini-card {
@@ -320,29 +379,32 @@
 }
 
 .history-badge {
-  width: 18px;
+  width: 16px;
   text-align: center;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
-.history-item--win { border-color: rgba(212, 175, 55, 0.5); }
-.history-item--win .history-badge { color: var(--gold); }
+.history-item--win { border-color: rgba(56, 161, 105, 0.4); }
+.history-item--win .history-badge { color: var(--win); }
+.history-item--lose { border-color: rgba(229, 62, 62, 0.4); }
 .history-item--lose .history-badge { color: var(--lose); }
+.history-item--tie { border-color: rgba(66, 153, 225, 0.4); }
 .history-item--tie .history-badge { color: var(--tie); }
 
-/* ---------------------------------------------------------------- Estado */
+/* ------------------------------------------------ 6. Estado del Turno */
 
 .game-status {
   min-height: 1.5em;
   font-family: var(--font-display);
+  font-size: 0.95rem;
   font-weight: 600;
   text-align: center;
-  color: var(--text-dim);
+  color: var(--text-secondary);
 }
 
 .game-status--turn {
-  color: var(--gold);
+  color: var(--text-primary);
 }
 
 .game-status--turn::before {
@@ -352,41 +414,43 @@
   height: 8px;
   margin-right: 8px;
   border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 10px var(--gold);
+  background: var(--gold-matte);
+  box-shadow: 0 0 10px var(--gold-matte);
   vertical-align: middle;
 }
 
-/* ------------------------------------------------------------------ Mano */
+/* ------------------------------------------------ 7. Mano y Cartas */
+
+.player-hand-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
 
 .hand {
   display: flex;
   justify-content: center;
-  gap: clamp(6px, 2.5vw, 18px);
-  padding-top: 12px; /* espacio para la elevación al seleccionar */
-  min-height: calc(var(--card-w) * 1.4 + 12px);
+  gap: clamp(8px, 2.5vw, 18px);
+  padding-top: 14px; /* espacio para la elevación de selección */
+  min-height: calc(var(--card-w) * 1.4 + 14px);
 }
-
-.btn--play {
-  width: min(100%, 320px);
-}
-
-/* ----------------------------------------------------------------- Carta */
 
 .card {
   position: relative;
   width: var(--card-w);
   aspect-ratio: 5 / 7;
   padding: 0;
-  border: 2px solid transparent;
-  border-radius: calc(var(--card-w) * 0.075);
+  border: 1px solid transparent;
+  border-radius: calc(var(--card-w) * 0.08);
   background: none;
   overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
-  transition: transform var(--dur-fast) var(--ease-out),
-              box-shadow var(--dur-fast) var(--ease-out),
-              filter var(--dur-fast) var(--ease-out),
-              opacity var(--dur-fast) var(--ease-out);
+  box-shadow: var(--shadow-card);
+  transition: transform 180ms var(--ease-apple),
+              box-shadow 180ms var(--ease-apple),
+              filter 180ms var(--ease-apple),
+              opacity 180ms var(--ease-apple);
 }
 
 .card img {
@@ -395,21 +459,21 @@
   pointer-events: none;
 }
 
-.card--piedra { background: linear-gradient(180deg, #4A4A4A, #2E2E2E); }
-.card--papel  { background: linear-gradient(180deg, #F5EFE0, #E8DFC8); }
-.card--tijera { background: linear-gradient(180deg, #8B2E3C, #5E1F2A); }
+.card--piedra { background: linear-gradient(180deg, #4A4A4A, #282828); }
+.card--papel  { background: linear-gradient(180deg, #F5EFE0, #E0D7C1); }
+.card--tijera { background: linear-gradient(180deg, #8B2E3C, #561C26); }
 
 @media (hover: hover) {
   .hand:not(.is-locked) .card:not(.card-select):not(.is-played):hover {
-    transform: translateY(-4px);
-    filter: brightness(1.1);
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+    transform: translateY(-5px);
+    filter: brightness(1.08);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
   }
 }
 
 .card:focus-visible {
   outline: none;
-  box-shadow: var(--focus);
+  box-shadow: var(--focus-ring);
 }
 
 .hand.is-locked .card {
@@ -418,33 +482,55 @@
 
 .card.is-played {
   transform: scale(0.85);
-  opacity: 0.6;
-  filter: saturate(0.4);
+  opacity: 0.45;
+  filter: saturate(0.3);
   cursor: default;
 }
 
-/* ------------------------------------------------------------ Responsive */
+/* ------------------------------------------------ 8. Botón Dinámico de Juego */
+
+.btn--play {
+  width: min(100%, 340px);
+  min-height: 52px;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.btn--play.btn--ready {
+  background-color: var(--gold-matte);
+  color: var(--gold-ink);
+  box-shadow: 0 6px 20px var(--gold-glow);
+  transform: translateY(-1px);
+}
+
+.btn--play.btn--ready:hover {
+  background-color: var(--gold-hover);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.38);
+}
+
+/* ------------------------------------------------ 9. Responsive */
 
 @media (min-width: 768px) {
   .screen--game {
-    gap: 14px;
-    padding-top: 20px;
+    gap: 16px;
+    padding-top: 24px;
   }
 
   .scoreboard {
-    padding: 12px 56px 12px 20px;
+    padding: 12px 56px 12px 24px;
   }
 
-  .mini-back { width: 30px; }
-  .mini-card { width: 20px; }
+  .mini-back { width: 32px; }
+  .mini-card { width: 22px; }
 }
 
 @media (max-width: 360px) {
   .scoreboard {
     padding-right: 44px;
+    padding-left: 10px;
   }
 
   .round-label {
-    font-size: 0.64rem;
+    font-size: 0.65rem;
   }
 }

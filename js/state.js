@@ -9,11 +9,33 @@
 /** Tipos de carta válidos. */
 export const CARD_TYPES = ['piedra', 'papel', 'tijera'];
 
-/** Opciones de mazo: 6 cartas consumidas por ronda (3 por jugador). */
+/** Opciones de mazo / modos de juego: 6 cartas consumidas por ronda (3 por jugador). */
 export const DECK_OPTIONS = [
-  { size: 18, rounds: 3 },
-  { size: 30, rounds: 5 },
-  { size: 54, rounds: 9 },
+  {
+    size: 18,
+    rounds: 3,
+    title: 'Duelo Rápido',
+    tag: '3 rondas',
+    desc: 'Partida ágil e intensa de 3 rondas.',
+    layers: 1,
+  },
+  {
+    size: 30,
+    rounds: 5,
+    title: 'Estándar',
+    tag: '5 rondas',
+    desc: 'La experiencia equilibrada y competitiva.',
+    layers: 2,
+    recommended: true,
+  },
+  {
+    size: 54,
+    rounds: 9,
+    title: 'Gran Torneo',
+    tag: '9 rondas',
+    desc: 'Máxima prueba de estrategia y conteo de cartas.',
+    layers: 3,
+  },
 ];
 
 /** Intentos máximos por ronda (una carta por intento). */
@@ -30,8 +52,8 @@ export const state = {
   roomCode: null,
   peer: null,               // referencia informativa (la gestiona net.js)
   conn: null,               // referencia informativa (la gestiona net.js)
-  deckSize: 18,
-  totalRounds: 3,
+  deckSize: 30,
+  totalRounds: 5,
   currentRound: 1,
   deck: [],                 // mazo restante (solo host; lo mantiene HostEngine)
   myHand: [],               // [{ type: 'piedra', played: false }, ...]

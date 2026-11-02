@@ -1,9 +1,9 @@
-﻿/**
- * main.js â€” Arranque, router de pantallas y controlador de partida.
+/**
+ * main.js — Arranque, router de pantallas y controlador de partida.
  *
  * Todos los eventos de juego (los que llegan por red al guest y los que el
- * host se emite a sÃ­ mismo) pasan por una Ãºnica cola serie (`enqueue`), de modo
- * que ambos clientes procesan exactamente la misma secuencia y cada animaciÃ³n
+ * host se emite a sí mismo) pasan por una única cola serie (`enqueue`), de modo
+ * que ambos clientes procesan exactamente la misma secuencia y cada animación
  * termina antes de pintar el siguiente evento.
  */
 import {
@@ -32,7 +32,7 @@ function enqueue(msg) {
     .catch((err) => console.error('[janken] error procesando evento', msg?.type, err));
 }
 
-/** El motor del host emite aquÃ­: al host localmente, al guest por red. */
+/** El motor del host emite aquí: al host localmente, al guest por red. */
 function engineEmit(role, msg) {
   if (role === 'host') enqueue(msg);
   else net.send(msg);
@@ -59,7 +59,7 @@ net.setHandlers({
   onFatal: () => {
     if (state.screen === 'waiting') {
       leaveSession();
-      ui.showToast('Se perdiÃ³ la conexiÃ³n con el servidor. IntÃ©ntalo de nuevo.');
+      ui.showToast('Se perdió la conexión con el servidor. Inténtalo de nuevo.');
     }
   },
 });
@@ -103,7 +103,7 @@ function onNetData(msg) {
   // Guest
   if (msg.type === 'room-full') {
     leaveSession();
-    showJoinError('La sala ya estÃ¡ completa.');
+    showJoinError('La sala ya está completa.');
     return;
   }
   if (GUEST_EVENTS.includes(msg.type)) enqueue(msg);
@@ -119,10 +119,10 @@ function onConnectionClosed() {
   sessionId++;
   engine = null;
   state.canPlay = false;
-  ui.showDisconnect(state.role === 'host' ? 'Tu rival se ha desconectado.' : 'El anfitriÃ³n se ha desconectado o cerrÃ³ la sala.');
+  ui.showDisconnect(state.role === 'host' ? 'Tu rival se ha desconectado.' : 'El anfitrión se ha desconectado o cerró la sala.');
 }
 
-/** Cierra la conexiÃ³n y vuelve al menÃº. */
+/** Cierra la conexión y vuelve al menú. */
 function leaveSession() {
   sessionId++;
   queue = Promise.resolve();
@@ -141,12 +141,12 @@ function leaveSession() {
 async function onRoomConfig(msg) {
   state.deckSize = msg.deckSize;
   state.totalRounds = msg.rounds;
-  if (state.role === 'guest') state.rivalName = sanitizeName(msg.hostName) || 'AnfitriÃ³n';
+  if (state.role === 'guest') state.rivalName = sanitizeName(msg.hostName) || 'Anfitrión';
   resetMatchState();
   prepareBoard();
   ui.showScreen('game');
-  ui.setStatus('Barajando el mazoâ€¦', 'wait');
-  await fx.wait(500);
+  ui.setStatus('Barajando el mazo…', 'wait');
+  await fx.wait(400);
 }
 
 function prepareBoard() {
@@ -188,15 +188,15 @@ async function onDeal(msg) {
   ui.renderRivalHand(3);
 
   if (state.isTiebreak) {
-    ui.setStatus(state.tiebreakNumber > 1 ? 'Desempate nulo: Â¡se repite!' : 'Empate en puntos: Â¡desempate!', 'info');
+    ui.setStatus(state.tiebreakNumber > 1 ? 'Desempate nulo: ¡se repite!' : 'Empate en puntos: ¡desempate!', 'info');
     await fx.showBanner($('tiebreak-banner'));
   } else {
     ui.setTiebreakBanner(false);
-    ui.setStatus('Repartiendo cartasâ€¦', 'info');
+    ui.setStatus('Repartiendo cartas…', 'info');
   }
 
   ui.renderHand(true);
-  await fx.wait(650);
+  await fx.wait(600);
   enableTurn();
 }
 
@@ -204,7 +204,7 @@ function enableTurn() {
   state.canPlay = true;
   selectedIndex = null;
   ui.updateHand(null);
-  ui.setStatus(state.rivalPlay ? 'El rival ya eligiÃ³. Â¡Tu turno!' : 'Tu turno: elige una carta', 'turn');
+  ui.setStatus(state.rivalPlay ? 'El rival ya eligió. ¡Tu turno!' : 'Tu turno: elige una carta', 'turn');
 }
 
 function remainingRivalCards() {
@@ -216,7 +216,7 @@ function onRivalPlayed(msg) {
   state.rivalPlay = 'hidden';
   ui.setFaceDown('rival');
   ui.renderRivalHand(remainingRivalCards());
-  if (state.canPlay) ui.setStatus('El rival ya eligiÃ³. Â¡Tu turno!', 'turn');
+  if (state.canPlay) ui.setStatus('El rival ya eligió. ¡Tu turno!', 'turn');
 }
 
 async function onAttemptResult(msg) {
@@ -230,7 +230,7 @@ async function onAttemptResult(msg) {
   state.rivalPlay = null;
   state.roundHistory.push({ mine, theirs, outcome });
   ui.renderRivalHand(remainingRivalCards());
-  ui.setStatus('Â¡Revelando!', 'info');
+  ui.setStatus('¡Revelando!', 'info');
 
   await fx.revealAttempt(
     { me: ui.slotParts('me'), rival: ui.slotParts('rival') },
@@ -253,7 +253,7 @@ async function onAttemptResult(msg) {
 async function onRoundResult(msg) {
   const scores = toPerspective(msg.scores);
   if (msg.nula) {
-    ui.setStatus(msg.isTiebreak ? 'Desempate nulo: se repetirÃ¡' : 'Ronda nula: nadie suma', 'info');
+    ui.setStatus(msg.isTiebreak ? 'Desempate nulo: se repetirá' : 'Ronda nula: nadie suma', 'info');
     await fx.nulaRound($('overlay-nula'));
     state.scores = scores;
     await fx.wait(300);
@@ -263,9 +263,9 @@ async function onRoundResult(msg) {
   state.scores = scores;
   ui.renderScoreboard();
   fx.bumpScore($(iWon ? 'score-me' : 'score-rival'));
-  if (msg.isTiebreak) ui.setStatus(iWon ? 'Â¡Ganas el desempate!' : 'El rival gana el desempate', 'info');
-  else ui.setStatus(iWon ? 'Â¡Ganas la ronda! +1 punto' : 'El rival gana la ronda', 'info');
-  await fx.wait(1500);
+  if (msg.isTiebreak) ui.setStatus(iWon ? '¡Ganas el desempate!' : 'El rival gana el desempate', 'info');
+  else ui.setStatus(iWon ? '¡Ganas la ronda! +1 punto' : 'El rival gana la ronda', 'info');
+  await fx.wait(1400);
 }
 
 async function onGameOver(msg) {
@@ -279,7 +279,7 @@ async function onGameOver(msg) {
   ui.setRematchUI({
     label: 'Revancha',
     disabled: false,
-    note: state.role === 'host' ? 'Misma configuraciÃ³n de mazo.' : 'La revancha la inicia el anfitriÃ³n.',
+    note: state.role === 'host' ? 'Misma configuración de mazo.' : 'La revancha la inicia el anfitrión.',
   });
   ui.showScreen('gameover');
   if (won) fx.launchConfetti();
@@ -290,9 +290,9 @@ function onRematchRequest() {
   state.rematch.offered = true;
   if (state.rematch.ready) {
     net.send({ type: 'rematch-accept' });
-    ui.setRematchUI({ label: 'Preparandoâ€¦', disabled: true, note: 'Â¡Revancha aceptada!' });
+    ui.setRematchUI({ label: 'Preparando…', disabled: true, note: '¡Revancha aceptada!' });
   } else {
-    ui.setRematchUI({ label: 'Aceptar revancha', disabled: false, note: `Â¡${state.rivalName} quiere la revancha!` });
+    ui.setRematchUI({ label: 'Aceptar revancha', disabled: false, note: `¡${state.rivalName} quiere la revancha!` });
   }
 }
 
@@ -318,7 +318,7 @@ function confirmPlay() {
   selectedIndex = null;
   ui.updateHand(null);
   ui.setFaceDown('me');
-  ui.setStatus(state.rivalPlay ? 'Revelandoâ€¦' : 'Esperando jugada del rivalâ€¦', 'wait');
+  ui.setStatus(state.rivalPlay ? 'Revelando…' : 'Esperando jugada del rival…', 'wait');
   fx.vibrate(20);
 
   const play = { type: 'play', card: card.type, attempt: state.currentAttempt, round: state.currentRound };
@@ -332,15 +332,15 @@ function requestRematch() {
     if (!net.connected) return;
     state.rematch.requested = true;
     net.send({ type: 'rematch-request' });
-    ui.setRematchUI({ label: 'Esperandoâ€¦', disabled: true, note: `Esperando a que ${state.rivalName} acepteâ€¦` });
+    ui.setRematchUI({ label: 'Esperando…', disabled: true, note: `Esperando a que ${state.rivalName} acepte…` });
     return;
   }
   if (state.rematch.offered) {
     net.send({ type: 'rematch-accept' });
-    ui.setRematchUI({ label: 'Preparandoâ€¦', disabled: true, note: 'Â¡Revancha aceptada!' });
+    ui.setRematchUI({ label: 'Preparando…', disabled: true, note: '¡Revancha aceptada!' });
   } else {
     state.rematch.ready = true;
-    ui.setRematchUI({ label: 'Listo', disabled: true, note: 'Esperando a que el anfitriÃ³n inicie la revanchaâ€¦' });
+    ui.setRematchUI({ label: 'Listo', disabled: true, note: 'Esperando a que el anfitrión inicie la revancha…' });
   }
 }
 
@@ -357,7 +357,7 @@ function initLogin() {
     e.preventDefault();
     const name = sanitizeName(input.value);
     if (!name) {
-      $('login-error').textContent = 'Escribe un nickname para continuar.';
+      $('login-error').textContent = 'Escribe un nombre para continuar.';
       input.focus();
       return;
     }
@@ -414,11 +414,11 @@ function initMenu() {
     e.preventDefault();
     const code = normalizeCode(codeInput.value);
     if (code.length !== CODE_LENGTH) {
-      showJoinError(`El cÃ³digo tiene ${CODE_LENGTH} caracteres.`);
+      showJoinError(`El código tiene ${CODE_LENGTH} caracteres.`);
       return;
     }
     const btn = $('btn-join-go');
-    ui.setButtonBusy(btn, true, 'Conectandoâ€¦');
+    ui.setButtonBusy(btn, true, 'Conectando…');
     codeInput.disabled = true;
     showJoinError('');
     fx.vibrate(10);
@@ -428,14 +428,14 @@ function initMenu() {
       state.roomCode = code;
       await net.join(code);
       net.send({ type: 'join', name: state.nickname });
-      $('join-error').textContent = 'Conectado. Esperando al anfitriÃ³nâ€¦';
+      $('join-error').textContent = 'Conectado. Esperando al anfitrión…';
     } catch (err) {
       resetSession();
       const msg = err?.type === 'no-peerjs'
-        ? 'No se pudo cargar PeerJS. Revisa tu conexiÃ³n.'
+        ? 'No se pudo cargar PeerJS. Revisa tu conexión.'
         : ['network', 'server-error', 'socket-error', 'socket-closed'].includes(err?.type)
-          ? 'No se pudo contactar con el servidor. Revisa tu conexiÃ³n.'
-          : 'CÃ³digo invÃ¡lido o sala cerrada.';
+          ? 'No se pudo contactar con el servidor. Revisa tu conexión.'
+          : 'Código inválido o sala cerrada.';
       showJoinError(msg);
     } finally {
       ui.setButtonBusy(btn, false);
@@ -446,16 +446,32 @@ function initMenu() {
 
 function initConfig() {
   const list = $('deck-options');
-  DECK_OPTIONS.forEach((opt, i) => {
+  list.replaceChildren();
+
+  DECK_OPTIONS.forEach((opt) => {
     const label = document.createElement('label');
-    label.className = 'deck-option';
+    label.className = 'mode-card';
+    if (opt.recommended) label.classList.add('is-recommended');
+
+    const stackHtml = Array.from({ length: opt.layers }, (_, idx) =>
+      `<span class="mode-stack-layer" style="--l:${idx}"></span>`
+    ).join('');
+
     label.innerHTML = `
-      <input type="radio" name="deck" value="${opt.size}" ${i === 0 ? 'checked' : ''}>
-      <span class="deck-option-body">
-        <span class="deck-option-size">${opt.size}</span>
-        <span class="deck-option-unit">cartas</span>
-        <span class="deck-option-rounds">${opt.rounds} rondas</span>
-      </span>`;
+      <input type="radio" name="deck" value="${opt.size}" ${opt.recommended ? 'checked' : ''}>
+      <div class="mode-card-content">
+        <div class="mode-visual" aria-hidden="true">
+          <div class="mode-stack">${stackHtml}</div>
+        </div>
+        <div class="mode-info">
+          <div class="mode-header">
+            <span class="mode-title">${opt.title}</span>
+            <span class="mode-badge">${opt.tag}</span>
+          </div>
+          <p class="mode-desc">${opt.desc}</p>
+        </div>
+        <div class="mode-check" aria-hidden="true">✓</div>
+      </div>`;
     list.append(label);
   });
 
@@ -464,9 +480,9 @@ function initConfig() {
   $('config-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const size = Number(new FormData(e.target).get('deck'));
-    const opt = DECK_OPTIONS.find((o) => o.size === size) || DECK_OPTIONS[0];
+    const opt = DECK_OPTIONS.find((o) => o.size === size) || DECK_OPTIONS[1];
     const btn = $('btn-config-create');
-    ui.setButtonBusy(btn, true, 'Creando salaâ€¦');
+    ui.setButtonBusy(btn, true, 'Creando sala…');
     fx.vibrate(10);
     try {
       resetSession();
@@ -477,15 +493,15 @@ function initConfig() {
       state.roomCode = code;
       engine = new HostEngine(opt.size, engineEmit);
       $('room-code').textContent = code;
-      $('waiting-info').textContent = `Mazo de ${opt.size} cartas Â· ${opt.rounds} rondas`;
-      $('btn-copy-label').textContent = 'Copiar cÃ³digo';
+      $('waiting-info').textContent = `${opt.title} · Mazo de ${opt.size} cartas (${opt.rounds} rondas)`;
+      $('btn-copy-label').textContent = 'Copiar código';
       ui.showScreen('waiting');
     } catch (err) {
       net.destroy();
       resetSession();
       ui.showToast(err?.type === 'no-peerjs'
-        ? 'No se pudo cargar PeerJS. Revisa tu conexiÃ³n.'
-        : 'No se pudo crear la sala. Revisa tu conexiÃ³n e intÃ©ntalo de nuevo.');
+        ? 'No se pudo cargar PeerJS. Revisa tu conexión.'
+        : 'No se pudo crear la sala. Revisa tu conexión e inténtalo de nuevo.');
     } finally {
       ui.setButtonBusy(btn, false);
     }
@@ -515,12 +531,12 @@ function initWaiting() {
   $('btn-copy').addEventListener('click', async () => {
     const ok = await copyText(state.roomCode || '');
     const label = $('btn-copy-label');
-    label.textContent = ok ? 'Â¡Copiado!' : 'CÃ³pialo a mano';
+    label.textContent = ok ? '¡Copiado!' : 'Cópialo a mano';
     $('btn-copy').classList.toggle('is-copied', ok);
     fx.vibrate(15);
     clearTimeout(initWaiting.timer);
     initWaiting.timer = setTimeout(() => {
-      label.textContent = 'Copiar cÃ³digo';
+      label.textContent = 'Copiar código';
       $('btn-copy').classList.remove('is-copied');
     }, 1800);
   });
@@ -541,7 +557,7 @@ function initGame() {
   });
   $('btn-play').addEventListener('click', confirmPlay);
   $('btn-leave-game').addEventListener('click', () => {
-    if (window.confirm('Â¿Seguro que quieres abandonar la partida?')) leaveSession();
+    if (window.confirm('¿Seguro que quieres abandonar la partida?')) leaveSession();
   });
 }
 

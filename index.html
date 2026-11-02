@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Janken Cards — Piedra, papel o tijera con cartas</title>
-  <meta name="description" content="Juego 1v1 online: piedra, papel o tijera con gestión de cartas. Crea una sala, comparte el código y juega P2P.">
-  <meta name="theme-color" content="#12141A">
+  <meta name="description" content="Juego 1v1 online para navegador: piedra, papel o tijera fusionado con gestión y estrategia de cartas. Conexión P2P directa sin registro.">
+  <meta name="theme-color" content="#0C0E14">
   <link rel="icon" type="image/svg+xml" href="assets/icons/jc.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,166 +18,239 @@
 <body>
   <main id="app">
 
-    <!-- 1. Login -->
+    <!-- 1. Pantalla de Bienvenida / Nickname -->
     <section class="screen screen--center" data-screen="login" aria-labelledby="login-title">
-      <div class="panel">
+      <div class="panel panel--login">
         <div class="logo">
           <div class="logo-cards" aria-hidden="true">
-            <img src="assets/icons/piedra.svg" alt="">
-            <img src="assets/icons/jc.svg" alt="">
-            <img src="assets/icons/tijera.svg" alt="">
+            <img class="logo-card logo-card--left" src="assets/icons/piedra.svg" alt="" width="76" height="106">
+            <img class="logo-card logo-card--center" src="assets/icons/jc.svg" alt="" width="76" height="106">
+            <img class="logo-card logo-card--right" src="assets/icons/tijera.svg" alt="" width="76" height="106">
           </div>
-          <h1 id="login-title" class="title">JANKEN <span>CARDS</span></h1>
-          <p class="tagline">Piedra, papel o tijera… pero con cartas.</p>
+          <h1 id="login-title" class="title">JANKEN <span class="title-accent">CARDS</span></h1>
+          <p class="tagline">Piedra, papel o tijera… con estrategia de cartas.</p>
         </div>
+
         <form id="login-form" class="form" novalidate>
-          <label class="field-label" for="nickname-input">Tu nickname</label>
-          <input id="nickname-input" class="input" type="text" maxlength="16" autocomplete="nickname"
-                 placeholder="Máx. 16 caracteres" required data-autofocus>
-          <p id="login-error" class="field-error" role="alert"></p>
+          <div class="field-group">
+            <label class="field-label" for="nickname-input">Tu nombre o apodo</label>
+            <div class="input-wrap">
+              <input id="nickname-input" class="input" type="text" maxlength="16" autocomplete="nickname"
+                     placeholder="Ej. Alex" required data-autofocus spellcheck="false">
+            </div>
+            <p id="login-error" class="field-error" role="alert"></p>
+          </div>
           <button type="submit" class="btn btn--primary btn--block">Continuar</button>
         </form>
       </div>
     </section>
 
-    <!-- 2. Menú -->
+    <!-- 2. Menú Principal / Lobby -->
     <section class="screen screen--center" data-screen="menu" aria-labelledby="menu-title" hidden>
-      <div class="panel">
-        <p class="eyebrow">Janken Cards</p>
-        <h2 id="menu-title" class="screen-title">Hola, <span id="menu-name" class="accent"></span></h2>
+      <div class="panel panel--menu">
+        <header class="lobby-profile">
+          <div class="lobby-user">
+            <span class="lobby-badge">Jugador</span>
+            <h2 id="menu-title" class="lobby-name"><span id="menu-name"></span></h2>
+          </div>
+          <button id="btn-rename" type="button" class="btn-pill" aria-label="Cambiar nombre de jugador">
+            <svg class="pill-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Cambiar</span>
+          </button>
+        </header>
+
         <div class="menu-actions">
-          <button id="btn-create" type="button" class="btn btn--primary btn--block" data-autofocus>Crear sala</button>
-          <button id="btn-join" type="button" class="btn btn--secondary btn--block" aria-expanded="false" aria-controls="join-form">Unirse a sala</button>
-          <form id="join-form" class="join-form" novalidate hidden>
-            <label class="field-label" for="code-input">Código de sala</label>
-            <div class="join-row">
-              <input id="code-input" class="input input--code" type="text" maxlength="6" inputmode="text"
-                     autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC123">
-              <button id="btn-join-go" type="submit" class="btn btn--primary">Entrar</button>
-            </div>
-            <p id="join-error" class="field-error" role="status" aria-live="polite"></p>
-          </form>
-          <button id="btn-rename" type="button" class="btn btn--ghost btn--block">Cambiar nombre</button>
+          <button id="btn-create" type="button" class="btn btn--primary btn--block btn--hero" data-autofocus>
+            <span class="btn-hero-text">Crear sala</span>
+            <span class="btn-hero-sub">Elige el mazo e invita a un amigo</span>
+          </button>
+
+          <div class="join-card">
+            <button id="btn-join" type="button" class="btn btn--secondary btn--block" aria-expanded="false" aria-controls="join-form">
+              <span>Unirse a una sala</span>
+              <svg class="chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+
+            <form id="join-form" class="join-form" novalidate hidden>
+              <label class="field-label" for="code-input">Código de sala (6 letras)</label>
+              <div class="join-row">
+                <input id="code-input" class="input input--code" type="text" maxlength="6" inputmode="text"
+                       autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC234">
+                <button id="btn-join-go" type="submit" class="btn btn--primary">Entrar</button>
+              </div>
+              <p id="join-error" class="field-error" role="status" aria-live="polite"></p>
+            </form>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. Configuración (host) -->
+    <!-- 3. Selección de Modo de Juego (Mazo) -->
     <section class="screen screen--center" data-screen="config" aria-labelledby="config-title" hidden>
-      <div class="panel">
-        <p class="eyebrow">Nueva sala</p>
-        <h2 id="config-title" class="screen-title">Elige el mazo</h2>
+      <div class="panel panel--config">
+        <header class="section-header">
+          <p class="eyebrow">Configuración de partida</p>
+          <h2 id="config-title" class="screen-title">Elige el modo de juego</h2>
+          <p class="subtitle">El mazo se compone de tercios exactos de piedra, papel y tijera, y se baraja una sola vez.</p>
+        </header>
+
         <form id="config-form" class="form">
           <fieldset class="deck-fieldset">
             <legend class="visually-hidden">Tamaño del mazo</legend>
-            <div id="deck-options" class="deck-options"></div>
+            <div id="deck-options" class="deck-modes"></div>
           </fieldset>
-          <p class="hint">Un tercio de piedras, papeles y tijeras. Se baraja una sola vez y las cartas jugadas no vuelven.</p>
-          <button id="btn-config-create" type="submit" class="btn btn--primary btn--block">Crear sala y generar código</button>
-          <button id="btn-config-back" type="button" class="btn btn--ghost btn--block">Volver</button>
+
+          <div class="config-actions">
+            <button id="btn-config-create" type="submit" class="btn btn--primary btn--block">Crear sala y generar código</button>
+            <button id="btn-config-back" type="button" class="btn btn--ghost btn--block">Volver al menú</button>
+          </div>
         </form>
       </div>
     </section>
 
-    <!-- 4. Sala de espera -->
+    <!-- 4. Sala de Espera -->
     <section class="screen screen--center" data-screen="waiting" aria-labelledby="waiting-title" hidden>
-      <div class="panel">
-        <p class="eyebrow">Sala creada</p>
-        <h2 id="waiting-title" class="screen-title">Comparte este código</h2>
-        <p id="room-code" class="room-code" aria-live="polite"></p>
+      <div class="panel panel--waiting">
+        <header class="section-header">
+          <p class="eyebrow">Sala creada</p>
+          <h2 id="waiting-title" class="screen-title">Comparte el código</h2>
+          <p id="waiting-info" class="subtitle"></p>
+        </header>
+
+        <div class="room-code-box">
+          <span class="code-label">Código de acceso</span>
+          <p id="room-code" class="room-code" aria-live="polite"></p>
+        </div>
+
         <button id="btn-copy" type="button" class="btn btn--primary btn--block btn--lg" data-autofocus>
           <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           <span id="btn-copy-label">Copiar código</span>
         </button>
-        <div class="waiting-status">
-          <span class="spinner" aria-hidden="true"></span>
-          <p class="pulse-waiting">Esperando a tu rival…</p>
+
+        <div class="waiting-indicator">
+          <span class="pulsar-dot" aria-hidden="true"></span>
+          <p class="pulse-waiting">Esperando a que tu rival se una…</p>
         </div>
-        <p id="waiting-info" class="hint"></p>
-        <button id="btn-cancel-room" type="button" class="btn btn--ghost btn--block">Cancelar / Salir</button>
+
+        <button id="btn-cancel-room" type="button" class="btn btn--ghost btn--block">Cancelar y salir</button>
       </div>
     </section>
 
-    <!-- 5. Tablero -->
+    <!-- 5. Tablero de Juego -->
     <section class="screen screen--game" data-screen="game" aria-label="Tablero de juego" hidden>
+      <!-- Cabecera estilo competición limpia -->
       <header class="scoreboard">
         <div class="player player--me">
           <span class="player-tag">Tú</span>
           <span id="me-name" class="player-name"></span>
         </div>
-        <div class="score-box">
+
+        <div class="score-center">
           <div class="score" aria-label="Marcador">
             <span id="score-me" class="score-num">0</span>
-            <span class="score-sep">—</span>
+            <span class="score-sep">:</span>
             <span id="score-rival" class="score-num">0</span>
           </div>
-          <span id="round-label" class="round-label"></span>
+          <span id="round-label" class="round-label">Ronda 1 de 5</span>
         </div>
+
         <div class="player player--rival">
           <span class="player-tag">Rival</span>
           <span id="rival-name" class="player-name"></span>
         </div>
+
         <button id="btn-leave-game" type="button" class="btn-icon-only" aria-label="Abandonar partida" title="Abandonar partida">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </header>
 
-      <div id="tiebreak-banner" class="tiebreak-banner" role="status" hidden>¡RONDA DE DESEMPATE!</div>
+      <!-- Banner sutil de desempate -->
+      <div id="tiebreak-banner" class="tiebreak-banner" role="status" hidden>
+        <span class="tiebreak-banner-text">¡RONDA DE DESEMPATE!</span>
+      </div>
 
-      <div id="rival-hand" class="rival-hand" role="img"></div>
+      <!-- Mano del rival (conteo de cartas restantes) -->
+      <div id="rival-hand" class="rival-hand" role="img" aria-label="Cartas del rival"></div>
 
+      <!-- Arena de duelo orgánica -->
       <div class="arena-wrap">
-        <p id="attempt-label" class="attempt-label"></p>
+        <div class="arena-meta">
+          <span id="attempt-label" class="attempt-label">Intento 1 de 3</span>
+        </div>
+
         <div id="arena" class="arena">
           <div id="slot-me" class="arena-slot arena-slot--me">
             <div class="slot-card"></div>
-            <span class="slot-label">Tú</span>
+            <span class="slot-label">Tu jugada</span>
           </div>
+
+          <div class="arena-divider" aria-hidden="true">
+            <span class="vs-badge">VS</span>
+          </div>
+
           <div id="slot-rival" class="arena-slot arena-slot--rival">
             <div class="slot-card"></div>
-            <span class="slot-label">Rival</span>
+            <span class="slot-label">Jugada rival</span>
           </div>
+
           <p id="arena-result" class="arena-result" aria-live="assertive" hidden></p>
         </div>
-        <ol id="history" class="history" aria-label="Intentos de esta ronda" hidden></ol>
+
+        <!-- Historial sutil de intentos de la ronda -->
+        <ol id="history" class="history" aria-label="Historial de intentos en esta ronda" hidden></ol>
       </div>
 
+      <!-- Indicador de estado del turno -->
       <p id="game-status" class="game-status" role="status" aria-live="polite"></p>
 
-      <div id="hand" class="hand" aria-label="Tu mano"></div>
-      <button id="btn-play" type="button" class="btn btn--primary btn--play" disabled>Jugar carta</button>
+      <!-- Zona de mano del jugador -->
+      <div class="player-hand-area">
+        <div id="hand" class="hand" aria-label="Tus cartas disponibles"></div>
+        <button id="btn-play" type="button" class="btn btn--primary btn--play" disabled>Elige una carta</button>
+      </div>
     </section>
 
-    <!-- 6. Fin de partida -->
+    <!-- 6. Fin de Partida -->
     <section class="screen screen--center" data-screen="gameover" aria-labelledby="result-title" hidden>
       <div class="panel panel--result">
-        <p class="eyebrow">Fin de la partida</p>
-        <h2 id="result-title" class="result-title"></h2>
+        <p class="eyebrow">Desenlace de la partida</p>
+        <h2 id="result-title" class="result-title">¡Victoria!</h2>
+
         <div class="final-score" aria-label="Marcador final">
-          <div class="final-player">
+          <div class="final-player final-player--me">
             <span id="final-me-name" class="final-name"></span>
             <span id="final-me" class="final-num">0</span>
           </div>
-          <span class="score-sep">—</span>
-          <div class="final-player">
+          <span class="final-score-sep">:</span>
+          <div class="final-player final-player--rival">
             <span id="final-rival-name" class="final-name"></span>
             <span id="final-rival" class="final-num">0</span>
           </div>
         </div>
+
         <p id="result-sub" class="hint"></p>
-        <button id="btn-rematch" type="button" class="btn btn--primary btn--block" data-autofocus>Revancha</button>
-        <p id="rematch-note" class="hint" role="status" aria-live="polite"></p>
-        <button id="btn-gameover-menu" type="button" class="btn btn--ghost btn--block">Volver al menú</button>
+
+        <div class="result-actions">
+          <button id="btn-rematch" type="button" class="btn btn--primary btn--block btn--lg" data-autofocus>Revancha</button>
+          <p id="rematch-note" class="hint hint--rematch" role="status" aria-live="polite"></p>
+          <button id="btn-gameover-menu" type="button" class="btn btn--ghost btn--block">Volver al menú principal</button>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Overlays -->
-  <div id="overlay-nula" class="overlay-nula" aria-hidden="true"><span>RONDA NULA</span></div>
+  <!-- Overlays y Modales -->
+  <div id="overlay-nula" class="overlay-nula" aria-hidden="true">
+    <div class="overlay-nula-badge">
+      <span>RONDA NULA</span>
+      <small>Nadie suma punto</small>
+    </div>
+  </div>
 
   <div id="overlay-disconnect" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="disconnect-title" aria-describedby="disconnect-text" hidden>
     <div class="modal-box">
-      <h2 id="disconnect-title" class="screen-title">Rival desconectado</h2>
+      <div class="modal-icon" aria-hidden="true">⚡</div>
+      <h2 id="disconnect-title" class="screen-title">Conexión finalizada</h2>
       <p id="disconnect-text" class="hint"></p>
       <button id="btn-disconnect-menu" type="button" class="btn btn--primary btn--block">Volver al menú</button>
     </div>

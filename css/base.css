@@ -1,27 +1,57 @@
-/* base.css — reset, variables y tipografía */
+/* base.css — reset, variables y sistema de diseño */
 
 :root {
-  --bg: #12141A;
-  --bg-elev: #1A1D26;
-  --bg-elev-2: #232733;
-  --line: rgba(240, 240, 240, 0.1);
-  --text: #F0F0F0;
-  --text-dim: #A3A8B6;
-  --gold: #D4AF37;
-  --gold-soft: rgba(212, 175, 55, 0.16);
-  --gold-ink: #1B1607;
-  --win: #6FCF97;
-  --lose: #EB6F7A;
-  --tie: #8FB3D9;
+  /* Fondo y superficies (Grafito / Ónice) */
+  --bg: #0C0E14;
+  --bg-surface: #141722;
+  --bg-elevated: #1B1F2E;
+  --bg-hover: #23283B;
 
+  /* Bordes sutiles y separadores */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  --border-active: rgba(212, 175, 55, 0.45);
+
+  /* Jerarquía tipográfica (3 niveles estrictos) */
+  --text-primary: #F7F8FA;
+  --text-secondary: #8E94A5;
+  --text-muted: #585E70;
+
+  /* Dorado noble mate (reservado para selección y acciones clave) */
+  --gold: #D4AF37;
+  --gold-matte: #C6A241;
+  --gold-hover: #D5B14E;
+  --gold-ink: #0C0E14;
+  --gold-surface: rgba(212, 175, 55, 0.09);
+  --gold-glow: rgba(212, 175, 55, 0.24);
+
+  /* Resultados de juego (reservados exclusivamente para duelos) */
+  --win: #38A169;
+  --win-surface: rgba(56, 161, 105, 0.14);
+  --lose: #E53E3E;
+  --lose-surface: rgba(229, 62, 62, 0.14);
+  --tie: #4299E1;
+  --tie-surface: rgba(66, 153, 225, 0.14);
+
+  /* Tipografía */
   --font-display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  --radius-sm: 8px;
+  /* Radios y sombras */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
   --radius: 14px;
-  --radius-lg: 22px;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --focus: 0 0 0 3px var(--bg), 0 0 0 5px var(--gold);
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 8px 24px -4px rgba(0, 0, 0, 0.45);
+  --shadow-modal: 0 20px 48px -8px rgba(0, 0, 0, 0.6);
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--gold-matte);
+
+  /* Curvas de animación (estilo Apple / Spring suave) */
+  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 *,
@@ -44,13 +74,13 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--text);
-  background:
-    radial-gradient(120% 70% at 50% -10%, rgba(212, 175, 55, 0.09), transparent 60%),
-    radial-gradient(90% 60% at 50% 110%, rgba(91, 141, 184, 0.08), transparent 60%),
-    var(--bg);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(100% 60% at 50% -10%, rgba(212, 175, 55, 0.05), transparent 60%),
+    radial-gradient(80% 50% at 50% 110%, rgba(66, 153, 225, 0.04), transparent 60%);
   background-attachment: fixed;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
@@ -77,10 +107,11 @@ button {
   display: none !important;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   font-family: var(--font-display);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
 .visually-hidden {
@@ -95,10 +126,6 @@ h1, h2, h3 {
   border: 0;
 }
 
-.accent {
-  color: var(--gold);
-}
-
 /* ---------------------------------------------------------------- Botones */
 
 .btn {
@@ -107,26 +134,30 @@ h1, h2, h3 {
   justify-content: center;
   gap: 0.5rem;
   min-height: 48px;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1.35rem;
   border: 1px solid transparent;
   border-radius: var(--radius);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.95rem;
   letter-spacing: 0.01em;
-  transition: transform 120ms ease, background-color 160ms ease, border-color 160ms ease,
-              box-shadow 160ms ease, opacity 160ms ease;
+  transition: transform 140ms var(--ease-apple),
+              background-color 160ms ease,
+              border-color 160ms ease,
+              box-shadow 160ms ease,
+              opacity 160ms ease;
   user-select: none;
 }
 
 .btn:focus-visible,
+.btn-pill:focus-visible,
 .btn-icon-only:focus-visible {
   outline: none;
-  box-shadow: var(--focus);
+  box-shadow: var(--focus-ring);
 }
 
 .btn:active:not(:disabled) {
-  transform: translateY(1px) scale(0.98);
+  transform: scale(0.98);
 }
 
 .btn:disabled {
@@ -134,36 +165,41 @@ h1, h2, h3 {
   opacity: 0.45;
 }
 
+/* Botón primario: dorado mate refinado con texto oscuro nítido */
 .btn--primary {
-  background: linear-gradient(180deg, #E2C054, var(--gold));
+  background-color: var(--gold-matte);
   color: var(--gold-ink);
-  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.22);
+  box-shadow: 0 4px 14px var(--gold-glow);
 }
 
 .btn--primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #EBCB62, #DDB846);
-  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.32);
+  background-color: var(--gold-hover);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  transform: translateY(-1px);
 }
 
+/* Botón secundario: superficie oscura pulida con borde fino */
 .btn--secondary {
-  background: var(--bg-elev-2);
-  border-color: rgba(212, 175, 55, 0.35);
-  color: var(--text);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-medium);
+  color: var(--text-primary);
 }
 
 .btn--secondary:hover:not(:disabled) {
-  border-color: var(--gold);
-  background: #2A2F3D;
+  background-color: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
 }
 
+/* Botón fantasma / discreto */
 .btn--ghost {
-  background: transparent;
-  color: var(--text-dim);
+  background-color: transparent;
+  color: var(--text-secondary);
 }
 
 .btn--ghost:hover:not(:disabled) {
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 .btn--block {
@@ -171,13 +207,39 @@ h1, h2, h3 {
 }
 
 .btn--lg {
-  min-height: 56px;
-  font-size: 1.1rem;
+  min-height: 52px;
+  font-size: 1.05rem;
 }
 
 .btn-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Botón tipo pastilla para acciones discretas (ej. Cambiar nombre) */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 140ms var(--ease-apple);
+}
+
+.btn-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-pill .pill-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .btn-icon-only {
@@ -186,11 +248,11 @@ h1, h2, h3 {
   width: 36px;
   height: 36px;
   padding: 0;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border-subtle);
   border-radius: 50%;
-  background: transparent;
-  color: var(--text-dim);
-  transition: color 160ms ease, border-color 160ms ease;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  transition: all 140ms ease;
 }
 
 .btn-icon-only svg {
@@ -199,56 +261,64 @@ h1, h2, h3 {
 }
 
 .btn-icon-only:hover {
-  color: var(--text);
-  border-color: var(--text-dim);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* ---------------------------------------------------------------- Campos */
 
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
 .field-label {
   display: block;
-  margin-bottom: 0.4rem;
-  font-size: 0.85rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-dim);
+  color: var(--text-secondary);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .input {
   width: 100%;
-  min-height: 50px;
+  min-height: 48px;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border-medium);
   border-radius: var(--radius);
-  background: var(--bg-elev);
-  font-size: 1.05rem;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
 
 .input::placeholder {
-  color: #6B7080;
+  color: var(--text-muted);
 }
 
 .input:hover {
-  border-color: rgba(240, 240, 240, 0.2);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .input:focus-visible {
   outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px var(--gold-soft);
+  border-color: var(--gold-matte);
+  box-shadow: 0 0 0 3px var(--gold-surface);
+  background: var(--bg-elevated);
 }
 
 .field-error {
   min-height: 1.3em;
   margin-top: 0.35rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--lose);
 }
 
 .hint {
-  font-size: 0.9rem;
-  color: var(--text-dim);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
   text-align: center;
 }

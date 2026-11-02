@@ -1,50 +1,91 @@
-/* 5. animations.css */
+/* animations.css — microinteracciones, transiciones de pantalla y efectos de juego */
 
-/* Variables globales de tiempo, curvas de aceleración y color */
-:root {
-  --dur-fast: 200ms;
-  --dur-normal: 400ms;
-  --dur-slow: 600ms;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --gold: #D4AF37;
-}
-
-/* 1. Entrada de cartas al repartir desde abajo hacia su posición original.
-   Se usa al inicio de la partida o ronda. Para efecto escalonado, aplicar 100ms de
-   diferencia entre cartas mediante animation-delay vía JS o selectores :nth-child(). */
+/* 1. Entrada de cartas al repartir desde abajo */
 @keyframes cardDeal {
   0% {
     opacity: 0;
-    transform: translateY(60px);
+    transform: translateY(48px) scale(0.92);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .card-deal {
-  animation: cardDeal var(--dur-normal) var(--ease-out) both;
+  animation: cardDeal 360ms var(--ease-apple) both;
 }
 
 .card-deal:nth-child(1) { animation-delay: 0ms; }
-.card-deal:nth-child(2) { animation-delay: 100ms; }
-.card-deal:nth-child(3) { animation-delay: 200ms; }
+.card-deal:nth-child(2) { animation-delay: 80ms; }
+.card-deal:nth-child(3) { animation-delay: 160ms; }
 
-/* 2. Estado de carta seleccionada por el jugador.
-   Se usa al hacer clic o enfocar una carta de la mano antes de confirmar la jugada. */
-.card-select {
-  transform: translateY(-8px);
-  box-shadow: 0 0 20px var(--gold), 0 8px 16px rgba(212, 175, 55, 0.35);
-  border: 2px solid var(--gold);
-  transition: transform var(--dur-fast) var(--ease-out),
-              box-shadow var(--dur-fast) var(--ease-out),
-              border-color var(--dur-fast) var(--ease-out);
+/* 2. Entrada de las cartas del logotipo en pantalla de bienvenida */
+@keyframes logoCardLeft {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg) translate(0, 20px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-14deg) translate(16px, 6px) scale(1);
+  }
 }
 
-/* 3. Volteo 3D de la carta para revelar la jugada sobre el eje Y (180deg a 0deg).
-   NOTA: El contenedor padre directo debe tener aplicada la propiedad `perspective: 1000px;`. */
+@keyframes logoCardCenter {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1);
+  }
+}
+
+@keyframes logoCardRight {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg) translate(0, 20px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(14deg) translate(-16px, 6px) scale(1);
+  }
+}
+
+.logo-card--left {
+  animation: logoCardLeft 550ms var(--ease-apple) 100ms both;
+}
+
+.logo-card--center {
+  animation: logoCardCenter 550ms var(--ease-apple) 40ms both;
+}
+
+.logo-card--right {
+  animation: logoCardRight 550ms var(--ease-apple) 140ms both;
+}
+
+/* 3. Carta seleccionada: elevación suave con aura dorada mate tenue */
+@keyframes selectGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px var(--gold-matte), 0 10px 24px var(--gold-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 2px var(--gold-hover), 0 14px 32px rgba(212, 175, 55, 0.38);
+  }
+}
+
+.card-select {
+  transform: translateY(-9px);
+  border-color: var(--gold-matte);
+  animation: selectGlowPulse 1.8s ease-in-out infinite;
+  transition: transform 180ms var(--ease-apple),
+              border-color 180ms var(--ease-apple),
+              box-shadow 180ms var(--ease-apple);
+}
+
+/* 4. Volteo 3D de la carta al revelar (180deg a 0deg) */
 @keyframes cardFlip {
   0% {
     transform: rotateY(180deg);
@@ -57,77 +98,69 @@
 .card-flip {
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  animation: cardFlip var(--dur-slow) var(--ease-out) forwards;
+  animation: cardFlip 520ms var(--ease-apple) forwards;
 }
 
-/* 4. Choque central de cartas al revelarse las jugadas.
-   Genera una sacudida horizontal de ±10px con 3 oscilaciones completas en 300ms. */
+/* 5. Choque de cartas en la arena (colisión elástica con amortiguación) */
 @keyframes cardClash {
   0%, 100% { transform: translateX(0); }
-  16.66%   { transform: translateX(-10px); }
-  33.33%   { transform: translateX(10px); }
-  50.00%   { transform: translateX(-10px); }
-  66.66%   { transform: translateX(10px); }
-  83.33%   { transform: translateX(-10px); }
-  91.66%   { transform: translateX(10px); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(7px); }
+  60%      { transform: translateX(-5px); }
+  80%      { transform: translateX(3px); }
 }
 
 .card-clash {
-  animation: cardClash 300ms ease-in-out;
+  animation: cardClash 320ms ease-in-out;
 }
 
-/* 5. Destello de la carta ganadora del duelo.
-   Anima un resplandor dorado pulsante durante 2 ciclos al ganar la ronda. */
+/* 6. Destello de victoria del intento */
 @keyframes cardWinGlow {
   0%, 100% {
-    box-shadow: 0 0 20px var(--gold);
+    transform: translateY(0);
+    box-shadow: 0 0 0 2px var(--gold-matte), 0 8px 24px var(--gold-glow);
   }
   50% {
-    box-shadow: 0 0 40px var(--gold), 0 0 15px var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 2px var(--gold-hover), 0 14px 36px rgba(212, 175, 55, 0.45);
   }
 }
 
 .card-win {
-  animation: cardWinGlow var(--dur-slow) ease-in-out 2 forwards;
+  animation: cardWinGlow 550ms ease-in-out 2 forwards;
 }
 
-/* 6. Estado de la carta perdedora del duelo.
-   Se usa al resolver la ronda para atenuar, desaturar y desplazar hacia abajo la carta vencida. */
+/* 7. Carta vencida del intento */
 .card-lose {
-  filter: grayscale(1);
-  opacity: 0.5;
-  transform: translateY(20px);
-  transition: filter var(--dur-normal) var(--ease-out),
-              opacity var(--dur-normal) var(--ease-out),
-              transform var(--dur-normal) var(--ease-out);
+  filter: grayscale(0.85);
+  opacity: 0.4;
+  transform: translateY(14px) scale(0.96);
+  transition: filter 350ms var(--ease-apple),
+              opacity 350ms var(--ease-apple),
+              transform 350ms var(--ease-apple);
 }
 
-/* 7. Vibración por empate cuando ambos jugadores eligen la misma carta.
-   Aplica una sacudida simultánea de ±6px con 4 oscilaciones en 400ms. */
+/* 8. Vibración por empate */
 @keyframes tieShake {
   0%, 100% { transform: translateX(0); }
-  12.5%    { transform: translateX(-6px); }
-  25.0%    { transform: translateX(6px); }
-  37.5%    { transform: translateX(-6px); }
-  50.0%    { transform: translateX(6px); }
-  62.5%    { transform: translateX(-6px); }
-  75.0%    { transform: translateX(6px); }
-  87.5%    { transform: translateX(-6px); }
-  93.75%   { transform: translateX(6px); }
+  20%      { transform: translateX(-5px); }
+  40%      { transform: translateX(5px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(3px); }
 }
 
 .tie-shake {
-  animation: tieShake 400ms ease-in-out;
+  animation: tieShake 360ms ease-in-out;
 }
 
-/* 8. Rebote del marcador numérico al sumar un punto.
-   Escala el texto del puntaje con efecto elástico para destacar el incremento. */
+/* 9. Rebote numérico del marcador al anotar */
 @keyframes scoreBump {
   0% {
     transform: scale(1);
   }
-  50% {
-    transform: scale(1.3);
+  45% {
+    transform: scale(1.28);
+    color: var(--gold-hover);
   }
   100% {
     transform: scale(1);
@@ -136,15 +169,14 @@
 
 .score-bump {
   display: inline-block;
-  animation: scoreBump 400ms var(--ease-bounce);
+  animation: scoreBump 380ms var(--ease-bounce);
 }
 
-/* 9. Entrada del banner superior de aviso o desempate.
-   Desliza el banner desde arriba (-100%) con fundido de entrada. */
+/* 10. Deslizamiento de banners informativos */
 @keyframes bannerSlideIn {
   0% {
     opacity: 0;
-    transform: translateY(-100%);
+    transform: translateY(-80%);
   }
   100% {
     opacity: 1;
@@ -153,30 +185,39 @@
 }
 
 .banner-slide-in {
-  animation: bannerSlideIn var(--dur-normal) var(--ease-out) forwards;
+  animation: bannerSlideIn 320ms var(--ease-apple) forwards;
 }
 
-/* 10. Pulso continuo para el texto o indicador "Esperando al rival...".
-    Alterna la opacidad entre 0.5 y 1 en bucle infinito mientras el oponente decide. */
+@keyframes bannerPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015); }
+}
+
+.banner-pulse {
+  animation: bannerPulse 2s ease-in-out infinite;
+}
+
+/* 11. Pulso para indicador de espera */
 @keyframes pulseWaiting {
   0%, 100% {
-    opacity: 0.5;
+    opacity: 0.45;
+    transform: scale(0.95);
   }
   50% {
     opacity: 1;
+    transform: scale(1.05);
   }
 }
 
 .pulse-waiting {
-  animation: pulseWaiting 1.5s ease-in-out infinite;
+  animation: pulseWaiting 1.8s ease-in-out infinite;
 }
 
-/* 11. Transición suave de entrada al cambiar entre pantallas del juego.
-    Aplica un fundido de opacidad acompañado de una ligera elevación vertical. */
+/* 12. Transición suave de entrada de pantallas */
 @keyframes screenFadeIn {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(14px);
   }
   100% {
     opacity: 1;
@@ -185,43 +226,38 @@
 }
 
 .screen-fade-in {
-  animation: screenFadeIn var(--dur-normal) var(--ease-out) forwards;
+  animation: screenFadeIn 260ms var(--ease-apple) forwards;
 }
 
-/* 12. Caída de partículas de confeti al finalizar la partida con victoria.
-    Se aplica a múltiples elementos <div class="confetti confetti-fall"> generados vía JS. */
-@keyframes confettiFall {
-  0% {
-    opacity: 1;
-    transform: translateY(-10vh) rotate3d(1, 1, 1, 0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(105vh) rotate3d(1, 1, 1, 720deg);
-  }
+/* 13. Pop de carta en la arena */
+@keyframes slotPop {
+  0%   { opacity: 0; transform: translateY(18px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.confetti {
-  position: fixed;
-  top: 0;
-  width: 10px;
-  height: 18px;
-  pointer-events: none;
-  z-index: 9999;
+.slot-pop {
+  animation: slotPop 240ms var(--ease-apple);
 }
 
-.confetti-fall {
-  animation: confettiFall 3s linear 1 forwards;
+/* 14. Resultado central de intento */
+@keyframes resultIn {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
-.confetti:nth-child(5n+1) { background-color: var(--gold); }
-.confetti:nth-child(5n+2) { background-color: #5B8DB8; }
-.confetti:nth-child(5n+3) { background-color: #E8A0B0; }
-.confetti:nth-child(5n+4) { background-color: #A0AEC0; }
-.confetti:nth-child(5n+5) { background-color: #FDFBF7; }
+.result-in {
+  animation: resultIn 300ms var(--ease-bounce) both;
+}
 
-/* 13. Aparición y desvanecimiento automático del overlay "RONDA NULA".
-    Realiza un fade-in rápido, se mantiene visible y desaparece tras 1.5s en total. */
+/* 15. Desvanecimiento en ronda nula */
+@keyframes cardFadeOut {
+  to { opacity: 0; transform: scale(0.92); filter: blur(2px); }
+}
+
+.card-fade-out {
+  animation: cardFadeOut 800ms var(--ease-apple) forwards;
+}
+
 @keyframes nulaOverlayFade {
   0% {
     opacity: 0;
@@ -230,7 +266,7 @@
   15% {
     opacity: 1;
   }
-  80% {
+  85% {
     opacity: 1;
   }
   100% {
@@ -240,130 +276,83 @@
 }
 
 .nula-overlay-fade {
-  animation: nulaOverlayFade 1.5s var(--ease-out) forwards;
+  animation: nulaOverlayFade 1.4s var(--ease-apple) forwards;
 }
 
-/* Accesibilidad: desactiva animaciones intensas o en bucle si el usuario prefiere movimiento reducido,
-   conservando la visibilidad de los estados finales. */
-@media (prefers-reduced-motion: reduce) {
-  .card-deal {
-    animation: none;
+/* 16. Caída de confeti refinado (geométrico, elegante) */
+@keyframes confettiFall {
+  0% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-8vh) rotate3d(1, 1, 1, 0deg);
   }
-
-  .card-flip {
-    animation: none;
-    transform: rotateY(0deg);
-  }
-
-  .card-clash {
-    animation: none;
-    transform: translateX(0);
-  }
-
-  .confetti-fall {
-    animation: none;
-    display: none;
-  }
-
-  .pulse-waiting {
-    animation: none;
-    opacity: 1;
+  100% {
+    opacity: 0;
+    transform: translateY(105vh) rotate3d(1, 1, 1, 580deg);
   }
 }
 
-/* ===================================================================
-   Extras del juego (complementan las animaciones anteriores)
-   =================================================================== */
-
-/* Spinner de la sala de espera. */
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.confetti {
+  position: fixed;
+  top: 0;
+  width: 8px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 9999;
 }
 
-/* Borde dorado pulsante de la carta seleccionada. */
-@keyframes selectGlow {
-  0%, 100% { box-shadow: 0 0 14px var(--gold), 0 8px 16px rgba(212, 175, 55, 0.3); border-color: var(--gold); }
-  50%      { box-shadow: 0 0 26px var(--gold), 0 8px 16px rgba(212, 175, 55, 0.45); border-color: #F3D774; }
+.confetti-fall {
+  animation: confettiFall 2.8s linear 1 forwards;
 }
 
-.card.card-select {
-  animation: selectGlow 1.4s ease-in-out infinite;
-}
+.confetti:nth-child(5n+1) { background-color: var(--gold-matte); }
+.confetti:nth-child(5n+2) { background-color: #5B8DB8; }
+.confetti:nth-child(5n+3) { background-color: #E8A0B0; }
+.confetti:nth-child(5n+4) { background-color: #CBD5E1; }
+.confetti:nth-child(5n+5) { background-color: #F8FAFC; }
 
-/* Carta boca abajo que aparece en la arena al jugar. */
-@keyframes slotPop {
-  0%   { opacity: 0; transform: translateY(24px) scale(0.92); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.slot-pop {
-  animation: slotPop 300ms var(--ease-out);
-}
-
-/* Texto central (EMPATE / ¡GANAS! / PIERDES) con fade-in. */
-@keyframes resultIn {
-  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-
-.result-in {
-  animation: resultIn 350ms var(--ease-bounce) both;
-}
-
-/* Desvanecimiento de las cartas en la ronda nula. */
-@keyframes cardFadeOut {
-  to { opacity: 0; transform: scale(0.9); filter: blur(2px); }
-}
-
-.card-fade-out {
-  animation: cardFadeOut 900ms var(--ease-out) forwards;
-}
-
-/* Pulso del banner de desempate tras su entrada. */
-@keyframes bannerPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3); }
-  50%      { transform: scale(1.02); box-shadow: 0 6px 30px rgba(212, 175, 55, 0.55); }
-}
-
-.banner-pulse {
-  animation: bannerPulse 1.6s ease-in-out infinite;
-}
-
-/* Entrada del toast. */
+/* 17. Toast */
 @keyframes toastIn {
-  0%   { opacity: 0; transform: translate(-50%, 16px); }
+  0%   { opacity: 0; transform: translate(-50%, 14px); }
   100% { opacity: 1; transform: translate(-50%, 0); }
 }
 
 .toast-in {
-  animation: toastIn 300ms var(--ease-out);
+  animation: toastIn 240ms var(--ease-apple);
 }
 
+/* Accesibilidad: movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
-  .card.card-select,
-  .banner-pulse,
+  .card-deal,
+  .logo-card--left,
+  .logo-card--center,
+  .logo-card--right,
+  .card-flip,
+  .card-clash,
+  .card-select,
+  .card-win,
   .tie-shake,
-  .slot-pop,
-  .screen-fade-in,
-  .banner-slide-in,
   .score-bump,
-  .card-win {
-    animation: none;
+  .banner-slide-in,
+  .banner-pulse,
+  .pulse-waiting,
+  .screen-fade-in,
+  .slot-pop,
+  .result-in,
+  .toast-in {
+    animation: none !important;
   }
 
-  .card-win {
-    box-shadow: 0 0 24px var(--gold);
+  .card-flip {
+    transform: rotateY(0deg) !important;
   }
 
-  .spinner {
-    animation-duration: 3s;
+  .confetti-fall {
+    display: none !important;
   }
 
-  .card-lose,
   .card,
-  .arena-slot {
-    transition: none;
+  .arena-slot,
+  .card-lose {
+    transition: none !important;
   }
 }
