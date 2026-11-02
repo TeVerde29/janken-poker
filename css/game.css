@@ -267,9 +267,9 @@
 }
 
 .slot-empty-icon {
-  font-size: calc(var(--arena-w) * 0.28);
-  opacity: 0.2;
-  filter: grayscale(1);
+  width: calc(var(--arena-w) * 0.4);
+  height: calc(var(--arena-w) * 0.55);
+  color: rgba(233, 227, 214, 0.2);
 }
 
 .slot-fx,
@@ -381,10 +381,11 @@
 }
 
 .history-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 16px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.75rem;
+  height: 16px;
 }
 
 .history-item--win { border-color: rgba(56, 161, 105, 0.4); }

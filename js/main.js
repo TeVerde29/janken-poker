@@ -499,7 +499,9 @@ function initConfig() {
           </div>
           <p class="mode-desc">${opt.desc}</p>
         </div>
-        <div class="mode-check" aria-hidden="true">✓</div>
+        <div class="mode-check" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
       </div>`;
 
     label.addEventListener('click', () => audio.sfxCardSelect());

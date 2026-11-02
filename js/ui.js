@@ -192,7 +192,7 @@ export function clearArena() {
     const holder = slotHolder(who);
     const ph = document.createElement('div');
     ph.className = 'slot-empty';
-    ph.innerHTML = '<span class="slot-empty-icon" aria-hidden="true">🎴</span>';
+    ph.innerHTML = '<svg class="slot-empty-icon" viewBox="0 0 24 32" aria-hidden="true"><rect x="2" y="2" width="20" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/></svg>';
     holder.replaceChildren(ph);
   }
   $('arena').classList.remove('is-meeting');
@@ -244,7 +244,11 @@ export function renderAttemptLabel(attempt) {
 /* ---------------------------------------------------------------- Historial */
 
 const OUTCOME_TEXT = { win: 'Ganaste', lose: 'Perdiste', tie: 'Empate' };
-const OUTCOME_ICON = { win: '✓', lose: '✕', tie: '=' };
+const OUTCOME_ICON = {
+  win: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  lose: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  tie: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/></svg>',
+};
 
 export function renderHistory(history) {
   const list = $('history');
@@ -260,7 +264,7 @@ export function renderHistory(history) {
 
     const badge = document.createElement('span');
     badge.className = 'history-badge';
-    badge.textContent = OUTCOME_ICON[h.outcome];
+    badge.innerHTML = OUTCOME_ICON[h.outcome];
 
     const theirs = document.createElement('span');
     theirs.className = 'mini-card';

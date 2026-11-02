@@ -828,7 +828,14 @@
 }
 
 .modal-icon {
-  font-size: 2rem;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--lose-surface);
+  color: var(--lose-ruby);
+  border: 1px solid rgba(229, 62, 62, 0.3);
 }
 
 .toast {
