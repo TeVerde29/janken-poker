@@ -2,7 +2,7 @@
  * sw.js — Service Worker para instalación de PWA y soporte offline de assets estáticos.
  */
 
-const CACHE_NAME = 'janken-cards-v5';
+const CACHE_NAME = 'janken-cards-v6';
 
 const ASSETS_TO_CACHE = [
   './',

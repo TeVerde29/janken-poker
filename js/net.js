@@ -45,11 +45,18 @@ export function normalizeCode(input) {
 export const isValidCode = (code) => normalizeCode(code).length === CODE_LENGTH && normalizeCode(code) === code;
 
 function peerOptions() {
-  const opts = { debug: 0 };
-  if (EXTRA_ICE_SERVERS.length) {
-    opts.config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, ...EXTRA_ICE_SERVERS] };
-  }
-  return opts;
+  return {
+    debug: 0,
+    config: {
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+        { urls: 'stun:stun.cloudflare.com:3478' },
+        ...EXTRA_ICE_SERVERS,
+      ],
+    },
+  };
 }
 
 /** Error tipado para que la UI muestre mensajes claros. */
@@ -168,9 +175,19 @@ class Net {
       if (this.conn === conn) this.handlers.onData?.(data);
     });
     conn.on('close', closed);
-    conn.on('error', closed);
+    conn.on('error', (err) => {
+      if (this.pendingJoin) {
+        this.pendingJoin.reject(new NetError(err?.type || 'conn-error', err?.message));
+      }
+      closed();
+    });
     conn.on('iceStateChanged', (s) => {
-      if (s === 'failed' || s === 'closed') closed();
+      if (s === 'failed' || s === 'closed') {
+        if (this.pendingJoin) {
+          this.pendingJoin.reject(new NetError('ice-failed', 'Fallo al conectar con el rival.'));
+        }
+        closed();
+      }
     });
   }
 
