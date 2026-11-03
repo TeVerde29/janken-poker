@@ -36,13 +36,20 @@ export const roundsForDeck = (size) => size / 6;
 
 /**
  * Motor de partida del host.
- * @param {number} deckSize 18 | 30 | 54
+ * @param {number|{ mode?: 'classic'|'strategic', deckSize?: number, rounds?: number }} config
  * @param {(role: 'host'|'guest', msg: object) => void} emit envía un mensaje a un jugador
  */
 export class HostEngine {
-  constructor(deckSize, emit) {
-    this.deckSize = deckSize;
-    this.totalRounds = roundsForDeck(deckSize);
+  constructor(config, emit) {
+    if (typeof config === 'number') {
+      this.mode = 'strategic';
+      this.deckSize = config;
+      this.totalRounds = roundsForDeck(config);
+    } else {
+      this.mode = config?.mode || 'classic';
+      this.totalRounds = config?.rounds || 5;
+      this.deckSize = config?.deckSize || (this.totalRounds * 6);
+    }
     this.emit = emit;
     this.reset();
   }
@@ -68,14 +75,18 @@ export class HostEngine {
   /** Nueva partida con la misma configuración (también sirve para revancha). */
   startMatch() {
     this.reset();
-    this.deck = buildDeck(this.deckSize);
+    if (this.mode === 'strategic') {
+      this.deck = buildDeck(this.deckSize);
+    } else {
+      this.deck = [];
+    }
     this.round = 1;
     this.startRound();
   }
 
   startRound() {
-    if (this.isTiebreak) {
-      this.tiebreakNumber += 1;
+    if (this.isTiebreak || this.mode === 'classic') {
+      if (this.isTiebreak) this.tiebreakNumber += 1;
       this.hands = { host: tiebreakHand(), guest: tiebreakHand() };
     } else {
       this.hands = { host: dealHand(this.deck), guest: dealHand(this.deck) };
@@ -87,13 +98,14 @@ export class HostEngine {
     for (const role of ['host', 'guest']) {
       this.emit(role, {
         type: 'deal',
+        mode: this.mode,
         round: this.round,
         totalRounds: this.totalRounds,
         hand: [...this.hands[role]],
         isTiebreak: this.isTiebreak,
         tiebreakNumber: this.tiebreakNumber,
         scores: { ...this.scores },
-        deckRemaining: this.deck.length,
+        deckRemaining: this.mode === 'strategic' ? this.deck.length : null,
       });
     }
   }

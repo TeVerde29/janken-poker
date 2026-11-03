@@ -342,6 +342,102 @@
   gap: 1.35rem;
 }
 
+.mode-switcher-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  text-align: left;
+}
+
+.mode-switcher-label {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-ivory);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.mode-segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 4px;
+  border-radius: var(--radius);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.mode-segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0.75rem 0.6rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 180ms var(--ease-apple);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  text-align: center;
+}
+
+.mode-segment:hover {
+  color: var(--text-ivory);
+  background: rgba(233, 227, 214, 0.05);
+}
+
+.mode-segment.is-active {
+  background: var(--brass-surface);
+  border-color: var(--brass);
+  color: var(--text-ivory);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 0 14px var(--brass-glow);
+}
+
+.segment-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: inherit;
+  letter-spacing: 0.02em;
+}
+
+.segment-tag {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.mode-segment.is-active .segment-tag {
+  color: var(--brass-light);
+}
+
+.mode-summary {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+  margin: 0.2rem 0 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-xs);
+  background: rgba(23, 38, 31, 0.35);
+  border-left: 2px solid var(--brass);
+}
+
+.board-mode-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--brass-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-top: 1px;
+}
+
 .deck-fieldset {
   border: 0;
   padding: 0;

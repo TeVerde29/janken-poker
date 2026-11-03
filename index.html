@@ -149,18 +149,33 @@
       <div class="panel panel--config">
         <header class="section-heading">
           <p class="eyebrow">Configuración del duelo</p>
-          <h2 id="config-title" class="section-title">Elige el mazo de juego</h2>
-          <p class="section-desc">El mazo se baraja una sola vez al inicio. Las cartas descartadas no vuelven al mazo.</p>
+          <h2 id="config-title" class="section-title">Elige el modo de juego</h2>
+          <p class="section-desc">Selecciona las reglas de las cartas y la duración del duelo.</p>
         </header>
 
         <form id="config-form" class="form">
+          <div class="mode-switcher-wrap" role="group" aria-label="Modo de cartas">
+            <span class="mode-switcher-label">Modo de cartas</span>
+            <div class="mode-segmented" role="tablist">
+              <button type="button" id="tab-mode-classic" class="mode-segment is-active" data-mode="classic" role="tab" aria-selected="true">
+                <span class="segment-title">Modo Clásico</span>
+                <span class="segment-tag">1 Piedra · 1 Papel · 1 Tijera</span>
+              </button>
+              <button type="button" id="tab-mode-strategic" class="mode-segment" data-mode="strategic" role="tab" aria-selected="false">
+                <span class="segment-title">Mazo Estratégico</span>
+                <span class="segment-tag">Cartas Finitas</span>
+              </button>
+            </div>
+            <p id="mode-summary" class="mode-summary">En cada ronda ambos duelistas juegan con 1 Piedra, 1 Papel y 1 Tijera.</p>
+          </div>
+
           <fieldset class="deck-fieldset">
-            <legend class="visually-hidden">Modos de mazo disponibles</legend>
+            <legend class="mode-switcher-label">Duración de la partida</legend>
             <div id="deck-options" class="deck-modes-grid"></div>
           </fieldset>
 
           <div class="config-actions">
-            <button id="btn-config-create" type="submit" class="btn btn--primary btn--block btn--lg">Crear sala y barajar</button>
+            <button id="btn-config-create" type="submit" class="btn btn--primary btn--block btn--lg">Crear sala clásica</button>
             <button id="btn-config-back" type="button" class="btn btn--ghost btn--block">Volver al lobby</button>
           </div>
         </form>
@@ -237,6 +252,7 @@
             <span id="score-rival" class="score-num">0</span>
           </div>
           <span id="round-label" class="round-label">Ronda 1 de 5</span>
+          <span id="board-mode-tag" class="board-mode-tag">Modo Clásico</span>
         </div>
 
         <div class="player player--rival">

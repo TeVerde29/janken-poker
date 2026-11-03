@@ -89,6 +89,11 @@ export function renderScoreboard() {
     label = `Ronda ${state.currentRound} de ${state.totalRounds}`;
   }
   $('round-label').textContent = label;
+
+  const modeTag = $('board-mode-tag');
+  if (modeTag) {
+    modeTag.textContent = state.gameMode === 'strategic' ? 'Mazo Estratégico' : 'Modo Clásico';
+  }
 }
 
 export function setTiebreakBanner(visible) {

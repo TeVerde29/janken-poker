@@ -7,7 +7,7 @@
  * termina antes de pintar el siguiente evento.
  */
 import {
-  state, DECK_OPTIONS, MAX_NICK, otherRole, toPerspective,
+  state, GAME_MODES, ROUND_PRESETS, DECK_OPTIONS, MAX_NICK, otherRole, toPerspective,
   resetMatchState, resetSession, sanitizeName,
 } from './state.js';
 import { HostEngine } from './rules.js';
@@ -78,6 +78,7 @@ function onNetData(msg) {
         state.rivalName = sanitizeName(msg.name) || 'Rival';
         const config = {
           type: 'room-config',
+          mode: state.gameMode,
           deckSize: state.deckSize,
           rounds: state.totalRounds,
           hostName: state.nickname,
@@ -141,13 +142,14 @@ function leaveSession() {
 /* ===================================================== Eventos de juego */
 
 async function onRoomConfig(msg) {
-  state.deckSize = msg.deckSize;
+  state.gameMode = msg.mode || 'classic';
+  state.deckSize = msg.deckSize || (msg.rounds * 6);
   state.totalRounds = msg.rounds;
   if (state.role === 'guest') state.rivalName = sanitizeName(msg.hostName) || 'Anfitrión';
   resetMatchState();
   prepareBoard();
   ui.showScreen('game');
-  ui.setStatus('Barajando el mazo…', 'wait');
+  ui.setStatus(state.gameMode === 'classic' ? 'Preparando duelo clásico…' : 'Barajando el mazo…', 'wait');
   await fx.wait(400);
 }
 
@@ -170,6 +172,7 @@ async function onDeal(msg) {
     prepareBoard();
     ui.showScreen('game');
   }
+  if (msg.mode) state.gameMode = msg.mode;
   state.currentRound = msg.round;
   state.totalRounds = msg.totalRounds;
   state.isTiebreak = Boolean(msg.isTiebreak);
@@ -476,38 +479,93 @@ function initMenu() {
 
 function initConfig() {
   const list = $('deck-options');
-  list.replaceChildren();
+  const tabClassic = $('tab-mode-classic');
+  const tabStrategic = $('tab-mode-strategic');
+  const modeSummary = $('mode-summary');
+  const btnCreate = $('btn-config-create');
 
-  DECK_OPTIONS.forEach((opt) => {
-    const label = document.createElement('label');
-    label.className = 'mode-card';
-    if (opt.recommended) label.classList.add('is-recommended');
+  function renderPresets(mode) {
+    state.gameMode = mode;
+    const isClassic = mode === 'classic';
 
-    label.innerHTML = `
-      <input type="radio" name="deck" value="${opt.size}" ${opt.recommended ? 'checked' : ''}>
-      <div class="mode-card-content">
-        <div class="mode-visual" aria-hidden="true">
-          <div class="archetype-icons">
-            <img src="assets/icons/piedra.svg" alt="" title="Piedras: ${opt.perType}">
-            <img src="assets/icons/papel.svg" alt="" title="Papeles: ${opt.perType}">
-            <img src="assets/icons/tijera.svg" alt="" title="Tijeras: ${opt.perType}">
+    if (tabClassic) {
+      tabClassic.classList.toggle('is-active', isClassic);
+      tabClassic.setAttribute('aria-selected', String(isClassic));
+    }
+    if (tabStrategic) {
+      tabStrategic.classList.toggle('is-active', !isClassic);
+      tabStrategic.setAttribute('aria-selected', String(!isClassic));
+    }
+
+    if (modeSummary) {
+      modeSummary.textContent = isClassic
+        ? 'En cada ronda ambos duelistas juegan con 1 Piedra, 1 Papel y 1 Tijera. Duelo psicológico puro.'
+        : 'Mazo cerrado barajado al inicio con tercios exactos. Las cartas jugadas se consumen y no regresan.';
+    }
+
+    if (btnCreate) {
+      btnCreate.textContent = isClassic ? 'Crear sala clásica' : 'Crear sala y barajar';
+    }
+
+    list.replaceChildren();
+
+    ROUND_PRESETS.forEach((opt) => {
+      const label = document.createElement('label');
+      label.className = 'mode-card';
+      if (opt.recommended) label.classList.add('is-recommended');
+
+      const desc = isClassic ? opt.classicDesc : opt.strategicDesc;
+      const badge = isClassic ? `${opt.rounds} rondas` : `${opt.size} cartas (${opt.rounds} rondas)`;
+      const visualTitle = isClassic
+        ? '1 Piedra, 1 Papel y 1 Tijera'
+        : `${opt.perType} Piedras, ${opt.perType} Papeles, ${opt.perType} Tijeras`;
+
+      label.innerHTML = `
+        <input type="radio" name="rounds" value="${opt.rounds}" ${opt.recommended ? 'checked' : ''}>
+        <div class="mode-card-content">
+          <div class="mode-visual" aria-hidden="true">
+            <div class="archetype-icons">
+              <img src="assets/icons/piedra.svg" alt="" title="${visualTitle}">
+              <img src="assets/icons/papel.svg" alt="" title="${visualTitle}">
+              <img src="assets/icons/tijera.svg" alt="" title="${visualTitle}">
+            </div>
           </div>
-        </div>
-        <div class="mode-info">
-          <div class="mode-header">
-            <span class="mode-title">${opt.title}</span>
-            <span class="mode-badge">${opt.tag}</span>
+          <div class="mode-info">
+            <div class="mode-header">
+              <span class="mode-title">${opt.title}</span>
+              <span class="mode-badge">${badge}</span>
+            </div>
+            <p class="mode-desc">${desc}</p>
           </div>
-          <p class="mode-desc">${opt.desc}</p>
-        </div>
-        <div class="mode-check" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-      </div>`;
+          <div class="mode-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>`;
 
-    label.addEventListener('click', () => audio.sfxCardSelect());
-    list.append(label);
-  });
+      label.addEventListener('click', () => audio.sfxCardSelect());
+      list.append(label);
+    });
+  }
+
+  if (tabClassic) {
+    tabClassic.addEventListener('click', () => {
+      if (state.gameMode !== 'classic') {
+        audio.sfxCardSelect();
+        renderPresets('classic');
+      }
+    });
+  }
+
+  if (tabStrategic) {
+    tabStrategic.addEventListener('click', () => {
+      if (state.gameMode !== 'strategic') {
+        audio.sfxCardSelect();
+        renderPresets('strategic');
+      }
+    });
+  }
+
+  renderPresets(state.gameMode || 'classic');
 
   $('btn-config-back').addEventListener('click', () => {
     audio.sfxCardSelect();
@@ -516,8 +574,8 @@ function initConfig() {
 
   $('config-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const size = Number(new FormData(e.target).get('deck'));
-    const opt = DECK_OPTIONS.find((o) => o.size === size) || DECK_OPTIONS[1];
+    const rounds = Number(new FormData(e.target).get('rounds') || new FormData(e.target).get('deck'));
+    const opt = ROUND_PRESETS.find((o) => o.rounds === rounds || o.size === rounds) || ROUND_PRESETS[1];
     const btn = $('btn-config-create');
     ui.setButtonBusy(btn, true, 'Creando sala…');
     audio.sfxCardSlide();
@@ -525,12 +583,16 @@ function initConfig() {
     try {
       resetSession();
       state.role = 'host';
-      state.deckSize = opt.size;
       state.totalRounds = opt.rounds;
+      state.deckSize = opt.size;
       const code = await net.host();
       state.roomCode = code;
-      engine = new HostEngine(opt.size, engineEmit);
-      $('waiting-info').textContent = `${opt.title} · Mazo de ${opt.size} cartas (${opt.rounds} rondas)`;
+      engine = new HostEngine({ mode: state.gameMode, rounds: opt.rounds, deckSize: opt.size }, engineEmit);
+      if (state.gameMode === 'classic') {
+        $('waiting-info').textContent = `Modo Clásico · ${opt.rounds} rondas (1 Piedra, 1 Papel, 1 Tijera cada ronda)`;
+      } else {
+        $('waiting-info').textContent = `Mazo Estratégico · Mazo de ${opt.size} cartas (${opt.rounds} rondas)`;
+      }
       $('btn-copy-label').textContent = 'Copiar';
       ui.renderWaitingFaceoff();
       ui.showScreen('waiting');

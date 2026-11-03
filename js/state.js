@@ -9,37 +9,72 @@
 /** Tipos de carta válidos. */
 export const CARD_TYPES = ['piedra', 'papel', 'tijera'];
 
-/** Opciones de mazo / modos de juego: 6 cartas consumidas por ronda (3 por jugador). */
-export const DECK_OPTIONS = [
+/** Modos de juego disponibles. */
+export const GAME_MODES = {
+  classic: {
+    id: 'classic',
+    title: 'Modo Clásico',
+    tag: 'Mano Completa',
+    eyebrow: '1 Piedra · 1 Papel · 1 Tijera',
+    desc: 'En cada ronda ambos duelistas juegan con 1 Piedra, 1 Papel y 1 Tijera. Duelo psicológico puro.',
+    badge: 'Clásico',
+  },
+  strategic: {
+    id: 'strategic',
+    title: 'Mazo Estratégico',
+    tag: 'Cartas Finitas',
+    eyebrow: 'Mazo Barajado',
+    desc: 'Cartas aleatorias de un mazo cerrado. Cada carta jugada se consume y no regresa.',
+    badge: 'Estratégico',
+  },
+};
+
+/** Presets de rondas / mazo (3, 5 o 9 rondas). */
+export const ROUND_PRESETS = [
   {
-    size: 18,
     rounds: 3,
+    size: 18,
     title: 'Duelo Rápido',
     tag: '3 rondas',
     perType: 6,
-    desc: 'Partida ágil e intensa (6 piedras, 6 papeles, 6 tijeras).',
+    classicDesc: 'Duelo ágil al mejor de 3 rondas (mano completa en cada una).',
+    strategicDesc: 'Mazo de 18 cartas (6 piedras, 6 papeles, 6 tijeras).',
     layers: 1,
   },
   {
-    size: 30,
     rounds: 5,
+    size: 30,
     title: 'Partida Estándar',
     tag: '5 rondas',
     perType: 10,
-    desc: 'La experiencia equilibrada y competitiva recomendada.',
+    classicDesc: 'La experiencia equilibrada recomendada a 5 rondas.',
+    strategicDesc: 'Mazo de 30 cartas (10 piedras, 10 papeles, 10 tijeras).',
     layers: 2,
     recommended: true,
   },
   {
-    size: 54,
     rounds: 9,
+    size: 54,
     title: 'Gran Torneo',
     tag: '9 rondas',
     perType: 18,
-    desc: 'Prueba máxima de memoria de cartas, farol y estrategia.',
+    classicDesc: 'Duelo largo a 9 rondas de resistencia y lectura del rival.',
+    strategicDesc: 'Mazo de 54 cartas (18 piedras, 18 papeles, 18 tijeras).',
     layers: 3,
   },
 ];
+
+/** Opciones de mazo (alias compatible con versiones previas). */
+export const DECK_OPTIONS = ROUND_PRESETS.map((p) => ({
+  size: p.size,
+  rounds: p.rounds,
+  title: p.title,
+  tag: p.tag,
+  perType: p.perType,
+  desc: p.strategicDesc,
+  layers: p.layers,
+  recommended: p.recommended,
+}));
 
 /** Intentos máximos por ronda (una carta por intento). */
 export const MAX_ATTEMPTS = 3;
@@ -55,6 +90,7 @@ export const state = {
   roomCode: null,
   peer: null,               // referencia informativa (la gestiona net.js)
   conn: null,               // referencia informativa (la gestiona net.js)
+  gameMode: 'classic',      // 'classic' | 'strategic'
   deckSize: 30,
   totalRounds: 5,
   currentRound: 1,
