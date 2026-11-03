@@ -21,7 +21,7 @@ export const CODE_LENGTH = 6;
 const EXTRA_ICE_SERVERS = [];
 
 const OPEN_TIMEOUT_MS = 12000;
-const JOIN_TIMEOUT_MS = 20000;
+const JOIN_TIMEOUT_MS = 15000;
 
 /** Errores del Peer que impiden seguir usando la señalización. */
 const FATAL_PEER_ERRORS = ['network', 'server-error', 'socket-error', 'socket-closed', 'browser-incompatible', 'ssl-unavailable'];
@@ -45,21 +45,11 @@ export function normalizeCode(input) {
 export const isValidCode = (code) => normalizeCode(code).length === CODE_LENGTH && normalizeCode(code) === code;
 
 function peerOptions() {
-  return {
-    debug: 1,
-    pingInterval: 5000,
-    config: {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' },
-        ...EXTRA_ICE_SERVERS,
-      ],
-      sdpSemantics: 'unified-plan',
-    },
-  };
+  const opts = { debug: 0 };
+  if (EXTRA_ICE_SERVERS.length) {
+    opts.config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, ...EXTRA_ICE_SERVERS] };
+  }
+  return opts;
 }
 
 /** Error tipado para que la UI muestre mensajes claros. */
@@ -155,18 +145,13 @@ class Net {
   }
 
   acceptConnection(conn) {
-    if (this.conn?.open) {
-      // Sala realmente ocupada con una partida activa: avisar y cerrar.
+    if (this.conn) {
+      // Sala ocupada: avisar y cerrar.
       conn.on('open', () => {
         conn.send({ type: 'room-full' });
         setTimeout(() => conn.close(), 400);
       });
       return;
-    }
-    // Descartar cualquier intento o conexión previa que no llegó a abrirse
-    if (this.conn) {
-      try { this.conn.close(); } catch { /* ya cerrada */ }
-      this.conn = null;
     }
     this.bindConnection(conn);
   }
@@ -178,29 +163,14 @@ class Net {
       this.conn = null;
       this.handlers.onClose?.();
     };
-    conn.on('open', () => {
-      console.log('[P2P] Canal de datos abierto con éxito');
-      this.handlers.onOpen?.();
-    });
+    conn.on('open', () => this.handlers.onOpen?.());
     conn.on('data', (data) => {
       if (this.conn === conn) this.handlers.onData?.(data);
     });
     conn.on('close', closed);
-    conn.on('error', (err) => {
-      console.warn('[P2P] Error en DataConnection:', err);
-      if (this.pendingJoin) {
-        this.pendingJoin.reject(new NetError(err?.type || 'conn-error', err?.message));
-      }
-      closed();
-    });
+    conn.on('error', closed);
     conn.on('iceStateChanged', (s) => {
-      console.log('[P2P] Estado ICE:', s);
-      if (s === 'failed' || s === 'closed') {
-        if (this.pendingJoin) {
-          this.pendingJoin.reject(new NetError('ice-failed', 'Fallo al conectar con el rival.'));
-        }
-        closed();
-      }
+      if (s === 'failed' || s === 'closed') closed();
     });
   }
 
