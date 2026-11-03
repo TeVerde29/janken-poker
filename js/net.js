@@ -47,6 +47,7 @@ export const isValidCode = (code) => normalizeCode(code).length === CODE_LENGTH 
 function peerOptions() {
   return {
     debug: 0,
+    pingInterval: 5000,
     config: {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },

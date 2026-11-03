@@ -24,6 +24,29 @@ let engine = null;          // solo host
 let selectedIndex = null;   // carta seleccionada en la mano
 let queue = Promise.resolve();
 let sessionId = 0;          // invalida eventos encolados al abandonar la sala
+let wakeLock = null;
+
+async function acquireWakeLock() {
+  if ('wakeLock' in navigator && !wakeLock) {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch { /* permiso no concedido o no soportado */ }
+  }
+}
+
+function releaseWakeLock() {
+  if (wakeLock) {
+    wakeLock.release().catch(() => {});
+    wakeLock = null;
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && (state.screen === 'waiting' || state.screen === 'game')) {
+    acquireWakeLock();
+  }
+});
 
 /* ===================================================== Cola de eventos */
 
@@ -133,6 +156,7 @@ function leaveSession() {
   engine = null;
   selectedIndex = null;
   resetSession();
+  releaseWakeLock();
   fx.clearConfetti();
   ui.hideDisconnect();
   ui.setTiebreakBanner(false);
@@ -464,11 +488,18 @@ function initMenu() {
       $('join-error').textContent = 'Conectado. Esperando al anfitrión…';
     } catch (err) {
       resetSession();
+      console.warn('[JANKEN] Fallo al unirse a la sala:', err);
       const msg = err?.type === 'no-peerjs'
         ? 'No se pudo cargar PeerJS. Revisa tu conexión.'
-        : ['network', 'server-error', 'socket-error', 'socket-closed'].includes(err?.type)
-          ? 'No se pudo contactar con el servidor. Revisa tu conexión.'
-          : 'Código inválido o sala cerrada.';
+        : err?.type === 'invalid-room'
+          ? 'No se encontró la sala. Comprueba que el anfitrión mantenga la pantalla de espera abierta.'
+          : err?.type === 'timeout'
+            ? 'Tiempo de espera agotado al conectar con el anfitrión.'
+            : err?.type === 'ice-failed'
+              ? 'No se pudo establecer la conexión directa P2P.'
+              : ['network', 'server-error', 'socket-error', 'socket-closed'].includes(err?.type)
+                ? 'No se pudo contactar con el servidor. Revisa tu conexión.'
+                : 'Código inválido o sala no disponible.';
       showJoinError(msg);
     } finally {
       ui.setButtonBusy(btn, false);
@@ -595,6 +626,7 @@ function initConfig() {
       }
       $('btn-copy-label').textContent = 'Copiar';
       ui.renderWaitingFaceoff();
+      acquireWakeLock();
       ui.showScreen('waiting');
     } catch (err) {
       net.destroy();
