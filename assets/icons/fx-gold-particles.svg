@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <radialGradient id="particle-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F7F4ED" stop-opacity="1" />
+      <stop offset="40%" stop-color="#DFC286" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#C8A96A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Polvo de Oro en Suspensión (Foco variable para profundidad de campo) -->
+  <g fill="url(#particle-glow)">
+    <circle cx="180" cy="640" r="14" opacity="0.35" />
+    <circle cx="340" cy="520" r="6" opacity="0.85" />
+    <circle cx="520" cy="690" r="18" opacity="0.25" />
+    <circle cx="680" cy="440" r="5" opacity="0.9" />
+    <circle cx="890" cy="580" r="12" opacity="0.4" />
+    <circle cx="1040" cy="390" r="7" opacity="0.75" />
+    <circle cx="260" cy="240" r="10" opacity="0.5" />
+    <circle cx="610" cy="190" r="4" opacity="0.95" />
+    <circle cx="940" cy="210" r="16" opacity="0.3" />
+  </g>
+
+  <!-- Hojuelas Geométricas de Pan de Oro Nítidas -->
+  <g fill="#DFC286" opacity="0.8">
+    <polygon points="420,310 426,318 420,326 414,318" />
+    <polygon points="760,280 765,286 760,292 755,286" fill="#F7F4ED" />
+    <polygon points="580,540 587,548 580,556 573,548" />
+    <polygon points="290,410 294,415 290,420 286,415" fill="#F7F4ED" />
+    <polygon points="840,470 846,476 840,482 834,476" />
+  </g>
+</svg>

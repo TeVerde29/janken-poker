@@ -1,64 +1,103 @@
-/* base.css — JANKEN Visual Design System
-   Paleta: Obsidian (#101512) · Forest (#17261F) · Ivory (#E9E3D6) · Brass (#B99A63)
+/* base.css — JANKEN CARDS Visual Design System (Nocturne Tactile Luxury & Apple HIG)
+   Paleta: Azul Noche (#0B101B) · Carbón (#161B26) · Oro Suave (#C8A96A) · Marfil (#F7F4ED) · Gris Acero (#7A8494)
 */
 
 :root {
-  /* Fondo y superficies */
-  --bg-obsidian: #101512;
-  --bg-table-felt: #151D18;
-  --bg-surface: #19221C;
-  --bg-surface-elevated: #202C25;
-  --bg-hover: #26352D;
+  /* Sistema de Tokens Oficial — JANKEN CARDS */
+  --jc-midnight-950: #070A12;
+  --jc-midnight-900: #0B101B;
+  --jc-midnight-800: #111827;
+
+  --jc-charcoal-900: #161B26;
+  --jc-charcoal-800: #1E2534;
+  --jc-charcoal-700: #283142;
+
+  --jc-gold-500: #C8A96A;
+  --jc-gold-400: #DFC286;
+  --jc-gold-300: #EFE0BB;
+  --jc-gold-glow: rgba(200, 169, 106, 0.28);
+  --jc-gold-hairline: rgba(200, 169, 106, 0.42);
+
+  --jc-ivory-100: #F7F4ED;
+  --jc-ivory-200: #EDE7DA;
+  --jc-ivory-300: #D5CCB9;
+
+  --jc-steel-400: #949FB1;
+  --jc-steel-500: #7A8494;
+  --jc-steel-600: #566070;
+  --jc-steel-hairline: rgba(148, 159, 177, 0.22);
+
+  /* Mapeo de Superficies y Fondos del Sistema */
+  --bg-obsidian: var(--jc-midnight-900);
+  --bg-table-felt: #0E1422;
+  --bg-surface: var(--jc-charcoal-900);
+  --bg-surface-elevated: var(--jc-charcoal-800);
+  --bg-hover: var(--jc-charcoal-700);
 
   /* Bordes de precisión y filetes metálicos */
-  --border-subtle: rgba(233, 227, 214, 0.08);
-  --border-medium: rgba(233, 227, 214, 0.15);
-  --border-brass: rgba(185, 154, 99, 0.4);
-  --border-brass-bright: #B99A63;
+  --border-subtle: rgba(148, 159, 177, 0.14);
+  --border-medium: rgba(148, 159, 177, 0.24);
+  --border-brass: var(--jc-gold-hairline);
+  --border-brass-bright: var(--jc-gold-500);
 
-  /* Tipografía y lectura (Ivory cálido) */
-  --text-ivory: #E9E3D6;
-  --text-primary: #F5EFEB;
-  --text-secondary: #9FAAA2;
-  --text-muted: #647068;
+  /* Tipografía y lectura (Marfil y Gris Acero) */
+  --text-ivory: var(--jc-ivory-100);
+  --text-primary: var(--jc-ivory-100);
+  --text-secondary: var(--jc-steel-400);
+  --text-muted: var(--jc-steel-500);
 
-  /* Acento de Latón / Aged Brass */
-  --brass: #B99A63;
-  --brass-light: #CBB07E;
-  --brass-dark: #8F7241;
-  --brass-ink: #0F1411;
-  --brass-glow: rgba(185, 154, 99, 0.22);
-  --brass-surface: rgba(185, 154, 99, 0.1);
+  /* Acento de Oro Suave / Soft Gold */
+  --brass: var(--jc-gold-500);
+  --brass-light: var(--jc-gold-400);
+  --brass-dark: #8A6E36;
+  --brass-ink: #070A12;
+  --brass-glow: var(--jc-gold-glow);
+  --brass-surface: rgba(200, 169, 106, 0.12);
 
-  /* Resultados de duelo (exclusivos para enfrentamientos) */
-  --win-emerald: #38A169;
-  --win-surface: rgba(56, 161, 105, 0.14);
-  --lose-ruby: #E53E3E;
-  --lose-surface: rgba(229, 62, 62, 0.14);
-  --tie-slate: #4A90E2;
-  --tie-surface: rgba(74, 144, 226, 0.14);
+  /* Semántica de Resolución (Victoria en Oro Imperial, Empate en Acero, Derrota en Carmesí Mineral) */
+  --win-emerald: #C8A96A;
+  --win-surface: rgba(200, 169, 106, 0.16);
+  --lose-ruby: #B85D5D;
+  --lose-surface: rgba(184, 93, 93, 0.14);
+  --tie-slate: #949FB1;
+  --tie-surface: rgba(148, 159, 177, 0.15);
 
-  /* Fuentes */
-  --font-serif: 'Cormorant Garamond', Garamond, 'Times New Roman', serif;
-  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Fuentes Editoriales y Ópticas */
+  --font-serif: 'Cormorant Garamond', 'Cinzel', Garamond, 'Times New Roman', serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
 
-  /* Radios y proporciones */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 18px;
+  /* Radios y proporciones (Cartas 3:4 unificadas) */
+  --card-aspect: 3 / 4;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 20px;
   --radius-full: 9999px;
 
-  /* Sombras y profundidad */
-  --shadow-subtle: 0 4px 14px rgba(0, 0, 0, 0.35);
-  --shadow-card: 0 10px 28px -4px rgba(0, 0, 0, 0.55);
-  --shadow-modal: 0 24px 56px -8px rgba(0, 0, 0, 0.75);
+  /* Iluminación Cinematográfica y Sombras Físicas */
+  --shadow-subtle:
+    0 8px 20px -4px rgba(4, 6, 11, 0.65),
+    inset 0 1px 0 0 rgba(247, 244, 237, 0.06);
+  --shadow-card:
+    0 14px 30px -6px rgba(4, 6, 11, 0.82),
+    0 4px 10px -2px rgba(4, 6, 11, 0.65),
+    inset 0 1px 0 0 rgba(247, 244, 237, 0.14);
+  --shadow-card-elevated:
+    0 28px 50px -12px rgba(4, 6, 11, 0.92),
+    0 12px 24px -4px rgba(200, 169, 106, 0.22),
+    inset 0 1px 0 0 rgba(200, 169, 106, 0.45);
+  --shadow-modal:
+    0 28px 64px -8px rgba(4, 6, 11, 0.9),
+    inset 0 1px 0 0 rgba(200, 169, 106, 0.2);
   --focus-ring: 0 0 0 2px var(--bg-obsidian), 0 0 0 4px var(--brass);
 
-  /* Curvas naturales de movimiento */
-  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Física de Movimiento (Apple Fluid Interface Springs) */
+  --ease-apple: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --jc-spring-critically-damped: cubic-bezier(0.22, 1, 0.36, 1);
+  --jc-spring-underdamped: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --jc-spring-heavy-stone: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 *,
@@ -86,11 +125,14 @@ body {
   color: var(--text-primary);
   background-color: var(--bg-obsidian);
   background-image:
-    radial-gradient(110% 65% at 50% -10%, rgba(185, 154, 99, 0.05), transparent 60%),
-    radial-gradient(90% 55% at 50% 110%, rgba(23, 38, 31, 0.4), transparent 60%);
+    radial-gradient(95% 60% at 50% -8%, rgba(200, 169, 106, 0.09), transparent 62%),
+    radial-gradient(90% 60% at 50% 108%, rgba(22, 27, 38, 0.85), transparent 65%),
+    url('../assets/icons/fx-gold-particles.svg');
+  background-size: 100% 100%, 100% 100%, 960px auto;
   background-attachment: fixed;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
 
 img,

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <!-- Iluminación Cenital de Mesa de Juego -->
+    <radialGradient id="table-felt" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#1A2232" />
+      <stop offset="55%" stop-color="#0E1422" />
+      <stop offset="100%" stop-color="#070A12" />
+    </radialGradient>
+
+    <linearGradient id="brass-inlay" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C8A96A" stop-opacity="0.55" />
+      <stop offset="50%" stop-color="#EFE0BB" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#8A6E36" stop-opacity="0.45" />
+    </linearGradient>
+  </defs>
+
+  <!-- Superficie Base de Pizarra y Cuero Nocturno -->
+  <rect width="1920" height="1080" fill="url(#table-felt)" />
+
+  <!-- Perímetro Arquitectónico de la Mesa (Incrustación de Latón) -->
+  <rect x="48" y="48" width="1824" height="984" rx="32" fill="none" stroke="url(#brass-inlay)" stroke-width="1.5" />
+  <rect x="64" y="64" width="1792" height="952" rx="22" fill="none" stroke="#7A8494" stroke-width="0.6" opacity="0.3" />
+
+  <!-- Línea de Horizonte de Duelo (Divide Oponente y Jugador) -->
+  <line x1="64" y1="540" x2="1856" y2="540" stroke="url(#brass-inlay)" stroke-width="1" stroke-dasharray="12 8" opacity="0.5" />
+
+  <!-- Círculo Central de Revelación Simultánea -->
+  <g transform="translate(960, 540)" fill="none">
+    <circle r="280" stroke="url(#brass-inlay)" stroke-width="1.5" />
+    <circle r="264" stroke="#7A8494" stroke-width="0.75" stroke-dasharray="4 10" opacity="0.45" />
+    <polygon points="0,-310 310,0 0,310 -310,0" stroke="url(#brass-inlay)" stroke-width="0.8" opacity="0.4" />
+
+    <!-- Slots de Enfrentamiento Central (Oponente Arriba / Jugador Abajo) -->
+    <rect x="-190" y="-170" width="150" height="200" rx="14" stroke="url(#brass-inlay)" stroke-width="1.2" stroke-dasharray="8 6" opacity="0.65" />
+    <rect x="40" y="-30" width="150" height="200" rx="14" stroke="url(#brass-inlay)" stroke-width="1.2" stroke-dasharray="8 6" opacity="0.65" />
+  </g>
+
+  <!-- Cunas de Mano del Jugador (3 Cartas Inferiores) -->
+  <g transform="translate(960, 885)" fill="none" stroke="url(#brass-inlay)" stroke-width="1" opacity="0.45">
+    <rect x="-285" y="-90" width="150" height="200" rx="14" />
+    <rect x="-75" y="-90" width="150" height="200" rx="14" />
+    <rect x="135" y="-90" width="150" height="200" rx="14" />
+  </g>
+
+  <!-- Cunas de Mano del Oponente (3 Cartas Superiores) -->
+  <g transform="translate(960, 195)" fill="none" stroke="#7A8494" stroke-width="1" opacity="0.3">
+    <rect x="-285" y="-110" width="150" height="200" rx="14" />
+    <rect x="-75" y="-110" width="150" height="200" rx="14" />
+    <rect x="135" y="-110" width="150" height="200" rx="14" />
+  </g>
+</svg>

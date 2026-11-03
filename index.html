@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>JANKEN — The Card Duel | Piedra, Papel o Tijera con Cartas 1v1 Online</title>
-  <meta name="description" content="Juego 1v1 online para navegador: piedra, papel o tijera con cartas y estrategia de mesa. Partidas P2P directas sin cuentas ni registro.">
+  <title>JANKEN CARDS — The Card Duel | Piedra, Papel o Tijera con Cartas 1v1 Online</title>
+  <meta name="description" content="Juego indie 1v1 online para navegador: piedra, papel o tijera mediante cartas coleccionables y estrategia de mesa. Partidas P2P directas sin registro.">
   <link rel="canonical" href="https://teverde29.github.io/janken-poker/">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
-  <meta name="theme-color" content="#101512">
+  <meta name="theme-color" content="#0B101B">
 
   <!-- Open Graph / Redes Sociales -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://teverde29.github.io/janken-poker/">
-  <meta property="og:title" content="JANKEN — The Card Duel | Piedra, Papel o Tijera con Cartas 1v1">
+  <meta property="og:title" content="JANKEN CARDS — The Card Duel | Piedra, Papel o Tijera con Cartas 1v1">
   <meta property="og:description" content="Duelos 1v1 de cartas online en tiempo real por WebRTC P2P. Sin registros ni cuentas: crea una sala y comparte el código.">
   <meta property="og:image" content="https://teverde29.github.io/janken-poker/assets/icons/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -20,27 +20,27 @@
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="JANKEN — The Card Duel | Duelo 1v1">
+  <meta name="twitter:title" content="JANKEN CARDS — The Card Duel | Duelo 1v1">
   <meta name="twitter:description" content="Piedra, papel o tijera llevado a la mesa de cartas online P2P.">
   <meta name="twitter:image" content="https://teverde29.github.io/janken-poker/assets/icons/og-image.png">
 
-  <link rel="icon" type="image/svg+xml" href="assets/icons/jc.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/logo-emblem.svg">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="JANKEN">
+  <meta name="apple-mobile-web-app-title" content="JANKEN CARDS">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://unpkg.com">
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="css/base.css?v=12">
-  <link rel="stylesheet" href="css/screens.css?v=12">
-  <link rel="stylesheet" href="css/game.css?v=12">
-  <link rel="stylesheet" href="css/animations.css?v=12">
+  <link rel="stylesheet" href="css/base.css?v=13">
+  <link rel="stylesheet" href="css/screens.css?v=13">
+  <link rel="stylesheet" href="css/game.css?v=13">
+  <link rel="stylesheet" href="css/animations.css?v=13">
 </head>
 <body>
   <main id="app">
@@ -49,16 +49,19 @@
     <section class="screen screen--center" data-screen="login" aria-labelledby="login-title">
       <div class="panel panel--login">
         <header class="brand-hero">
-          <div class="brand-deck-preview" aria-hidden="true">
-            <img class="hero-card hero-card--left" src="assets/icons/piedra.svg" alt="" width="78" height="109">
-            <img class="hero-card hero-card--center" src="assets/icons/jc.svg" alt="" width="78" height="109">
-            <img class="hero-card hero-card--right" src="assets/icons/tijera.svg" alt="" width="78" height="109">
+          <div class="brand-emblem-wrap" aria-hidden="true">
+            <img class="brand-emblem-logo" src="assets/icons/logo-emblem.svg" alt="" width="64" height="64">
+          </div>
+          <div class="brand-deck-preview jc-stage-3d" aria-hidden="true">
+            <img class="hero-card hero-card--left jc-anim-a-card-1" src="assets/icons/piedra.svg" alt="" width="84" height="112">
+            <img class="hero-card hero-card--center jc-anim-a-card-2" src="assets/icons/papel.svg" alt="" width="84" height="112">
+            <img class="hero-card hero-card--right jc-anim-a-card-3" src="assets/icons/tijera.svg" alt="" width="84" height="112">
           </div>
           <div class="brand-titles">
-            <h1 id="login-title" class="brand-title">JANKEN</h1>
+            <h1 id="login-title" class="brand-title">JANKEN CARDS</h1>
             <p class="brand-subtitle">THE CARD DUEL</p>
           </div>
-          <p class="brand-tagline">Piedra, papel o tijera llevado a la mesa de juego.</p>
+          <p class="brand-tagline">Piedra, papel o tijera esculpido en una colección de duelo.</p>
         </header>
 
         <form id="login-form" class="form form--login" novalidate>
@@ -188,7 +191,7 @@
           <p id="waiting-info" class="section-desc"></p>
         </header>
 
-        <!-- Face-off visual entre anfitrión y rival -->
+        <!-- Face-off visual entre anfitrión y rival con Astrolabio y Mazo 3D (Animación G) -->
         <div class="faceoff-stage" aria-label="Enfrentamiento en preparación">
           <div class="faceoff-player faceoff-player--host">
             <div class="faceoff-avatar">
@@ -199,6 +202,10 @@
           </div>
 
           <div class="faceoff-center" aria-hidden="true">
+            <div class="waiting-kinetic-core">
+              <img class="waiting-astrolabe jc-anim-g-orbit" src="assets/icons/waiting-room-elements.svg" alt="" width="110" height="110">
+              <img class="waiting-deck-3d jc-anim-g-waiting" src="assets/icons/deck-3d-stack.svg" alt="" width="68" height="68">
+            </div>
             <span class="faceoff-vs">VS</span>
             <div class="faceoff-dots">
               <span></span><span></span><span></span>
@@ -316,6 +323,9 @@
     <!-- 6. Fin de Partida / Desenlace Memorable -->
     <section class="screen screen--center" data-screen="gameover" aria-labelledby="result-title" hidden>
       <div class="panel panel--result">
+        <div class="result-crest-stage" aria-hidden="true">
+          <img id="result-crest-img" class="result-crest-img jc-anim-e-victory" src="assets/icons/fx-victory.svg" alt="" width="112" height="112">
+        </div>
         <p class="eyebrow">Desenlace del duelo</p>
         <h2 id="result-title" class="result-title">¡Victoria!</h2>
 
@@ -396,9 +406,9 @@
   <!-- Banner para instalar acceso directo PWA -->
   <aside id="pwa-install-banner" class="pwa-banner" role="complementary" aria-label="Instalar juego como aplicación" hidden>
     <div class="pwa-banner-content">
-      <img src="assets/icons/jc.svg" alt="" width="36" height="36" class="pwa-banner-icon">
+      <img src="assets/icons/logo-emblem.svg" alt="" width="36" height="36" class="pwa-banner-icon">
       <div class="pwa-banner-info">
-        <span class="pwa-banner-title">JANKEN — The Card Duel</span>
+        <span class="pwa-banner-title">JANKEN CARDS — The Card Duel</span>
         <span class="pwa-banner-desc">Instala el juego para abrirlo directo en pantalla completa</span>
       </div>
     </div>
@@ -411,6 +421,6 @@
   </aside>
 
   <script src="https://unpkg.com/peerjs@1/dist/peerjs.min.js"></script>
-  <script type="module" src="js/main.js?v=12"></script>
+  <script type="module" src="js/main.js?v=13"></script>
 </body>
 </html>

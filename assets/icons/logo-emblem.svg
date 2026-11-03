@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <!-- Iluminación metálica Oro Suave -->
+    <linearGradient id="jc-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EFE0BB" />
+      <stop offset="45%" stop-color="#C8A96A" />
+      <stop offset="100%" stop-color="#8A6E36" />
+    </linearGradient>
+
+    <!-- Iluminación mineral Carbón / Obsidiana -->
+    <linearGradient id="jc-obsidian-grad" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#283142" />
+      <stop offset="50%" stop-color="#161B26" />
+      <stop offset="100%" stop-color="#0B101B" />
+    </linearGradient>
+
+    <!-- Iluminación Marfil Plisado -->
+    <linearGradient id="jc-ivory-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7F4ED" />
+      <stop offset="70%" stop-color="#EDE7DA" />
+      <stop offset="100%" stop-color="#C7BFA9" />
+    </linearGradient>
+
+    <!-- Iluminación Gris Acero Forjado -->
+    <linearGradient id="jc-steel-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#566070" />
+      <stop offset="50%" stop-color="#949FB1" />
+      <stop offset="100%" stop-color="#D5DCE6" />
+    </linearGradient>
+
+    <!-- Sombra proyectada cinematográfica -->
+    <filter id="jc-drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#04060B" flood-opacity="0.75" />
+    </filter>
+  </defs>
+
+  <!-- Anillo de equilibrio exterior (Oro Suave) -->
+  <g filter="url(#jc-drop-shadow)">
+    <circle cx="300" cy="300" r="220" fill="none" stroke="url(#jc-gold-grad)" stroke-width="2" opacity="0.65" />
+    <circle cx="300" cy="300" r="206" fill="none" stroke="#7A8494" stroke-width="1" stroke-dasharray="6 10" opacity="0.4" />
+
+    <!-- Marco Romboidal Central (La Carta Arquetípica) -->
+    <polygon points="300,64 504,300 300,536 96,300" fill="url(#jc-obsidian-grad)" stroke="url(#jc-gold-grad)" stroke-width="3" />
+    <polygon points="300,82 486,300 300,518 114,300" fill="none" stroke="#C8A96A" stroke-width="0.75" opacity="0.45" />
+
+    <!-- 1. PIEDRA: Monolito Hexagonal Facetado (Base Sólida) -->
+    <g id="triad-stone">
+      <polygon points="300,250 385,310 355,415 245,415 215,310" fill="url(#jc-obsidian-grad)" stroke="url(#jc-gold-grad)" stroke-width="2" />
+      <!-- Facetas internas de roca -->
+      <polygon points="300,250 385,310 300,338" fill="#1E2534" opacity="0.85" />
+      <polygon points="300,250 215,310 300,338" fill="#283142" opacity="0.65" />
+      <polygon points="300,338 385,310 355,415 300,415" fill="#0B101B" opacity="0.9" />
+      <line x1="300" y1="250" x2="300" y2="415" stroke="url(#jc-gold-grad)" stroke-width="1.2" opacity="0.7" />
+    </g>
+
+    <!-- 2. PAPEL: Pliegue Escultórico en Marfil (Corona Superior) -->
+    <g id="triad-paper">
+      <polygon points="300,130 392,235 300,202 208,235" fill="url(#jc-ivory-grad)" />
+      <polygon points="300,130 392,235 300,275" fill="#D5CCB9" opacity="0.88" />
+      <polygon points="300,130 208,235 300,275" fill="#F7F4ED" />
+      <polyline points="208,235 300,275 392,235" fill="none" stroke="url(#jc-gold-grad)" stroke-width="2" />
+    </g>
+
+    <!-- 3. TIJERA: Hojas de Acero Forjado Cruzadas en Equilibrio -->
+    <g id="triad-scissors">
+      <!-- Hoja Izquierda a Derecha -->
+      <polygon points="168,182 192,168 418,412 385,424" fill="url(#jc-steel-grad)" stroke="#0B101B" stroke-width="1.5" />
+      <!-- Hoja Derecha a Izquierda -->
+      <polygon points="432,182 408,168 182,412 215,424" fill="url(#jc-steel-grad)" stroke="#0B101B" stroke-width="1.5" />
+      <!-- Eje Mecánico de Oro (Fulcro) -->
+      <circle cx="300" cy="296" r="18" fill="#0B101B" stroke="url(#jc-gold-grad)" stroke-width="4" />
+      <circle cx="300" cy="296" r="6" fill="url(#jc-gold-grad)" />
+    </g>
+
+    <!-- Acentos cardinales de precisión -->
+    <circle cx="300" cy="64" r="5" fill="#C8A96A" />
+    <circle cx="300" cy="536" r="5" fill="#C8A96A" />
+    <circle cx="96" cy="300" r="5" fill="#C8A96A" />
+    <circle cx="504" cy="300" r="5" fill="#C8A96A" />
+  </g>
+</svg>
