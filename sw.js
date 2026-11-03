@@ -2,7 +2,7 @@
  * sw.js — Service Worker para instalación de PWA y soporte offline de assets estáticos.
  */
 
-const CACHE_NAME = 'janken-cards-v10';
+const CACHE_NAME = 'janken-cards-v12';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -33,7 +33,20 @@ const ASSETS_TO_CACHE = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await Promise.all(
+        ASSETS_TO_CACHE.map(async (url) => {
+          try {
+            const response = await fetch(url, { cache: 'reload' });
+            if (response && response.ok) {
+              await cache.put(url, response);
+            }
+          } catch {
+            // Ignorar fallos individuales en precarga offline
+          }
+        })
+      );
+    }).then(() => self.skipWaiting())
   );
 });
 
@@ -54,39 +67,29 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // No interceptar peticiones directas de señalización de PeerJS (WebSocket / 0.peerjs.com)
-  if (url.hostname.includes('peerjs.com') || url.protocol === 'ws:' || url.protocol === 'wss:') {
+  // No interceptar peticiones externas ni señalización de PeerJS
+  if (url.origin !== self.location.origin || url.hostname.includes('peerjs.com') || url.protocol === 'ws:' || url.protocol === 'wss:') {
     return;
   }
 
-  // Para peticiones de navegación HTML (como abrir la app o recargar la página):
-  // Usar Network-First con fallback a caché. Garantiza que la app siempre tome la última versión si hay red.
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
-          }
-          return networkResponse;
-        })
-        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
-    );
-    return;
-  }
-
+  // Estrategia Network-First para todos los recursos propios (HTML, JS, CSS, SVG):
+  // garantiza que ambos dispositivos ejecuten siempre el código más reciente cuando hay conexión,
+  // usando la caché únicamente como respaldo si no hay red.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
+    fetch(event.request, { cache: 'no-cache' })
+      .then((networkResponse) => {
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
         }
         return networkResponse;
-      }).catch(() => cached);
-
-      return cached || fetchPromise;
-    })
+      })
+      .catch(() =>
+        caches.match(event.request).then((cached) => {
+          if (cached) return cached;
+          if (event.request.mode === 'navigate') return caches.match('./index.html');
+          return Response.error();
+        })
+      )
   );
 });

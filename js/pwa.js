@@ -86,7 +86,7 @@ export function initPWA() {
   // 1. Registro seguro del Service Worker con chequeo activo de actualizaciones
   if ('serviceWorker' in navigator) {
     const registerSW = () => {
-      navigator.serviceWorker.register('./sw.js').then((reg) => {
+      navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then((reg) => {
         reg.update().catch(() => {});
       }).catch((err) => {
         console.warn('[PWA] Service Worker no se pudo registrar:', err);
@@ -104,8 +104,8 @@ export function initPWA() {
       if (!refreshing) {
         refreshing = true;
         // Solo refrescar si no está a mitad de una partida para evitar interrupciones
-        const activeScreen = document.querySelector('.screen:not([hidden])')?.id;
-        if (activeScreen === 'screen-menu' || activeScreen === 'screen-login') {
+        const activeScreen = document.querySelector('.screen:not([hidden])')?.dataset.screen;
+        if (activeScreen === 'menu' || activeScreen === 'login') {
           window.location.reload();
         }
       }
