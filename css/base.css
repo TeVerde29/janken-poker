@@ -125,10 +125,12 @@ body {
   color: var(--text-primary);
   background-color: var(--bg-obsidian);
   background-image:
-    radial-gradient(95% 60% at 50% -8%, rgba(200, 169, 106, 0.09), transparent 62%),
-    radial-gradient(90% 60% at 50% 108%, rgba(22, 27, 38, 0.85), transparent 65%),
-    url('../assets/icons/fx-gold-particles.svg');
-  background-size: 100% 100%, 100% 100%, 960px auto;
+    radial-gradient(95% 60% at 50% -8%, rgba(200, 169, 106, 0.12), transparent 62%),
+    radial-gradient(90% 60% at 50% 108%, rgba(11, 16, 27, 0.92), transparent 65%),
+    url('../assets/icons/fx-gold-particles.svg'),
+    url('../assets/renders/13-fx-gold-particles.png');
+  background-size: 100% 100%, 100% 100%, 960px auto, cover;
+  background-blend-mode: normal, normal, screen, screen;
   background-attachment: fixed;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;

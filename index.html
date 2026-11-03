@@ -37,10 +37,10 @@
   <link rel="preconnect" href="https://unpkg.com">
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="css/base.css?v=13">
-  <link rel="stylesheet" href="css/screens.css?v=13">
-  <link rel="stylesheet" href="css/game.css?v=13">
-  <link rel="stylesheet" href="css/animations.css?v=13">
+  <link rel="stylesheet" href="css/base.css?v=14">
+  <link rel="stylesheet" href="css/screens.css?v=14">
+  <link rel="stylesheet" href="css/game.css?v=14">
+  <link rel="stylesheet" href="css/animations.css?v=14">
 </head>
 <body>
   <main id="app">
@@ -50,12 +50,22 @@
       <div class="panel panel--login">
         <header class="brand-hero">
           <div class="brand-emblem-wrap" aria-hidden="true">
-            <img class="brand-emblem-logo" src="assets/icons/logo-emblem.svg" alt="" width="64" height="64">
+            <img class="brand-emblem-3d" src="assets/renders/01-logo-emblem.png" alt="" width="76" height="76">
+            <img class="brand-emblem-ring jc-anim-g-orbit" src="assets/icons/logo-emblem.svg" alt="" width="96" height="96">
           </div>
           <div class="brand-deck-preview jc-stage-3d" aria-hidden="true">
-            <img class="hero-card hero-card--left jc-anim-a-card-1" src="assets/icons/piedra.svg" alt="" width="84" height="112">
-            <img class="hero-card hero-card--center jc-anim-a-card-2" src="assets/icons/papel.svg" alt="" width="84" height="112">
-            <img class="hero-card hero-card--right jc-anim-a-card-3" src="assets/icons/tijera.svg" alt="" width="84" height="112">
+            <div class="hero-card-3d hero-card--left jc-anim-a-card-1">
+              <img class="hero-card-render" src="assets/renders/03-card-piedra.png" alt="" width="96" height="128">
+              <img class="hero-card-glyph" src="assets/icons/piedra.svg" alt="" width="24" height="32">
+            </div>
+            <div class="hero-card-3d hero-card--center jc-anim-a-card-2">
+              <img class="hero-card-render" src="assets/renders/04-card-papel.png" alt="" width="96" height="128">
+              <img class="hero-card-glyph" src="assets/icons/papel.svg" alt="" width="24" height="32">
+            </div>
+            <div class="hero-card-3d hero-card--right jc-anim-a-card-3">
+              <img class="hero-card-render" src="assets/renders/05-card-tijera.png" alt="" width="96" height="128">
+              <img class="hero-card-glyph" src="assets/icons/tijera.svg" alt="" width="24" height="32">
+            </div>
           </div>
           <div class="brand-titles">
             <h1 id="login-title" class="brand-title">JANKEN CARDS</h1>
@@ -105,6 +115,19 @@
             </button>
           </div>
         </header>
+
+        <!-- Escenario 3D del Mazo y Colección en Menú -->
+        <div class="lobby-showcase jc-stage-3d" aria-hidden="true">
+          <div class="lobby-deck-display">
+            <img class="lobby-deck-3d jc-anim-g-waiting" src="assets/renders/06-deck-3d-stack.png" alt="" width="110" height="110">
+            <img class="lobby-deck-svg-ring jc-anim-g-orbit" src="assets/icons/waiting-room-elements.svg" alt="" width="146" height="146">
+          </div>
+          <div class="lobby-collection-trio">
+            <img class="lobby-trio-card jc-anim-a-card-1" src="assets/renders/03-card-piedra.png" alt="" width="64" height="85">
+            <img class="lobby-trio-card jc-anim-a-card-2" src="assets/renders/04-card-papel.png" alt="" width="64" height="85">
+            <img class="lobby-trio-card jc-anim-a-card-3" src="assets/renders/05-card-tijera.png" alt="" width="64" height="85">
+          </div>
+        </div>
 
         <div class="lobby-actions">
           <button id="btn-create" type="button" class="btn btn--primary btn--block btn--hero" data-autofocus>
@@ -191,7 +214,7 @@
           <p id="waiting-info" class="section-desc"></p>
         </header>
 
-        <!-- Face-off visual entre anfitrión y rival con Astrolabio y Mazo 3D (Animación G) -->
+        <!-- Face-off visual entre anfitrión y rival con Astrolabio, Disco 3D y Mazo 3D (Animación G) -->
         <div class="faceoff-stage" aria-label="Enfrentamiento en preparación">
           <div class="faceoff-player faceoff-player--host">
             <div class="faceoff-avatar">
@@ -203,8 +226,9 @@
 
           <div class="faceoff-center" aria-hidden="true">
             <div class="waiting-kinetic-core">
-              <img class="waiting-astrolabe jc-anim-g-orbit" src="assets/icons/waiting-room-elements.svg" alt="" width="110" height="110">
-              <img class="waiting-deck-3d jc-anim-g-waiting" src="assets/icons/deck-3d-stack.svg" alt="" width="68" height="68">
+              <img class="waiting-arena-disc" src="assets/renders/15-waiting-room-arena-disc.png" alt="" width="108" height="108">
+              <img class="waiting-astrolabe jc-anim-g-orbit" src="assets/icons/waiting-room-elements.svg" alt="" width="116" height="116">
+              <img class="waiting-deck-3d jc-anim-g-waiting" src="assets/renders/06-deck-3d-stack.png" alt="" width="64" height="64">
             </div>
             <span class="faceoff-vs">VS</span>
             <div class="faceoff-dots">
@@ -282,13 +306,25 @@
       <!-- Mano del rival (cartas ocultas restantes) -->
       <div id="rival-hand" class="rival-hand" role="img" aria-label="Cartas del rival"></div>
 
-      <!-- Tapete de duelo / Arena orgánica -->
+      <!-- Tapete de duelo / Arena con Efectos Cinematográficos (Animaciones B, D, E, F) -->
       <div class="arena-wrap">
+        <img class="arena-table-svg-grid" src="assets/icons/bg-game-table.svg" alt="" aria-hidden="true">
         <div class="arena-meta">
           <span id="attempt-label" class="attempt-label">Intento 1 de 3</span>
         </div>
 
-        <div id="arena" class="arena">
+        <div id="arena" class="arena jc-stage-3d">
+          <!-- ANIMACIÓN B: Escenario de Barajado Físico entre rondas -->
+          <div id="shuffle-stage" class="shuffle-stage jc-stage-3d" aria-hidden="true" hidden>
+            <img class="shuffle-deck-base" src="assets/renders/06-deck-3d-stack.png" alt="">
+            <img class="shuffle-card shuffle-card--left jc-anim-b-deck-left" src="assets/renders/02-card-back.png" alt="">
+            <img class="shuffle-card shuffle-card--right jc-anim-b-deck-right" src="assets/renders/02-card-back.png" alt="">
+          </div>
+
+          <!-- Efectos Centrales de Revelación (09) y Empate (11) -->
+          <img id="arena-fx-reveal" class="arena-center-fx arena-center-fx--reveal" src="assets/icons/fx-card-reveal.svg" alt="" aria-hidden="true" hidden>
+          <img id="arena-fx-draw" class="arena-center-fx arena-center-fx--draw" src="assets/icons/fx-draw.svg" alt="" aria-hidden="true" hidden>
+
           <div id="slot-me" class="arena-slot arena-slot--me">
             <div class="slot-card"></div>
             <span class="slot-label">Tu carta</span>
@@ -324,7 +360,8 @@
     <section class="screen screen--center" data-screen="gameover" aria-labelledby="result-title" hidden>
       <div class="panel panel--result">
         <div class="result-crest-stage" aria-hidden="true">
-          <img id="result-crest-img" class="result-crest-img jc-anim-e-victory" src="assets/icons/fx-victory.svg" alt="" width="112" height="112">
+          <img id="result-crest-halo" class="result-crest-halo jc-anim-g-orbit" src="assets/icons/fx-victory.svg" alt="" width="150" height="150">
+          <img id="result-crest-img" class="result-crest-img jc-anim-e-victory" src="assets/renders/10-fx-victory-crest.png" alt="" width="112" height="112">
         </div>
         <p class="eyebrow">Desenlace del duelo</p>
         <h2 id="result-title" class="result-title">¡Victoria!</h2>
@@ -421,6 +458,6 @@
   </aside>
 
   <script src="https://unpkg.com/peerjs@1/dist/peerjs.min.js"></script>
-  <script type="module" src="js/main.js?v=13"></script>
+  <script type="module" src="js/main.js?v=14"></script>
 </body>
 </html>

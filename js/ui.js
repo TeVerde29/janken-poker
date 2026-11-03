@@ -6,25 +6,103 @@ import { state, MAX_ATTEMPTS } from './state.js';
 import { restartClass } from './animations.js';
 
 const ICONS = 'assets/icons/';
+const RENDERS = 'assets/renders/';
+
 export const CARD_LABEL = { piedra: 'Piedra', papel: 'Papel', tijera: 'Tijera' };
+
+export const CARD_RENDER_MAP = {
+  jc: `${RENDERS}02-card-back.png`,
+  piedra: `${RENDERS}03-card-piedra.png`,
+  papel: `${RENDERS}04-card-papel.png`,
+  tijera: `${RENDERS}05-card-tijera.png`,
+};
 
 export const $ = (id) => document.getElementById(id);
 
-/** Precarga las imágenes de las cartas para que el volteo no muestre huecos. */
+/** Precarga todos los recursos 3D (.PNG) y vectoriales (.SVG) para transiciones instantáneas. */
 export function preloadCards() {
-  ['piedra', 'papel', 'tijera', 'jc'].forEach((n) => {
+  const urls = [
+    ...Object.values(CARD_RENDER_MAP),
+    `${RENDERS}01-logo-emblem.png`,
+    `${RENDERS}06-deck-3d-stack.png`,
+    `${RENDERS}08-fx-card-locked.png`,
+    `${RENDERS}10-fx-victory-crest.png`,
+    `${RENDERS}13-fx-gold-particles.png`,
+    `${RENDERS}14-bg-game-table.png`,
+    `${RENDERS}15-waiting-room-arena-disc.png`,
+    `${ICONS}piedra.svg`,
+    `${ICONS}papel.svg`,
+    `${ICONS}tijera.svg`,
+    `${ICONS}jc.svg`,
+    `${ICONS}logo-emblem.svg`,
+    `${ICONS}deck-3d-stack.svg`,
+    `${ICONS}fx-card-selected.svg`,
+    `${ICONS}fx-card-locked.svg`,
+    `${ICONS}fx-card-reveal.svg`,
+    `${ICONS}fx-victory.svg`,
+    `${ICONS}fx-draw.svg`,
+    `${ICONS}fx-defeat.svg`,
+    `${ICONS}fx-gold-particles.svg`,
+    `${ICONS}bg-game-table.svg`,
+    `${ICONS}waiting-room-elements.svg`,
+  ];
+  urls.forEach((src) => {
     const img = new Image();
-    img.src = `${ICONS}${n}.svg`;
+    img.src = src;
   });
 }
 
+/**
+ * Crea la imagen principal de una carta usando el render 3D de estudio (.PNG).
+ */
 export function cardImg(type) {
   const img = document.createElement('img');
-  img.src = `${ICONS}${type}.svg`;
+  img.className = 'card-render-photo';
+  img.src = CARD_RENDER_MAP[type] || `${ICONS}${type}.svg`;
   img.alt = type === 'jc' ? 'Carta boca abajo' : CARD_LABEL[type];
   img.draggable = false;
   img.decoding = 'async';
   return img;
+}
+
+/**
+ * Crea el glifo vectorial (.SVG) de esquina para acompañar al render 3D.
+ */
+export function cardVectorGlyph(type) {
+  const badge = document.createElement('img');
+  badge.className = 'card-vector-badge';
+  badge.src = `${ICONS}${type}.svg`;
+  badge.alt = '';
+  badge.setAttribute('aria-hidden', 'true');
+  badge.draggable = false;
+  return badge;
+}
+
+/**
+ * Conecta física táctil 1:1 estilo Apple HIG (inclinación 3D en tiempo real al mover el puntero).
+ */
+export function attachTactileCardPhysics(cardEl) {
+  let rafId = null;
+  const onPointerMove = (e) => {
+    if (cardEl.disabled || cardEl.classList.contains('is-played')) return;
+    const rect = cardEl.getBoundingClientRect();
+    const normX = (e.clientX - rect.left) / rect.width - 0.5;
+    const normY = (e.clientY - rect.top) / rect.height - 0.5;
+    const rotateY = normX * 20;
+    const rotateX = -normY * 20;
+    const liftY = cardEl.classList.contains('card-select') ? -20 : -10;
+
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      cardEl.style.transform = `translate3d(0, ${liftY}px, 34px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+    });
+  };
+  const onPointerLeave = () => {
+    if (rafId) cancelAnimationFrame(rafId);
+    cardEl.style.transform = '';
+  };
+  cardEl.addEventListener('pointermove', onPointerMove);
+  cardEl.addEventListener('pointerleave', onPointerLeave);
 }
 
 /* ---------------------------------------------------------------- Pantallas */
@@ -114,7 +192,31 @@ export function renderHand(animate) {
     b.dataset.index = String(i);
     b.setAttribute('aria-label', `Carta ${CARD_LABEL[card.type]}`);
     b.setAttribute('aria-pressed', 'false');
-    b.append(cardImg(card.type));
+
+    // Superficie con Render 3D (.PNG), Glifo Vectorial (.SVG) y reflejo especular
+    const surface = document.createElement('div');
+    surface.className = 'card-surface';
+    surface.append(cardImg(card.type), cardVectorGlyph(card.type));
+
+    // Recurso 07: Efecto visual de carta seleccionada (.SVG)
+    const fxSelected = document.createElement('img');
+    fxSelected.className = 'card-fx-selected';
+    fxSelected.src = `${ICONS}fx-card-selected.svg`;
+    fxSelected.alt = '';
+    fxSelected.setAttribute('aria-hidden', 'true');
+
+    // Recurso 08: Efecto de carta bloqueada / jugada (Render 3D .PNG + Sello .SVG)
+    const fxLocked = document.createElement('div');
+    fxLocked.className = 'card-fx-locked';
+    fxLocked.setAttribute('aria-hidden', 'true');
+    fxLocked.innerHTML = `
+      <img class="locked-render-bg" src="${RENDERS}08-fx-card-locked.png" alt="">
+      <img class="locked-vector-seal" src="${ICONS}fx-card-locked.svg" alt="">
+    `;
+
+    b.append(surface, fxSelected, fxLocked);
+    attachTactileCardPhysics(b);
+
     if (animate) {
       b.classList.add('card-deal');
       b.addEventListener('animationend', () => b.classList.remove('card-deal'), { once: true });
@@ -175,11 +277,14 @@ export function renderRivalHand(count) {
 
 const slotHolder = (who) => $(`slot-${who}`).querySelector('.slot-card');
 
-/** Estructura: fx (win/lose) > clash (shake) > flip (perspectiva) > inner (rotación) > caras. */
+/** Estructura: fx (win/lose + overlays 10/12/13) > clash (shake) > flip (perspectiva) > inner (rotación) > caras. */
 function buildSlotCard() {
   const fx = document.createElement('div');
   fx.className = 'slot-fx';
   fx.innerHTML = `
+    <img class="slot-outcome-fx slot-outcome-fx--win jc-anim-e-victory" src="${ICONS}fx-victory.svg" alt="" aria-hidden="true">
+    <img class="slot-outcome-fx slot-outcome-fx--win" src="${ICONS}fx-gold-particles.svg" alt="" aria-hidden="true">
+    <img class="slot-outcome-fx slot-outcome-fx--lose" src="${ICONS}fx-defeat.svg" alt="" aria-hidden="true">
     <div class="slot-clash">
       <div class="flip">
         <div class="flip-inner">
@@ -188,7 +293,8 @@ function buildSlotCard() {
         </div>
       </div>
     </div>`;
-  fx.querySelector('.face--back').append(cardImg('jc'));
+  const backFace = fx.querySelector('.face--back');
+  backFace.append(cardImg('jc'), cardVectorGlyph('jc'));
   return fx;
 }
 
@@ -201,6 +307,10 @@ export function clearArena() {
     holder.replaceChildren(ph);
   }
   $('arena').classList.remove('is-meeting');
+  const fxRev = $('arena-fx-reveal');
+  const fxDraw = $('arena-fx-draw');
+  if (fxRev) fxRev.hidden = true;
+  if (fxDraw) fxDraw.hidden = true;
   setArenaResult('', null);
 }
 
@@ -213,14 +323,14 @@ export function setFaceDown(who) {
   restartClass(card, 'slot-pop');
 }
 
-/** Coloca las caras reales (aún ocultas por el dorso) antes del volteo. */
+/** Coloca las caras reales (Render 3D + Glifo SVG aún ocultos por el dorso) antes del volteo. */
 export function setFaces(mine, theirs) {
   setFaceDown('me');
   setFaceDown('rival');
   for (const [who, type] of [['me', mine], ['rival', theirs]]) {
     const front = slotHolder(who).querySelector('.face--front');
     front.className = `face face--front card--${type}`;
-    front.replaceChildren(cardImg(type));
+    front.replaceChildren(cardImg(type), cardVectorGlyph(type));
   }
 }
 
@@ -296,6 +406,16 @@ export function renderGameOver({ won, tiebreaks, lastDuel }) {
   const title = $('result-title');
   title.textContent = won ? '¡Victoria!' : 'Derrota';
   title.className = 'result-title ' + (won ? 'result-title--win' : 'result-title--lose');
+
+  const crestImg = $('result-crest-img');
+  const crestHalo = $('result-crest-halo');
+  if (crestImg) {
+    crestImg.src = won ? `${RENDERS}10-fx-victory-crest.png` : `${ICONS}fx-defeat.svg`;
+    crestImg.classList.toggle('jc-anim-e-victory', won);
+  }
+  if (crestHalo) {
+    crestHalo.src = won ? `${ICONS}fx-victory.svg` : `${ICONS}fx-defeat.svg`;
+  }
 
   $('final-me-name').textContent = state.nickname;
   $('final-rival-name').textContent = state.rivalName || 'Rival';

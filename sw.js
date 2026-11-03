@@ -2,7 +2,7 @@
  * sw.js — Service Worker para instalación de PWA y soporte offline de assets estáticos.
  */
 
-const CACHE_NAME = 'janken-cards-v12';
+const CACHE_NAME = 'janken-cards-v14';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -26,9 +26,31 @@ const ASSETS_TO_CACHE = [
   './assets/icons/papel.svg',
   './assets/icons/tijera.svg',
   './assets/icons/jc.svg',
+  './assets/icons/logo-emblem.svg',
+  './assets/icons/deck-3d-stack.svg',
+  './assets/icons/fx-card-selected.svg',
+  './assets/icons/fx-card-locked.svg',
+  './assets/icons/fx-card-reveal.svg',
+  './assets/icons/fx-victory.svg',
+  './assets/icons/fx-draw.svg',
+  './assets/icons/fx-defeat.svg',
+  './assets/icons/fx-gold-particles.svg',
+  './assets/icons/bg-game-table.svg',
+  './assets/icons/waiting-room-elements.svg',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
-  './assets/icons/og-image.png'
+  './assets/icons/og-image.png',
+  './assets/renders/01-logo-emblem.png',
+  './assets/renders/02-card-back.png',
+  './assets/renders/03-card-piedra.png',
+  './assets/renders/04-card-papel.png',
+  './assets/renders/05-card-tijera.png',
+  './assets/renders/06-deck-3d-stack.png',
+  './assets/renders/08-fx-card-locked.png',
+  './assets/renders/10-fx-victory-crest.png',
+  './assets/renders/13-fx-gold-particles.png',
+  './assets/renders/14-bg-game-table.png',
+  './assets/renders/15-waiting-room-arena-disc.png'
 ];
 
 self.addEventListener('install', (event) => {

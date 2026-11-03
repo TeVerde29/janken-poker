@@ -64,38 +64,62 @@ export function bumpScore(el) {
 }
 
 /**
- * Secuencia completa de revelación de un intento:
- * volteo simultáneo → acercamiento → choque → victoria/derrota o empate.
+ * ANIMACIÓN B — Secuencia cinematográfica de barajado del mazo 3D antes de repartir.
+ */
+export async function playDeckShuffle(ms = 900) {
+  const stage = document.getElementById('shuffle-stage');
+  if (!stage) return;
+  stage.hidden = false;
+  await wait(ms);
+  stage.hidden = true;
+}
+
+/**
+ * ANIMACIÓN D, E y F — Secuencia completa de revelación de un intento:
+ * volteo simultáneo con destello 09-fx-card-reveal.svg → acercamiento → choque →
+ * victoria (10-fx-victory.svg + 13-fx-gold-particles.svg) / derrota (12-fx-defeat.svg) o empate (11-fx-draw.svg).
  * @param {{me: object, rival: object}} parts piezas devueltas por ui.slotParts
  * @param {'win'|'lose'|'tie'} outcome desde la perspectiva local
  * @param {(text: string, kind: string) => void} setResult pinta el texto central
  */
 export async function revealAttempt(parts, outcome, setResult) {
   const arena = document.getElementById('arena');
+  const fxReveal = document.getElementById('arena-fx-reveal');
+  const fxDraw = document.getElementById('arena-fx-draw');
   const { me, rival } = parts;
 
-  // 1. Volteo 3D simultáneo (la clase se queda: fija la cara visible).
+  // 1. ANIMACIÓN D: Volteo 3D simultáneo + Destello anamórfico (09-fx-card-reveal.svg) en 90°
+  if (fxReveal) {
+    fxReveal.hidden = false;
+    restartClass(fxReveal, 'reveal-flare-burst');
+  }
   await Promise.all([playClass(me.inner, 'card-flip', 600), playClass(rival.inner, 'card-flip', 600)]);
+  if (fxReveal) fxReveal.hidden = true;
 
   // 2. Las cartas se desplazan al centro y chocan.
   arena.classList.add('is-meeting');
-  await wait(260);
+  await wait(240);
   await Promise.all([playClass(me.clash, 'card-clash', 300), playClass(rival.clash, 'card-clash', 300)]);
   me.clash.classList.remove('card-clash');
   rival.clash.classList.remove('card-clash');
 
-  // 3. Resultado.
+  // 3. Resultado: ANIMACIÓN F (Empate con 11-fx-draw.svg) o ANIMACIÓN E (Victoria/Derrota con 10/12/13)
   if (outcome === 'tie') {
+    if (fxDraw) {
+      fxDraw.hidden = false;
+      restartClass(fxDraw, 'draw-equilibrium-pulse');
+    }
     setResult('EMPATE', 'tie');
     await Promise.all([playClass(me.clash, 'tie-shake', 400), playClass(rival.clash, 'tie-shake', 400)]);
     await wait(700);
+    if (fxDraw) fxDraw.hidden = true;
     return;
   }
   const [winner, loser] = outcome === 'win' ? [me, rival] : [rival, me];
   winner.fx.classList.add('card-win');
   loser.fx.classList.add('card-lose');
   setResult(outcome === 'win' ? '¡GANAS!' : 'PIERDES', outcome);
-  await wait(1300);
+  await wait(1350);
 }
 
 /** Overlay "RONDA NULA" y desvanecimiento de las cartas de la arena. */

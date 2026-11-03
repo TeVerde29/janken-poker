@@ -197,9 +197,11 @@ async function onDeal(msg) {
     await fx.showBanner($('tiebreak-banner'));
   } else {
     ui.setTiebreakBanner(false);
-    ui.setStatus('Repartiendo cartas…', 'info');
+    ui.setStatus('Barajando y repartiendo cartas…', 'info');
   }
 
+  audio.sfxCardSlide();
+  await fx.playDeckShuffle(680);
   ui.renderHand(true);
   await fx.wait(550);
   enableTurn();
@@ -524,11 +526,15 @@ function initConfig() {
         <input type="radio" name="rounds" value="${opt.rounds}" ${opt.recommended ? 'checked' : ''}>
         <div class="mode-card-content">
           <div class="mode-visual" aria-hidden="true">
-            <div class="archetype-icons">
-              <img src="assets/icons/piedra.svg" alt="" title="${visualTitle}">
-              <img src="assets/icons/papel.svg" alt="" title="${visualTitle}">
-              <img src="assets/icons/tijera.svg" alt="" title="${visualTitle}">
-            </div>
+            ${isClassic ? `
+              <div class="archetype-icons" title="${visualTitle}">
+                <img src="assets/renders/03-card-piedra.png" alt="">
+                <img src="assets/renders/04-card-papel.png" alt="">
+                <img src="assets/renders/05-card-tijera.png" alt="">
+              </div>
+            ` : `
+              <img class="mode-deck-stack" src="assets/renders/06-deck-3d-stack.png" alt="" title="${visualTitle}">
+            `}
           </div>
           <div class="mode-info">
             <div class="mode-header">
