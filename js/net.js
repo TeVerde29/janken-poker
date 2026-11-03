@@ -53,8 +53,17 @@ function peerOptions() {
         { urls: 'stun:stun1.l.google.com:19302' },
         { urls: 'stun:stun2.l.google.com:19302' },
         { urls: 'stun:stun.cloudflare.com:3478' },
+        {
+          urls: [
+            'turn:eu-0.turn.peerjs.com:3478',
+            'turn:us-0.turn.peerjs.com:3478',
+          ],
+          username: 'peerjs',
+          credential: 'peerjsp',
+        },
         ...EXTRA_ICE_SERVERS,
       ],
+      sdpSemantics: 'unified-plan',
     },
   };
 }

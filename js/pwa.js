@@ -83,18 +83,33 @@ function renderGuideSteps(container, isApple) {
 }
 
 export function initPWA() {
-  // 1. Registro seguro del Service Worker
+  // 1. Registro seguro del Service Worker con chequeo activo de actualizaciones
   if ('serviceWorker' in navigator) {
     const registerSW = () => {
-      navigator.serviceWorker.register('./sw.js').catch((err) => {
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        reg.update().catch(() => {});
+      }).catch((err) => {
         console.warn('[PWA] Service Worker no se pudo registrar:', err);
       });
     };
+
     if (document.readyState === 'complete') {
       registerSW();
     } else {
       window.addEventListener('load', registerSW);
     }
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) {
+        refreshing = true;
+        // Solo refrescar si no está a mitad de una partida para evitar interrupciones
+        const activeScreen = document.querySelector('.screen:not([hidden])')?.id;
+        if (activeScreen === 'screen-menu' || activeScreen === 'screen-login') {
+          window.location.reload();
+        }
+      }
+    });
   }
 
   // Si ya se está ejecutando en pantalla completa standalone, no molestar al jugador

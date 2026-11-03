@@ -2,7 +2,7 @@
  * sw.js — Service Worker para instalación de PWA y soporte offline de assets estáticos.
  */
 
-const CACHE_NAME = 'janken-cards-v6';
+const CACHE_NAME = 'janken-cards-v7';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -56,6 +56,23 @@ self.addEventListener('fetch', (event) => {
 
   // No interceptar peticiones directas de señalización de PeerJS (WebSocket / 0.peerjs.com)
   if (url.hostname.includes('peerjs.com') || url.protocol === 'ws:' || url.protocol === 'wss:') {
+    return;
+  }
+
+  // Para peticiones de navegación HTML (como abrir la app o recargar la página):
+  // Usar Network-First con fallback a caché. Garantiza que la app siempre tome la última versión si hay red.
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
+    );
     return;
   }
 
