@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JANKEN CARDS — Art Direction & Asset Vault</title>
+  <link rel="stylesheet" href="./design-system/tokens.css" />
+  <link rel="stylesheet" href="./animations/janken-cinematic-animations.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--jc-midnight-950);
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(200, 169, 106, 0.08), transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(22, 27, 38, 0.9), var(--jc-midnight-950));
+      color: var(--jc-ivory-100);
+      font-family: var(--jc-font-sans);
+      line-height: 1.6;
+      padding: 48px 24px 96px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .vault-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    header.vault-header {
+      text-align: center;
+      padding: 40px 20px 64px;
+      border-bottom: 1px solid var(--jc-gold-hairline);
+      margin-bottom: 64px;
+    }
+    .vault-badge {
+      display: inline-block;
+      font-family: var(--jc-font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      color: var(--jc-gold-400);
+      border: 1px solid var(--jc-gold-hairline);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: var(--jc-font-display);
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--jc-ivory-100);
+      margin-bottom: 16px;
+    }
+    .subtitle {
+      max-width: 680px;
+      margin: 0 auto;
+      color: var(--jc-steel-400);
+      font-size: 1.05rem;
+    }
+    section {
+      margin-bottom: 88px;
+    }
+    h2.section-title {
+      font-family: var(--jc-font-display);
+      font-size: 1.75rem;
+      letter-spacing: 0.05em;
+      color: var(--jc-gold-400);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-desc {
+      color: var(--jc-steel-400);
+      margin-bottom: 36px;
+      max-width: 75ch;
+    }
+
+    /* Paleta */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 20px;
+    }
+    .swatch-card {
+      background: var(--jc-charcoal-900);
+      border: 1px solid var(--jc-steel-hairline);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--jc-shadow-resting);
+    }
+    .swatch-color {
+      height: 96px;
+      border-bottom: 1px solid var(--jc-steel-hairline);
+    }
+    .swatch-info {
+      padding: 16px;
+    }
+    .swatch-name {
+      font-weight: 600;
+      color: var(--jc-ivory-100);
+      font-size: 0.95rem;
+    }
+    .swatch-hex {
+      font-family: var(--jc-font-mono);
+      font-size: 0.8rem;
+      color: var(--jc-gold-400);
+      margin-top: 4px;
+    }
+
+    /* Las 3 Cartas Principales */
+    .hero-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+    }
+    .card-comparison-panel {
+      background: rgba(22, 27, 38, 0.65);
+      border: 1px solid var(--jc-gold-hairline);
+      border-radius: 20px;
+      padding: 28px;
+      text-align: center;
+    }
+    .card-comparison-panel h3 {
+      font-family: var(--jc-font-display);
+      letter-spacing: 0.08em;
+      color: var(--jc-ivory-100);
+      margin-bottom: 6px;
+    }
+    .card-comparison-panel p {
+      font-size: 0.88rem;
+      color: var(--jc-steel-400);
+      margin-bottom: 24px;
+    }
+    .dual-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    .preview-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .preview-item img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: var(--jc-shadow-resting);
+      border: 1px solid rgba(200, 169, 106, 0.25);
+    }
+    .preview-tag {
+      font-family: var(--jc-font-mono);
+      font-size: 0.72rem;
+      color: var(--jc-steel-400);
+    }
+
+    /* Catálogo de los 15 Recursos */
+    .assets-catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+      gap: 24px;
+    }
+    .asset-tile {
+      background: var(--jc-charcoal-900);
+      border: 1px solid var(--jc-steel-hairline);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--jc-shadow-resting);
+    }
+    .asset-stage {
+      height: 210px;
+      background: radial-gradient(circle at 50% 40%, #1E2534, #070A12);
+      border-radius: 12px;
+      border: 1px solid rgba(200, 169, 106, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+    .asset-stage img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .asset-num {
+      font-family: var(--jc-font-mono);
+      font-size: 0.72rem;
+      color: var(--jc-gold-400);
+    }
+    .asset-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--jc-ivory-100);
+    }
+    .asset-meta {
+      font-size: 0.83rem;
+      color: var(--jc-steel-400);
+    }
+
+    /* Laboratorio de Animaciones A–G */
+    .anim-lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+    }
+    .anim-theater {
+      background: var(--jc-charcoal-900);
+      border: 1px solid var(--jc-gold-hairline);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .theater-viewport {
+      height: 270px;
+      background: radial-gradient(circle at 50% 50%, #1A2232, #070A12);
+      border-radius: 14px;
+      border: 1px solid var(--jc-steel-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .mini-card {
+      width: 108px;
+      aspect-ratio: 3 / 4;
+      border-radius: 10px;
+      box-shadow: var(--jc-shadow-resting);
+    }
+  </style>
+</head>
+<body>
+  <div class="vault-container">
+    <header class="vault-header">
+      <span class="vault-badge">BÓVEDA INDEPENDIENTE · NO CONECTADA AL SISTEMA</span>
+      <h1>JANKEN CARDS</h1>
+      <p class="subtitle">
+        Sistema de Identidad Visual Indie Premium, Colección Escultórica de Cartas (3D + SVG) y Motor de Animación Cinematográfica estilo Apple HIG.
+      </p>
+    </header>
+
+    <!-- 1. PALETA DE COLOR -->
+    <section>
+      <h2 class="section-title">01. Paleta Oficial — Nocturne Tactile Luxury</h2>
+      <p class="section-desc">
+        Tonos minerales, papel algodón marfil y metales forjados bajo iluminación de estudio. Sin neones ni degradados sintéticos.
+      </p>
+      <div class="palette-grid">
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #0B101B;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Azul Noche Abisal</div>
+            <div class="swatch-hex">#0B101B · --jc-midnight-900</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #161B26;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Carbón Mineral</div>
+            <div class="swatch-hex">#161B26 · --jc-charcoal-900</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #C8A96A;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Oro Suave Bruñido</div>
+            <div class="swatch-hex">#C8A96A · --jc-gold-500</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #F7F4ED;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Marfil Editorial</div>
+            <div class="swatch-hex">#F7F4ED · --jc-ivory-100</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #7A8494;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Gris Acero Forjado</div>
+            <div class="swatch-hex">#7A8494 · --jc-steel-500</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LAS TRES CARTAS PRINCIPALES -->
+    <section>
+      <h2 class="section-title">02. Trilogía de Cartas Principales (3D Render + Vector SVG)</h2>
+      <p class="section-desc">
+        Misma perspectiva frontal, mismo sistema de bordes en doble bisel de carbón y oro, misma iluminación cenital-izquierda y proporción constante 3:4. Pasa el cursor sobre las cartas para sentir la física táctil e iluminación especular.
+      </p>
+      <div class="hero-cards-grid">
+        <!-- PIEDRA -->
+        <div class="card-comparison-panel">
+          <h3>CARTA PIEDRA</h3>
+          <p>Monolito de basalto y obsidiana facetada con vetas minerales Kintsugi en oro suave.</p>
+          <div class="dual-preview">
+            <div class="preview-item">
+              <img class="jc-anim-c-selectable js-tactile-card" src="./renders-3d/03-card-piedra.png" alt="Render 3D Carta Piedra" />
+              <span class="preview-tag">Render 3D Estudio (.PNG)</span>
+            </div>
+            <div class="preview-item">
+              <img class="jc-anim-c-selectable js-tactile-card" src="./svg-vectors/03-card-piedra.svg" alt="Vector SVG Carta Piedra" />
+              <span class="preview-tag">Vector Escalable (.SVG)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAPEL -->
+        <div class="card-comparison-panel">
+          <h3>CARTA PAPEL</h3>
+          <p>Pliegue arquitectónico de papel algodón marfil con volumen físico y cantos de pan de oro.</p>
+          <div class="dual-preview">
+            <div class="preview-item">
+              <img class="jc-anim-c-selectable js-tactile-card" src="./renders-3d/04-card-papel.png" alt="Render 3D Carta Papel" />
+              <span class="preview-tag">Render 3D Estudio (.PNG)</span>
+            </div>
+            <div class="preview-item">
+              <img class="jc-anim-c-selectable js-tactile-card" src="./svg-vectors/04-card-papel.svg" alt="Vector SVG Carta Papel" />
+              <span class="preview-tag">Vector Escalable (.SVG)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIJERA -->
+        <div class="card-comparison-panel">
+          <h3>CARTA TIJERA</h3>
+          <p>Hojas cruzadas en acero de Damasco y titanio cepillado con eje mecánico de relojería en oro.</p>
+          <div class="dual-preview">
+            <div class="preview-item">
+              <img class="jc-anim-c-selectable js-tactile-card" src="./renders-3d/05-card-tijera.png" alt="Render 3D Carta Tijera" />
+              <span class="preview-tag">Render 3D Estudio (.PNG)</span>
+            </div>
+            <div class="preview-item">
+              <img class="jc-anim-c-selectable js-tactile-card" src="./svg-vectors/05-card-tijera.svg" alt="Vector SVG Carta Tijera" />
+              <span class="preview-tag">Vector Escalable (.SVG)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. LOS 15 RECURSOS INDEPENDIENTES -->
+    <section>
+      <h2 class="section-title">03. Inventario de los 15 Recursos Gráficos Independientes</h2>
+      <p class="section-desc">
+        Cada activo ha sido aislado sin textos inventados ni botones incrustados para poder componerse libremente en el DOM, Canvas o WebGL.
+      </p>
+      <div class="assets-catalog-grid">
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/01-logo-emblem.png" alt="01 Logo" /></div>
+          <span class="asset-num">RECURSO 01 · PNG 3D + SVG</span>
+          <div class="asset-title">Logo Original JANKEN CARDS</div>
+          <p class="asset-meta">Pantalla de título y acceso a sala. Emblema escultórico de la tríada.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/02-card-back.png" alt="02 Reverso" /></div>
+          <span class="asset-num">RECURSO 02 · PNG 3D + SVG</span>
+          <div class="asset-title">Reverso de las Cartas</div>
+          <p class="asset-meta">Mano oculta del rival y mazo central con geometría sagrada en oro.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/03-card-piedra.png" alt="03 Piedra" /></div>
+          <span class="asset-num">RECURSO 03 · PNG 3D + SVG</span>
+          <div class="asset-title">Carta de Piedra</div>
+          <p class="asset-meta">Mano del jugador y revelación en arena. Monolito mineral Kintsugi.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/04-card-papel.png" alt="04 Papel" /></div>
+          <span class="asset-num">RECURSO 04 · PNG 3D + SVG</span>
+          <div class="asset-title">Carta de Papel</div>
+          <p class="asset-meta">Mano del jugador y revelación en arena. Origami arquitectónico marfil.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/05-card-tijera.png" alt="05 Tijera" /></div>
+          <span class="asset-num">RECURSO 05 · PNG 3D + SVG</span>
+          <div class="asset-title">Carta de Tijera</div>
+          <p class="asset-meta">Mano del jugador y revelación en arena. Acero forjado y fulcro de oro.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/06-deck-3d-stack.png" alt="06 Mazo 3D" /></div>
+          <span class="asset-num">RECURSO 06 · PNG 3D + SVG</span>
+          <div class="asset-title">Mazo Apilado en Perspectiva 3D</div>
+          <p class="asset-meta">Selección de mazo y reserva en mesa con cantos dorados bruñidos.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./svg-vectors/07-fx-card-selected.svg" alt="07 Seleccionada" /></div>
+          <span class="asset-num">RECURSO 07 · SVG TRANSPARENTE</span>
+          <div class="asset-title">Efecto Carta Seleccionada</div>
+          <p class="asset-meta">Halo de enfoque cálido y brackets de precisión al elegir jugada.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/08-fx-card-locked.png" alt="08 Bloqueada" /></div>
+          <span class="asset-num">RECURSO 08 · PNG 3D + SVG</span>
+          <div class="asset-title">Efecto Carta Bloqueada</div>
+          <p class="asset-meta">Sello mecánico en gris acero y obsidiana para cartas inactivas.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./svg-vectors/09-fx-card-reveal.svg" alt="09 Revelación" /></div>
+          <span class="asset-num">RECURSO 09 · SVG TRANSPARENTE</span>
+          <div class="asset-title">Efecto Revelación de Carta</div>
+          <p class="asset-meta">Destello anamórfico cálido para el giro simultáneo de 90°.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/10-fx-victory-crest.png" alt="10 Victoria" /></div>
+          <span class="asset-num">RECURSO 10 · PNG 3D + SVG</span>
+          <div class="asset-title">Efecto de Victoria</div>
+          <p class="asset-meta">Corona solar y trofeo cinético de anillos levitantes en oro.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./svg-vectors/11-fx-draw.svg" alt="11 Empate" /></div>
+          <span class="asset-num">RECURSO 11 · SVG TRANSPARENTE</span>
+          <div class="asset-title">Efecto de Empate</div>
+          <p class="asset-meta">Resonancia simétrica dual en acero y oro (Vesica Piscis).</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./svg-vectors/12-fx-defeat.svg" alt="12 Derrota" /></div>
+          <span class="asset-num">RECURSO 12 · SVG TRANSPARENTE</span>
+          <div class="asset-title">Efecto de Derrota</div>
+          <p class="asset-meta">Fractura mineral sobria y viñeta de eclipse sobre la carta vencida.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/13-fx-gold-particles.png" alt="13 Partículas" /></div>
+          <span class="asset-num">RECURSO 13 · PNG 3D + SVG</span>
+          <div class="asset-title">Partículas Doradas Sutiles</div>
+          <p class="asset-meta">Hojuelas de pan de oro y bokeh cálido para mezcla Screen/Additive.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./renders-3d/14-bg-game-table.png" alt="14 Mesa" /></div>
+          <span class="asset-num">RECURSO 14 · PNG 16:9 + SVG</span>
+          <div class="asset-title">Fondo Mesa de Juego Premium</div>
+          <p class="asset-meta">Tablero de pizarra y cuero nocturno con incrustaciones de latón.</p>
+        </div>
+
+        <div class="asset-tile">
+          <div class="asset-stage"><img src="./svg-vectors/15-waiting-room-elements.svg" class="jc-anim-g-orbit" alt="15 Sala de Espera" /></div>
+          <span class="asset-num">RECURSO 15 · PNG 3D + SVG</span>
+          <div class="asset-title">Elementos Pantalla de Espera</div>
+          <p class="asset-meta">Astrolabio cinético de sincronización mientras entra el jugador 2.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. DEMO EN VIVO DE LAS 7 ANIMACIONES CINEMATOGRÁFICAS -->
+    <section>
+      <h2 class="section-title">04. Estudio de Movimiento — Secuencias A a G en Vivo</h2>
+      <p class="section-desc">
+        Previsualización en tiempo real ejecutando <code>animations/janken-cinematic-animations.css</code>. Bucles limpios de 3 a 6 segundos con cámara fija.
+      </p>
+      <div class="anim-lab-grid">
+        <!-- ANIMACIÓN A -->
+        <div class="anim-theater">
+          <div class="theater-viewport jc-stage-3d" style="gap: 14px;">
+            <img src="./svg-vectors/03-card-piedra.svg" class="mini-card jc-anim-a-card-1" alt="Piedra" />
+            <img src="./svg-vectors/04-card-papel.svg" class="mini-card jc-anim-a-card-2" alt="Papel" />
+            <img src="./svg-vectors/05-card-tijera.svg" class="mini-card jc-anim-a-card-3" alt="Tijera" />
+          </div>
+          <span class="asset-num">ANIMACIÓN A · LOOP 6.0S</span>
+          <div class="asset-title">Menú — Levitación Orbital 3D</div>
+          <p class="asset-meta">Tres cartas flotando con rotación suave en 3 ejes, sombras dinámicas y desfase armónico.</p>
+        </div>
+
+        <!-- ANIMACIÓN B -->
+        <div class="anim-theater">
+          <div class="theater-viewport jc-stage-3d">
+            <img src="./svg-vectors/02-card-back.svg" class="mini-card jc-anim-b-deck-left" style="position:absolute;" alt="Mazo Izq" />
+            <img src="./svg-vectors/02-card-back.svg" class="mini-card jc-anim-b-deck-right" style="position:absolute;" alt="Mazo Der" />
+          </div>
+          <span class="asset-num">ANIMACIÓN B · LOOP 3.2S</span>
+          <div class="asset-title">Barajado — Físicas Naturales</div>
+          <p class="asset-meta">Corte e imbricación espacial con muelles sub-amortiguados y arqueo en eje Z.</p>
+        </div>
+
+        <!-- ANIMACIÓN C -->
+        <div class="anim-theater">
+          <div class="theater-viewport jc-stage-3d">
+            <div class="jc-card-actor jc-anim-c-selectable is-selected js-tactile-card" style="width: 124px;">
+              <img src="./svg-vectors/05-card-tijera.svg" style="width:100%; height:100%; display:block;" alt="Tijera Seleccionada" />
+            </div>
+          </div>
+          <span class="asset-num">ANIMACIÓN C · INTERACTIVA (PASA EL CURSOR)</span>
+          <div class="asset-title">Selección — Elevación y Reflejo Especular</div>
+          <p class="asset-meta">Inclinación 1:1 hacia el puntero y barrido de luz dorada sobre el bisel metálico.</p>
+        </div>
+
+        <!-- ANIMACIÓN D -->
+        <div class="anim-theater">
+          <div class="theater-viewport jc-stage-3d" style="gap: 28px;">
+            <div class="mini-card jc-anim-d-flipper">
+              <img src="./svg-vectors/02-card-back.svg" class="jc-card-face-back" style="width:100%;height:100%;" alt="Dorso" />
+              <img src="./svg-vectors/03-card-piedra.svg" class="jc-card-face-front" style="width:100%;height:100%;" alt="Piedra" />
+            </div>
+            <div class="mini-card jc-anim-d-flipper">
+              <img src="./svg-vectors/02-card-back.svg" class="jc-card-face-back" style="width:100%;height:100%;" alt="Dorso" />
+              <img src="./svg-vectors/05-card-tijera.svg" class="jc-card-face-front" style="width:100%;height:100%;" alt="Tijera" />
+            </div>
+          </div>
+          <span class="asset-num">ANIMACIÓN D · LOOP 4.2S</span>
+          <div class="asset-title">Revelación Simultánea 3D</div>
+          <p class="asset-meta">Dos cartas enfrentadas giran 180° en sincronía para descubrir el duelo.</p>
+        </div>
+
+        <!-- ANIMACIÓN E -->
+        <div class="anim-theater">
+          <div class="theater-viewport">
+            <img src="./svg-vectors/13-fx-gold-particles.svg" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" alt="Partículas" />
+            <img src="./svg-vectors/10-fx-victory.svg" class="jc-anim-e-victory" style="width: 190px; height: 190px;" alt="Victoria" />
+          </div>
+          <span class="asset-num">ANIMACIÓN E · LOOP 4.5S</span>
+          <div class="asset-title">Victoria — Celebración Imperial</div>
+          <p class="asset-meta">Resplandor controlado, partículas de oro en suspensión y corona geométrica.</p>
+        </div>
+
+        <!-- ANIMACIÓN F -->
+        <div class="anim-theater">
+          <div class="theater-viewport jc-stage-3d">
+            <img src="./svg-vectors/11-fx-draw.svg" style="position:absolute; width:220px; opacity:0.65;" alt="Empate FX" />
+            <img src="./svg-vectors/04-card-papel.svg" class="mini-card jc-anim-f-left" alt="Papel 1" />
+            <img src="./svg-vectors/04-card-papel.svg" class="mini-card jc-anim-f-right" alt="Papel 2" />
+          </div>
+          <span class="asset-num">ANIMACIÓN F · LOOP 3.4S</span>
+          <div class="asset-title">Empate — Equilibrio Simétrico</div>
+          <p class="asset-meta">Convergencia elástica y onda estacionaria entre dos cartas idénticas.</p>
+        </div>
+
+        <!-- ANIMACIÓN G -->
+        <div class="anim-theater">
+          <div class="theater-viewport">
+            <img src="./svg-vectors/15-waiting-room-elements.svg" class="jc-anim-g-orbit" style="position:absolute; width: 220px; opacity: 0.45;" alt="Astrolabio" />
+            <img src="./svg-vectors/06-deck-3d-stack.svg" class="jc-anim-g-waiting" style="width: 150px;" alt="Mazo en espera" />
+          </div>
+          <span class="asset-num">ANIMACIÓN G · LOOP 5.0S</span>
+          <div class="asset-title">Espera — Movimiento Ambiental de Sala</div>
+          <p class="asset-meta">Mazo levitante con órbita relojera mientras se une el segundo jugador.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { attachTactileCardPhysics } from './animations/janken-spring-physics.js';
+    document.querySelectorAll('.js-tactile-card').forEach((el) => {
+      attachTactileCardPhysics(el);
+    });
+  </script>
+</body>
+</html>

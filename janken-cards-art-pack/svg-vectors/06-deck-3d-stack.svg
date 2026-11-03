@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="deck-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EFE0BB" />
+      <stop offset="50%" stop-color="#C8A96A" />
+      <stop offset="100%" stop-color="#7D622F" />
+    </linearGradient>
+    <linearGradient id="deck-slate" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#283142" />
+      <stop offset="60%" stop-color="#161B26" />
+      <stop offset="100%" stop-color="#0B101B" />
+    </linearGradient>
+    <filter id="deck-shadow" x="-25%" y="-25%" width="150%" height="160%">
+      <feDropShadow dx="0" dy="38" stdDeviation="28" flood-color="#04060B" flood-opacity="0.88" />
+    </filter>
+  </defs>
+
+  <!-- Sombra de contacto sobre la mesa -->
+  <polygon points="400,260 660,410 400,595 140,445" fill="#04060B" opacity="0.7" filter="url(#deck-shadow)" />
+
+  <!-- Capas apiladas en perspectiva 3D (Cantos dorados bruñidos) -->
+  <g stroke="url(#deck-gold)" stroke-width="1.5">
+    <polygon points="400,236 650,380 400,556 150,412" fill="#0B101B" />
+    <polygon points="400,224 650,368 400,544 150,400" fill="#161B26" />
+    <polygon points="400,212 650,356 400,532 150,388" fill="#0B101B" />
+    <polygon points="400,200 650,344 400,520 150,376" fill="#161B26" />
+    <polygon points="400,188 650,332 400,508 150,364" fill="#0B101B" />
+    <polygon points="400,176 650,320 400,496 150,352" fill="#161B26" />
+    <!-- Carta Superior del Mazo -->
+    <polygon points="400,164 650,308 400,484 150,340" fill="url(#deck-slate)" stroke-width="2.5" />
+  </g>
+
+  <!-- Filigrana Isométrica de la Carta Superior -->
+  <g fill="none" stroke="url(#deck-gold)" stroke-width="1.5" opacity="0.85">
+    <polygon points="400,184 622,310 400,464 178,338" />
+    <ellipse cx="400" cy="324" rx="110" ry="68" />
+    <polygon points="400,248 510,324 400,400 290,324" fill="#0B101B" fill-opacity="0.6" />
+    <circle cx="400" cy="324" r="16" fill="url(#deck-gold)" />
+  </g>
+</svg>

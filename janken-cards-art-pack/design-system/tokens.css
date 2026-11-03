@@ -1,0 +1,79 @@
+:root {
+  /* ==========================================================================
+     1. PALETA DE COLOR OFICIAL — JANKEN CARDS (Editorial Nocturne & Tactile)
+     ========================================================================== */
+  
+  /* Azul Noche (Superficies abisales y mesa de juego) */
+  --jc-midnight-950: #070A12;
+  --jc-midnight-900: #0B101B;
+  --jc-midnight-800: #111827;
+
+  /* Carbón (Cuerpo de cartas, paneles táctiles y chasis) */
+  --jc-charcoal-900: #161B26;
+  --jc-charcoal-800: #1E2534;
+  --jc-charcoal-700: #283142;
+
+  /* Oro Suave (Filigranas, estados seleccionados, luz de victoria) */
+  --jc-gold-500: #C8A96A;
+  --jc-gold-400: #DFC286;
+  --jc-gold-300: #EFE0BB;
+  --jc-gold-glow: rgba(200, 169, 106, 0.28);
+  --jc-gold-hairline: rgba(200, 169, 106, 0.42);
+
+  /* Marfil (Tipografía editorial, papel plisado, alto contraste cálido) */
+  --jc-ivory-100: #F7F4ED;
+  --jc-ivory-200: #EDE7DA;
+  --jc-ivory-300: #D5CCB9;
+
+  /* Gris Acero (Metal forjado, estados bloqueados, empate, bordes neutros) */
+  --jc-steel-400: #949FB1;
+  --jc-steel-500: #7A8494;
+  --jc-steel-600: #566070;
+  --jc-steel-hairline: rgba(148, 159, 177, 0.22);
+
+  /* Semántica de Resolución (Sin neones; tonos minerales y editoriales) */
+  --jc-state-victory: #C8A96A;       /* Oro imperial */
+  --jc-state-draw: #949FB1;          /* Acero equilibrado */
+  --jc-state-defeat: #6E3B3B;        /* Carmesí oxidado / Fractura mineral */
+
+  /* ==========================================================================
+     2. GEOMETRÍA Y PROPORCIONES DE CARTAS (Colección Comercial)
+     ========================================================================== */
+  --jc-card-aspect-ratio: 3 / 4;
+  --jc-card-width-sm: 132px;
+  --jc-card-width-md: 196px;
+  --jc-card-width-lg: 260px;
+  --jc-card-radius: 16px;
+  --jc-card-inner-radius: 11px;
+  --jc-card-bevel-width: 1.5px;
+
+  /* ==========================================================================
+     3. ILUMINACIÓN CINEMATOGRÁFICA Y SOMBRAS FÍSICAS
+     ========================================================================== */
+  /* Luz principal (Key Light): Cenital-Izquierda Cálida (Oro Marfil) */
+  /* Luz de contra (Rim Light): Inferior-Derecha Fría (Gris Acero) */
+  --jc-shadow-resting: 
+    0 12px 24px -6px rgba(4, 6, 11, 0.75),
+    0 4px 8px -2px rgba(4, 6, 11, 0.6),
+    inset 0 1px 0 0 rgba(247, 244, 237, 0.12);
+
+  --jc-shadow-elevated: 
+    0 28px 50px -12px rgba(4, 6, 11, 0.88),
+    0 12px 20px -4px rgba(200, 169, 106, 0.14),
+    inset 0 1px 0 0 rgba(200, 169, 106, 0.45);
+
+  /* ==========================================================================
+     4. TIPOGRAFÍA EDITORIAL (Apple HIG Optical Sizing)
+     ========================================================================== */
+  --jc-font-display: 'Cinzel', 'Instrument Serif', 'Playfair Display', Georgia, serif;
+  --jc-font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+  --jc-font-mono: 'SF Mono', 'JetBrains Mono', monospace;
+
+  /* ==========================================================================
+     5. FÍSICA DE MOVIMIENTO (Apple Fluid Interface Springs)
+     ========================================================================== */
+  /* Equivalentes CSS Linear() de muelles con amortiguación crítica y sub-amortiguada */
+  --jc-spring-critically-damped: cubic-bezier(0.22, 1, 0.36, 1); /* Damping 1.0, Response 0.4s */
+  --jc-spring-underdamped: cubic-bezier(0.34, 1.45, 0.64, 1);    /* Damping 0.78, Response 0.38s */
+  --jc-spring-heavy-stone: cubic-bezier(0.16, 1, 0.3, 1);        /* Damping 1.0, Response 0.55s */
+}

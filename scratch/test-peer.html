@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PeerJS Diagnostic Test</title>
+  <script src="https://unpkg.com/peerjs@1/dist/peerjs.min.js"></script>
+</head>
+<body>
+  <h1>PeerJS Test</h1>
+  <pre id="log"></pre>
+  <script>
+    const logEl = document.getElementById('log');
+    function log(msg) {
+      console.log(msg);
+      logEl.textContent += msg + '\n';
+    }
+
+    async function runTest() {
+      log('Starting PeerJS Diagnostic Test...');
+      if (typeof window.Peer !== 'function') {
+        log('ERROR: window.Peer is NOT a function!');
+        return;
+      }
+      log('window.Peer is available. Version: ' + window.Peer.name);
+
+      const code = 'TEST' + Math.floor(1000 + Math.random() * 9000);
+      const hostId = 'jankencards-' + code;
+      log('Host ID: ' + hostId);
+
+      // Create Host
+      const hostPeer = new window.Peer(hostId, { debug: 1 });
+      
+      hostPeer.on('open', (id) => {
+        log('Host peer OPEN with id: ' + id);
+        // Create Guest
+        createGuest(hostId);
+      });
+
+      hostPeer.on('error', (err) => {
+        log('Host peer ERROR: ' + err.type + ' - ' + err.message);
+      });
+
+      hostPeer.on('connection', (conn) => {
+        log('Host received incoming connection from: ' + conn.peer);
+        conn.on('open', () => {
+          log('Host connection OPEN! Sending welcome packet...');
+          conn.send({ type: 'welcome', text: 'Hello from host' });
+        });
+        conn.on('data', (d) => {
+          log('Host received data: ' + JSON.stringify(d));
+        });
+        conn.on('error', (err) => {
+          log('Host conn ERROR: ' + err);
+        });
+      });
+
+      function createGuest(targetId) {
+        log('Creating guest peer...');
+        const guestPeer = new window.Peer({ debug: 1 });
+
+        guestPeer.on('open', (id) => {
+          log('Guest peer OPEN with id: ' + id);
+          log('Guest connecting to host: ' + targetId);
+          const conn = guestPeer.connect(targetId, { reliable: true, serialization: 'json' });
+
+          conn.on('open', () => {
+            log('Guest connection OPEN! Sending join packet...');
+            conn.send({ type: 'join', name: 'GuestUser' });
+          });
+
+          conn.on('data', (d) => {
+            log('Guest received data: ' + JSON.stringify(d));
+            log('TEST SUCCESS: Two-way P2P DataChannel fully verified!');
+          });
+
+          conn.on('error', (err) => {
+            log('Guest conn ERROR: ' + err);
+          });
+        });
+
+        guestPeer.on('error', (err) => {
+          log('Guest peer ERROR: ' + err.type + ' - ' + err.message);
+        });
+      }
+    }
+
+    runTest().catch(e => log('Unhandled error: ' + e));
+  </script>
+</body>
+</html>

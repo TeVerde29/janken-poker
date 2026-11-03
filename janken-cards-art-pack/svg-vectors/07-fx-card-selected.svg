@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 880" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sel-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7F4ED" />
+      <stop offset="40%" stop-color="#DFC286" />
+      <stop offset="100%" stop-color="#C8A96A" />
+    </linearGradient>
+    <radialGradient id="sel-aura" cx="50%" cy="50%" r="55%">
+      <stop offset="65%" stop-color="#C8A96A" stop-opacity="0" />
+      <stop offset="88%" stop-color="#C8A96A" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#C8A96A" stop-opacity="0" />
+    </radialGradient>
+    <filter id="gold-bloom" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Halo de elevación suave (Sin neón, luz cálida reflectante) -->
+  <rect x="10" y="10" width="660" height="860" rx="52" fill="url(#sel-aura)" />
+
+  <!-- Marco de Enfoque de Precisión -->
+  <g filter="url(#gold-bloom)" fill="none" stroke="url(#sel-gold)">
+    <rect x="46" y="46" width="588" height="788" rx="40" stroke-width="2.5" />
+    
+    <!-- Brackets Esquinados de Bloqueo Táctil -->
+    <path d="M 32 120 L 32 58 Q 32 32 58 32 L 120 32" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 560 32 L 622 32 Q 648 32 648 58 L 648 120" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 32 760 L 32 822 Q 32 848 58 848 L 120 848" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 560 848 L 622 848 Q 648 848 648 822 L 648 760" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- Nodos Cardinales de Luz -->
+    <polygon points="340,22 350,32 340,42 330,32" fill="#F7F4ED" stroke="none" />
+    <polygon points="340,838 350,848 340,858 330,848" fill="#F7F4ED" stroke="none" />
+  </g>
+</svg>

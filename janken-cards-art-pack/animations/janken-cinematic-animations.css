@@ -1,0 +1,239 @@
+/* ==========================================================================
+   JANKEN CARDS — SUITE DE ANIMACIONES CINEMATOGRÁFICAS (A–G)
+   Física de muelles (Apple HIG Fluid Interfaces) y perspectiva 3D
+   ========================================================================== */
+
+/* Escenario 3D compartido */
+.jc-stage-3d {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.jc-card-actor {
+  width: var(--jc-card-width-md, 196px);
+  aspect-ratio: 3 / 4;
+  border-radius: var(--jc-card-radius, 16px);
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  box-shadow: var(--jc-shadow-resting);
+  transition:
+    transform 420ms var(--jc-spring-critically-damped),
+    box-shadow 420ms var(--jc-spring-critically-damped);
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN A — MENÚ (Levitación orbital 3D de 3 cartas en bucle)
+   Duración: 6.0s | Cámara fija | Bucle perfecto sin saltos
+   -------------------------------------------------------------------------- */
+@keyframes jc-anim-a-menu-float {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0) rotateX(8deg) rotateY(-12deg) rotateZ(-2deg);
+    box-shadow: 0 22px 38px -10px rgba(4, 6, 11, 0.8), 0 0 18px rgba(200, 169, 106, 0.08);
+  }
+  50% {
+    transform: translate3d(0, -16px, 24px) rotateX(-6deg) rotateY(12deg) rotateZ(2deg);
+    box-shadow: 0 38px 60px -12px rgba(4, 6, 11, 0.92), 0 0 28px rgba(200, 169, 106, 0.22);
+  }
+}
+
+.jc-anim-a-card-1 {
+  animation: jc-anim-a-menu-float 6s ease-in-out infinite;
+  animation-delay: 0s;
+}
+.jc-anim-a-card-2 {
+  animation: jc-anim-a-menu-float 6s ease-in-out infinite;
+  animation-delay: -2s;
+}
+.jc-anim-a-card-3 {
+  animation: jc-anim-a-menu-float 6s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN B — BARAJADO (Mezcla física en cascada / Riffle & Orbit)
+   Duración: 3.2s | Físicas naturales con amortiguación elástica
+   -------------------------------------------------------------------------- */
+@keyframes jc-anim-b-shuffle-left {
+  0%, 100% { transform: translate3d(0, 0, 0) rotateZ(0deg) rotateY(0deg); }
+  25% { transform: translate3d(-95px, -18px, 40px) rotateZ(-14deg) rotateY(22deg); }
+  50% { transform: translate3d(0, -6px, 60px) rotateZ(2deg) rotateY(0deg); }
+  75% { transform: translate3d(0, 0, 10px) rotateZ(0deg); }
+}
+
+@keyframes jc-anim-b-shuffle-right {
+  0%, 100% { transform: translate3d(0, 0, 0) rotateZ(0deg) rotateY(0deg); }
+  28% { transform: translate3d(95px, -12px, 30px) rotateZ(14deg) rotateY(-22deg); }
+  55% { transform: translate3d(0, -3px, 45px) rotateZ(-2deg) rotateY(0deg); }
+  80% { transform: translate3d(0, 0, 5px) rotateZ(0deg); }
+}
+
+.jc-anim-b-deck-left {
+  animation: jc-anim-b-shuffle-left 3.2s var(--jc-spring-underdamped) infinite;
+}
+.jc-anim-b-deck-right {
+  animation: jc-anim-b-shuffle-right 3.2s var(--jc-spring-underdamped) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN C — SELECCIÓN (Elevación táctil + barrido especular de luz)
+   Respuesta inmediata al puntero con sheen metálico en ángulo
+   -------------------------------------------------------------------------- */
+.jc-anim-c-selectable {
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.jc-anim-c-selectable::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(247, 244, 237, 0.04) 44%,
+    rgba(200, 169, 106, 0.42) 50%,
+    rgba(247, 244, 237, 0.04) 56%,
+    transparent 65%
+  );
+  transform: translateX(-120%) rotate(12deg);
+  transition: transform 650ms var(--jc-spring-critically-damped);
+  pointer-events: none;
+}
+
+.jc-anim-c-selectable:hover,
+.jc-anim-c-selectable.is-selected {
+  transform: translate3d(0, -22px, 36px) rotateX(10deg) rotateY(-6deg) scale(1.04);
+  box-shadow: var(--jc-shadow-elevated);
+}
+
+.jc-anim-c-selectable:hover::after,
+.jc-anim-c-selectable.is-selected::after {
+  transform: translateX(120%) rotate(12deg);
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN D — REVELACIÓN (Giro simultáneo 3D de 180° con destello en 90°)
+   Duración: 3.6s por ciclo de demostración (o trigger puntual de 750ms)
+   -------------------------------------------------------------------------- */
+@keyframes jc-anim-d-reveal-flip {
+  0%, 15% {
+    transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
+  }
+  40% {
+    transform: translate3d(0, -28px, 70px) rotateY(90deg) scale(1.08);
+  }
+  55%, 85% {
+    transform: translate3d(0, -8px, 25px) rotateY(180deg) scale(1.03);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotateY(360deg) scale(1);
+  }
+}
+
+.jc-anim-d-flipper {
+  transform-style: preserve-3d;
+  animation: jc-anim-d-reveal-flip 4.2s var(--jc-spring-critically-damped) infinite;
+}
+
+.jc-card-face-front,
+.jc-card-face-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--jc-card-radius, 16px);
+}
+
+.jc-card-face-front {
+  transform: rotateY(180deg);
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN E — VICTORIA (Ascenso imperial, halo solar y polvo de oro)
+   Duración: 4.5s | Movimiento ceremonial en bucle
+   -------------------------------------------------------------------------- */
+@keyframes jc-anim-e-victory-crest {
+  0%, 100% {
+    transform: scale(0.96) rotateZ(0deg);
+    filter: drop-shadow(0 0 18px rgba(200, 169, 106, 0.28));
+  }
+  50% {
+    transform: scale(1.05) rotateZ(4deg);
+    filter: drop-shadow(0 0 42px rgba(200, 169, 106, 0.62));
+  }
+}
+
+.jc-anim-e-victory {
+  animation: jc-anim-e-victory-crest 4.5s ease-in-out infinite;
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN F — EMPATE (Choque elástico simétrico y resonancia de acero)
+   Duración: 3.4s | Dos cartas convergen, reverberan y mantienen el equilibrio
+   -------------------------------------------------------------------------- */
+@keyframes jc-anim-f-draw-left {
+  0%, 100% { transform: translate3d(-48px, 0, 0) rotateZ(-6deg); }
+  40% { transform: translate3d(-12px, -8px, 24px) rotateZ(-1deg); }
+  48% { transform: translate3d(-24px, 0, 12px) rotateZ(-3deg); }
+  65% { transform: translate3d(-20px, 0, 12px) rotateZ(-2deg); }
+}
+
+@keyframes jc-anim-f-draw-right {
+  0%, 100% { transform: translate3d(48px, 0, 0) rotateZ(6deg); }
+  40% { transform: translate3d(12px, -8px, 24px) rotateZ(1deg); }
+  48% { transform: translate3d(24px, 0, 12px) rotateZ(3deg); }
+  65% { transform: translate3d(20px, 0, 12px) rotateZ(2deg); }
+}
+
+.jc-anim-f-left {
+  animation: jc-anim-f-draw-left 3.4s var(--jc-spring-critically-damped) infinite;
+}
+.jc-anim-f-right {
+  animation: jc-anim-f-draw-right 3.4s var(--jc-spring-critically-damped) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN G — ESPERA (Respiración ambiental de mazo y giro de astrolabio)
+   Duración: 5.0s | Calma tensa mientras se une el segundo jugador
+   -------------------------------------------------------------------------- */
+@keyframes jc-anim-g-waiting-breathe {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotateZ(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(0, -10px, 14px) rotateZ(1.5deg);
+    opacity: 1;
+  }
+}
+
+@keyframes jc-anim-g-orbit-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.jc-anim-g-waiting {
+  animation: jc-anim-g-waiting-breathe 5s ease-in-out infinite;
+}
+
+.jc-anim-g-orbit {
+  transform-origin: center;
+  animation: jc-anim-g-orbit-slow 24s linear infinite;
+}
+
+/* Respeto estricto por accesibilidad (Apple HIG Reduced Motion) */
+@media (prefers-reduced-motion: reduce) {
+  .jc-anim-a-card-1,
+  .jc-anim-a-card-2,
+  .jc-anim-a-card-3,
+  .jc-anim-b-deck-left,
+  .jc-anim-b-deck-right,
+  .jc-anim-d-flipper,
+  .jc-anim-e-victory,
+  .jc-anim-f-left,
+  .jc-anim-f-right,
+  .jc-anim-g-waiting,
+  .jc-anim-g-orbit {
+    animation: none !important;
+  }
+}

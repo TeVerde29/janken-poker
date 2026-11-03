@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="vic-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7F4ED" />
+      <stop offset="45%" stop-color="#DFC286" />
+      <stop offset="100%" stop-color="#9A7B3E" />
+    </linearGradient>
+    <radialGradient id="vic-halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#C8A96A" stop-opacity="0.35" />
+      <stop offset="70%" stop-color="#C8A96A" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#C8A96A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <g transform="translate(400, 400)">
+    <circle r="360" fill="url(#vic-halo)" />
+
+    <!-- Corona Solar de Precisión Relojera -->
+    <circle r="260" fill="none" stroke="url(#vic-gold)" stroke-width="2" />
+    <circle r="242" fill="none" stroke="url(#vic-gold)" stroke-width="1" stroke-dasharray="3 9" />
+
+    <!-- Rayos Geométricos Simétricos -->
+    <g stroke="url(#vic-gold)" stroke-width="2">
+      <line x1="0" y1="-330" x2="0" y2="-260" />
+      <line x1="0" y1="260" x2="0" y2="330" />
+      <line x1="-330" y1="0" x2="-260" y2="0" />
+      <line x1="260" y1="0" x2="330" y2="0" />
+      <line x1="-220" y1="-220" x2="-184" y2="-184" />
+      <line x1="220" y1="-220" x2="184" y2="-184" />
+      <line x1="-220" y1="220" x2="-184" y2="184" />
+      <line x1="220" y1="220" x2="184" y2="184" />
+    </g>
+
+    <!-- Emblema Central de Victoria (Prisma Imperial de Marfil y Oro) -->
+    <polygon points="0,-195 145,0 0,195 -145,0" fill="#0B101B" stroke="url(#vic-gold)" stroke-width="3.5" />
+    <polygon points="0,-155 110,0 0,155 -110,0" fill="url(#vic-gold)" opacity="0.18" />
+    <polygon points="0,-115 65,0 0,115 -65,0" fill="url(#vic-gold)" />
+    <polygon points="0,-60 32,0 0,60 -32,0" fill="#F7F4ED" />
+  </g>
+</svg>
